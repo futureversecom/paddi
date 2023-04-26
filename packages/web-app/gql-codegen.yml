@@ -1,0 +1,23 @@
+overwrite: true
+schema: '../core/src/graphql/*.graphql.ts'
+documents: 'src/graphql/operations/**/**.gql'
+generates:
+  src/graphql/generated/index.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+        # TODO: fix eslint for this?
+        # - eslint --fix
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-query'
+    config:
+      constEnums: true
+      legacyMode: true
+      fetcher: graphql-request
+      scalars:
+        ChainAddress: 'core/src/types/chain-address#ChainAddress'
+        UInt256: 'core/src/types/uint256#UInt256'
+        Timestamp: 'core/src/types/timestamp#Timestamp'
+        HexColour: 'core/src/types/hex-colour#HexColour'

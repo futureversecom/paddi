@@ -1,0 +1,5 @@
+mutation savePinnedNodeId($hash: UInt256!, $nodeId: String!) {
+  savePinnedNodeId(hash: $hash, nodeId: $nodeId) {
+    success
+  }
+}

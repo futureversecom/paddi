@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "id": "https://acp.futureverse.com/schemas/training_request.json",
+  "title": "TrainingRequest",
+  "type": "object",
+  "properties": {
+    "training_id": {
+      "title": "Training Id",
+      "type": "string"
+    },
+    "training_units": {
+      "title": "Training Units",
+      "type": "integer"
+    },
+    "player_config": {
+      "$ref": "./segments/agent_config.json"
+    },
+    "scenario": {
+      "$ref": "./segments/scenario_config.json#/definitions/ScenarioConfig"
+    },
+    "reward_config": {
+      "$ref": "#/definitions/RewardConfig"
+    },
+    "training_output": {
+      "description": "Output of the previous iteration",
+      "$ref": "./training_output.json"
+    }
+  },
+  "required": [
+    "training_id",
+    "training_units",
+    "player_config",
+    "scenario",
+    "reward_config"
+  ],
+  "definitions": {
+    "RewardConfig": {
+      "title": "RewardConfig",
+      "type": "object",
+      "properties": {
+        "win_round": {
+          "title": "Win Round",
+          "type": "number"
+        },
+        "lose_round": {
+          "title": "Lose Round",
+          "type": "number"
+        },
+        "paddle_hit": {
+          "title": "Paddle Hit",
+          "type": "number"
+        },
+        "near_miss_multiplier": {
+          "title": "Near Miss Multiplier",
+          "type": "number"
+        },
+        "near_miss_exponent": {
+          "title": "Near Miss Exponent",
+          "type": "number"
+        },
+        "near_miss_min_distance": {
+          "title": "Near Miss Min Distance",
+          "type": "number"
+        },
+        "survival_reward_multiplier": {
+          "title": "Survival Reward Multiplier",
+          "type": "number"
+        },
+        "endurance_penalty_multiplier": {
+          "title": "Endurance Penalty Multiplier",
+          "type": "number"
+        }
+      },
+      "required": [
+        "win_round",
+        "lose_round",
+        "paddle_hit",
+        "near_miss_multiplier",
+        "near_miss_exponent",
+        "near_miss_min_distance",
+        "survival_reward_multiplier",
+        "endurance_penalty_multiplier"
+      ]
+    }
+  }
+}

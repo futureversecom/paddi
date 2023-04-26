@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "types": ["node", "jest"]
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../core-backend"
+    },
+    {
+      "path": "../smart-contracts/tsconfig.ext.json"
+    }
+  ]
+}

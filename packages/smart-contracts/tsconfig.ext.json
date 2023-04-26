@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true,
+    "resolveJsonModule": true,
+    "noImplicitOverride": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "importsNotUsedAsValues": "remove",
+    "skipLibCheck": true
+  },
+  "include": [
+    "gen",
+    "./lib/protocol-core/gen",
+    "./lib/protocol-core/abi/*.json",
+    "abi/*.json",
+    "abi/*.ts",
+    "typechain-types"
+  ]
+}

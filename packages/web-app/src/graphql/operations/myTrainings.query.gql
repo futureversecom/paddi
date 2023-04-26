@@ -1,0 +1,49 @@
+query myTrainings {
+  myTrainings {
+    hash
+    brainId
+    timestamp
+    recordState
+    parentNodeId
+    units
+    completedUnits
+    pinnedNodeId
+    trainingOutput {
+      outputPath
+    }
+    evaluationOutput {
+      evaluationId
+      replayPath
+      stats {
+        ... on HistogramStats {
+          __typename
+          name
+          xAxis
+          yAxis
+          categories
+          data
+        }
+
+        ... on AggregationStats {
+          __typename
+          name
+          aggregated_data
+        }
+      }
+    }
+    rewardConfig {
+      winRound
+      loseRound
+      paddleHit
+      nearMissMultiplier
+      survivalRewardMultiplier
+      endurancePenaltyMultiplier
+    }
+    scenario {
+      __typename
+      ... on AgentScenario {
+        agentType
+      }
+    }
+  }
+}

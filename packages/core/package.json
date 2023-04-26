@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "core",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
+  "scripts": {
+    "exec:script": "TS_NODE_COMPILER_OPTIONS='{\"noUnusedLocals\": false}' node -r tsconfig-paths/register -r ts-node/register",
+    "types:imProgressEvents": "json2ts --cwd=../schemas/src/im -i ../schemas/src/im/im_progress_events.json  -o ./src/types/generated/in-progress-events.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "8.2.0",
+    "ethers": "^5.7.2",
+    "esbuild": "^0.14.29",
+    "fp-ts": "^2.12.3",
+    "fp-ts-contrib": "^0.1.29",
+    "fp-ts-std": "^0.11.0",
+    "graphql-tag": "^2.12.6",
+    "io-ts": "^2.2.16",
+    "retry-ts": "^0.1.4",
+    "yazl": "^2.5.1"
+  },
+  "devDependencies": {
+    "@ethersproject/logger": "^5.7.0",
+    "@graphql-codegen/cli": "^2.12.1",
+    "@graphql-codegen/introspection": "^2.2.1",
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
+    "@graphql-codegen/typescript-resolvers": "^2.7.3",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.31",
+    "fast-check": "^3.1.1",
+    "jest": "^27.5.1",
+    "monocle-ts": "^2.3.11",
+    "newtype-ts": "^0.3.4",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^3.11.0"
+  }
+}

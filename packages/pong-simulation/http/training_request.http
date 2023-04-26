@@ -1,0 +1,35 @@
+POST http://localhost:9000/2015-03-31/functions/function/invocations HTTP/1.1
+content-type: application/json
+
+{
+  "training_id": "0xb74e564cd9f5d89ed56e62ba1768b46065eb2e6f3015b6c2946634d235ba2659",
+  "training_units": 1,
+  "player_config": {
+    "memory_config": {
+      "type": "TrainedNode",
+	  "memory": {
+      	"memory_id": "1234", 
+        "memory_url": "s3://asm-protocol-dev-models/test-model.zip"
+      }
+    },
+    "genome_attributes": {
+      "size": 0.4,
+      "strength": 0.5,
+      "max_speed": 0.6,
+      "endurance": 0.6
+    }
+  },
+  "scenario": {
+    "scenario_type": "Wall"
+  },
+  "reward_config": {
+    "win_round": 0.4,
+    "lose_round": 0.3,
+    "paddle_hit": 0.5,
+    "near_miss_multiplier": 0.5,
+    "near_miss_exponent": 0.5,
+    "near_miss_min_distance": 0.5,
+    "survival_reward_multiplier": 0.5,
+    "endurance_penalty_multiplier": 0.5
+  }
+}

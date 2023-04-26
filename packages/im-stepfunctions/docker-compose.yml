@@ -1,0 +1,34 @@
+version: "3.7"
+
+services:
+  tester:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: xxx
+      AWS_SECRET_ACCESS_KEY: xxx
+      STEP_FUNCTIONS_ENDPOINT: http://sfn-endpoint:8083
+    ports:
+      - "13000:13000"
+    command: >
+      python -m pytest -v ./tests
+
+  sfn-endpoint:
+    image: amazon/aws-stepfunctions-local:1.12.0
+    ports:
+      - "8083:8083"
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: xxx
+      AWS_SECRET_ACCESS_KEY: xxx
+      WAIT_TIME_SCALE: 0
+      STEP_FUNCTIONS_ENDPOINT: http://sfn-endpoint:8083
+      SFN_MOCK_CONFIG: "/home/stepfunctionslocal/MockConfigFile.json"
+    volumes:
+      - type: "bind"
+        source: ./resources/im-stepfunctions.mock.json
+        target: /home/stepfunctionslocal/MockConfigFile.json
+        read_only: true
+

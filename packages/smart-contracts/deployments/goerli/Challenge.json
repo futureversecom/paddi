@@ -1,0 +1,686 @@
+{
+  "address": "0x75EDE0cE4647e3aA2Adaf2989461Bf1b6660143d",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "asto",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "signer_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "feeAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "feeBasis_",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidCaller",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidContestState",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidParams",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidSignature",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaymentFailed",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "initiator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "acceptor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "potHalf",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ContestAccepted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "loser",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "winnings",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ContestClosed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "initiator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "acceptor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "potHalf",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ContestOpened",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "initiator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ContestRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "ASTO",
+      "outputs": [
+        {
+          "internalType": "contract IERC20",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "_signer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "acceptContest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "closeContest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "contests",
+      "outputs": [
+        {
+          "internalType": "enum ContestState",
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "initiator",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "acceptor",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "potHalf",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "feeAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "feeBasis",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getContest",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum ContestState",
+              "name": "state",
+              "type": "uint8"
+            },
+            {
+              "internalType": "address",
+              "name": "initiator",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "acceptor",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "potHalf",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct Contest",
+          "name": "contest",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "acceptor",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "potHalf",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "openContest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "contestHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokeContest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "feeAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "feeBasis_",
+          "type": "uint256"
+        }
+      ],
+      "name": "setFeeDetails",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "signer_",
+          "type": "address"
+        }
+      ],
+      "name": "setSigner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x858eeaf384ebffb1855866bd3b05da317542eccb113558b3b08d73a7ffe6972c",
+  "receipt": {
+    "to": null,
+    "from": "0xeb24a849E6C908D4166D34D7E3133B452CB627D2",
+    "contractAddress": "0x75EDE0cE4647e3aA2Adaf2989461Bf1b6660143d",
+    "transactionIndex": 30,
+    "gasUsed": "1225751",
+    "logsBloom": "0x00000000000000000000000000000000000000000000100000800000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000080000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000001080000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xaadd4e9634cd4ee9c7a0a26ccd0719c9efecf17df997ba94bd8eb70ae6a80030",
+    "transactionHash": "0x858eeaf384ebffb1855866bd3b05da317542eccb113558b3b08d73a7ffe6972c",
+    "logs": [
+      {
+        "transactionIndex": 30,
+        "blockNumber": 8730869,
+        "transactionHash": "0x858eeaf384ebffb1855866bd3b05da317542eccb113558b3b08d73a7ffe6972c",
+        "address": "0x75EDE0cE4647e3aA2Adaf2989461Bf1b6660143d",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000eb24a849e6c908d4166d34d7e3133b452cb627d2"
+        ],
+        "data": "0x",
+        "logIndex": 39,
+        "blockHash": "0xaadd4e9634cd4ee9c7a0a26ccd0719c9efecf17df997ba94bd8eb70ae6a80030"
+      }
+    ],
+    "blockNumber": 8730869,
+    "cumulativeGasUsed": "5219421",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x93798C8cEDad99B233fa92AF1B1A274406FA516d",
+    "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+    "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+    "1000"
+  ],
+  "numDeployments": 4,
+  "solcInputHash": "62d642a65c015339619197723ee9f83e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"asto\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"signer_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"feeAddress_\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"feeBasis_\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"InvalidCaller\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidContestState\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidParams\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"PaymentFailed\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"initiator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"acceptor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"potHalf\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"ContestAccepted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"loser\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"winnings\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"ContestClosed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"initiator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"acceptor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"potHalf\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"ContestOpened\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"initiator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"ContestRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ASTO\",\"outputs\":[{\"internalType\":\"contract IERC20\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"_signer\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"acceptContest\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"closeContest\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"contests\",\"outputs\":[{\"internalType\":\"enum ContestState\",\"name\":\"state\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"initiator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"acceptor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"potHalf\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeBasis\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"getContest\",\"outputs\":[{\"components\":[{\"internalType\":\"enum ContestState\",\"name\":\"state\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"initiator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"acceptor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"potHalf\",\"type\":\"uint256\"}],\"internalType\":\"struct Contest\",\"name\":\"contest\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"acceptor\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"potHalf\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"openContest\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"contestHash\",\"type\":\"bytes32\"}],\"name\":\"revokeContest\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"feeAddress_\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"feeBasis_\",\"type\":\"uint256\"}],\"name\":\"setFeeDetails\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signer_\",\"type\":\"address\"}],\"name\":\"setSigner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"acceptContest(bytes32)\":{\"params\":{\"contestHash\":\"The contest hash.\"}},\"closeContest(address,bytes32,bytes)\":{\"params\":{\"contestHash\":\"The contest hash.\",\"signature\":\"The server signed contest hash.\",\"winner\":\"The winner of the contest.\"}},\"getContest(bytes32)\":{\"params\":{\"contestHash\":\"The contest hash.\"},\"returns\":{\"contest\":\"The contest.\"}},\"openContest(address,uint256,bytes32,bytes)\":{\"params\":{\"acceptor\":\"The acceptor of the challenge. If address(0), anyone can accept.\",\"contestHash\":\"The contest hash.\",\"potHalf\":\"The amount added to the pot by the initiator.\",\"signature\":\"The server signed contest hash.\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"revokeContest(bytes32)\":{\"details\":\"Returns ASTO to the initiator.\",\"params\":{\"contestHash\":\"The contest to revoke.\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"acceptContest(bytes32)\":{\"notice\":\"Accepts an open contest.\"},\"closeContest(address,bytes32,bytes)\":{\"notice\":\"Marks a contest as won. Sends the winner the winnings.\"},\"getContest(bytes32)\":{\"notice\":\"Get the contest.\"},\"openContest(address,uint256,bytes32,bytes)\":{\"notice\":\"Create an open contest.\"},\"revokeContest(bytes32)\":{\"notice\":\"Revoke an open contest.This must be called on an open contest.This must be called by the initiator of the contest.\"}},\"notice\":\"A contract that allows one player to challenge another. Note: Challenge details are managed off chain and signed by the host server.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/Challenge.sol\":\"Challenge\"},\"evmVersion\":\"london\",\"libraries\":{\":__CACHE_BREAKER__\":\"0x0000000000000031363739393739353132303233\"},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20 {\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n\\n    /**\\n     * @dev Returns the amount of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the amount of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves `amount` tokens from the caller's account to `to`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address to, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 amount) external returns (bool);\\n\\n    /**\\n     * @dev Moves `amount` tokens from `from` to `to` using the\\n     * allowance mechanism. `amount` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(address from, address to, uint256 amount) external returns (bool);\\n}\\n\",\"keccak256\":\"0x00c839ff53d07d19db2e7cfa1e5133f9ee90a8d64b0e2e57f50446a2d1a3a0e0\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.8.0) (utils/Strings.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"./math/Math.sol\\\";\\nimport \\\"./math/SignedMath.sol\\\";\\n\\n/**\\n * @dev String operations.\\n */\\nlibrary Strings {\\n    bytes16 private constant _SYMBOLS = \\\"0123456789abcdef\\\";\\n    uint8 private constant _ADDRESS_LENGTH = 20;\\n\\n    /**\\n     * @dev Converts a `uint256` to its ASCII `string` decimal representation.\\n     */\\n    function toString(uint256 value) internal pure returns (string memory) {\\n        unchecked {\\n            uint256 length = Math.log10(value) + 1;\\n            string memory buffer = new string(length);\\n            uint256 ptr;\\n            /// @solidity memory-safe-assembly\\n            assembly {\\n                ptr := add(buffer, add(32, length))\\n            }\\n            while (true) {\\n                ptr--;\\n                /// @solidity memory-safe-assembly\\n                assembly {\\n                    mstore8(ptr, byte(mod(value, 10), _SYMBOLS))\\n                }\\n                value /= 10;\\n                if (value == 0) break;\\n            }\\n            return buffer;\\n        }\\n    }\\n\\n    /**\\n     * @dev Converts a `int256` to its ASCII `string` decimal representation.\\n     */\\n    function toString(int256 value) internal pure returns (string memory) {\\n        return string(abi.encodePacked(value < 0 ? \\\"-\\\" : \\\"\\\", toString(SignedMath.abs(value))));\\n    }\\n\\n    /**\\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation.\\n     */\\n    function toHexString(uint256 value) internal pure returns (string memory) {\\n        unchecked {\\n            return toHexString(value, Math.log256(value) + 1);\\n        }\\n    }\\n\\n    /**\\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.\\n     */\\n    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {\\n        bytes memory buffer = new bytes(2 * length + 2);\\n        buffer[0] = \\\"0\\\";\\n        buffer[1] = \\\"x\\\";\\n        for (uint256 i = 2 * length + 1; i > 1; --i) {\\n            buffer[i] = _SYMBOLS[value & 0xf];\\n            value >>= 4;\\n        }\\n        require(value == 0, \\\"Strings: hex length insufficient\\\");\\n        return string(buffer);\\n    }\\n\\n    /**\\n     * @dev Converts an `address` with fixed length of 20 bytes to its not checksummed ASCII `string` hexadecimal representation.\\n     */\\n    function toHexString(address addr) internal pure returns (string memory) {\\n        return toHexString(uint256(uint160(addr)), _ADDRESS_LENGTH);\\n    }\\n\\n    /**\\n     * @dev Returns true if the two strings are equal.\\n     */\\n    function equal(string memory a, string memory b) internal pure returns (bool) {\\n        return keccak256(bytes(a)) == keccak256(bytes(b));\\n    }\\n}\\n\",\"keccak256\":\"0x2626d8ab3dfdad0fad630c212ad146d59473d0f48b771784c61a7c1dbbea1f3f\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.8.0) (utils/cryptography/ECDSA.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../Strings.sol\\\";\\n\\n/**\\n * @dev Elliptic Curve Digital Signature Algorithm (ECDSA) operations.\\n *\\n * These functions can be used to verify that a message was signed by the holder\\n * of the private keys of a given address.\\n */\\nlibrary ECDSA {\\n    enum RecoverError {\\n        NoError,\\n        InvalidSignature,\\n        InvalidSignatureLength,\\n        InvalidSignatureS,\\n        InvalidSignatureV // Deprecated in v4.8\\n    }\\n\\n    function _throwError(RecoverError error) private pure {\\n        if (error == RecoverError.NoError) {\\n            return; // no error: do nothing\\n        } else if (error == RecoverError.InvalidSignature) {\\n            revert(\\\"ECDSA: invalid signature\\\");\\n        } else if (error == RecoverError.InvalidSignatureLength) {\\n            revert(\\\"ECDSA: invalid signature length\\\");\\n        } else if (error == RecoverError.InvalidSignatureS) {\\n            revert(\\\"ECDSA: invalid signature 's' value\\\");\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the address that signed a hashed message (`hash`) with\\n     * `signature` or error string. This address can then be used for verification purposes.\\n     *\\n     * The `ecrecover` EVM opcode allows for malleable (non-unique) signatures:\\n     * this function rejects them by requiring the `s` value to be in the lower\\n     * half order, and the `v` value to be either 27 or 28.\\n     *\\n     * IMPORTANT: `hash` _must_ be the result of a hash operation for the\\n     * verification to be secure: it is possible to craft signatures that\\n     * recover to arbitrary addresses for non-hashed data. A safe way to ensure\\n     * this is by receiving a hash of the original message (which may otherwise\\n     * be too long), and then calling {toEthSignedMessageHash} on it.\\n     *\\n     * Documentation for signature generation:\\n     * - with https://web3js.readthedocs.io/en/v1.3.4/web3-eth-accounts.html#sign[Web3.js]\\n     * - with https://docs.ethers.io/v5/api/signer/#Signer-signMessage[ethers]\\n     *\\n     * _Available since v4.3._\\n     */\\n    function tryRecover(bytes32 hash, bytes memory signature) internal pure returns (address, RecoverError) {\\n        if (signature.length == 65) {\\n            bytes32 r;\\n            bytes32 s;\\n            uint8 v;\\n            // ecrecover takes the signature parameters, and the only way to get them\\n            // currently is to use assembly.\\n            /// @solidity memory-safe-assembly\\n            assembly {\\n                r := mload(add(signature, 0x20))\\n                s := mload(add(signature, 0x40))\\n                v := byte(0, mload(add(signature, 0x60)))\\n            }\\n            return tryRecover(hash, v, r, s);\\n        } else {\\n            return (address(0), RecoverError.InvalidSignatureLength);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the address that signed a hashed message (`hash`) with\\n     * `signature`. This address can then be used for verification purposes.\\n     *\\n     * The `ecrecover` EVM opcode allows for malleable (non-unique) signatures:\\n     * this function rejects them by requiring the `s` value to be in the lower\\n     * half order, and the `v` value to be either 27 or 28.\\n     *\\n     * IMPORTANT: `hash` _must_ be the result of a hash operation for the\\n     * verification to be secure: it is possible to craft signatures that\\n     * recover to arbitrary addresses for non-hashed data. A safe way to ensure\\n     * this is by receiving a hash of the original message (which may otherwise\\n     * be too long), and then calling {toEthSignedMessageHash} on it.\\n     */\\n    function recover(bytes32 hash, bytes memory signature) internal pure returns (address) {\\n        (address recovered, RecoverError error) = tryRecover(hash, signature);\\n        _throwError(error);\\n        return recovered;\\n    }\\n\\n    /**\\n     * @dev Overload of {ECDSA-tryRecover} that receives the `r` and `vs` short-signature fields separately.\\n     *\\n     * See https://eips.ethereum.org/EIPS/eip-2098[EIP-2098 short signatures]\\n     *\\n     * _Available since v4.3._\\n     */\\n    function tryRecover(bytes32 hash, bytes32 r, bytes32 vs) internal pure returns (address, RecoverError) {\\n        bytes32 s = vs & bytes32(0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);\\n        uint8 v = uint8((uint256(vs) >> 255) + 27);\\n        return tryRecover(hash, v, r, s);\\n    }\\n\\n    /**\\n     * @dev Overload of {ECDSA-recover} that receives the `r and `vs` short-signature fields separately.\\n     *\\n     * _Available since v4.2._\\n     */\\n    function recover(bytes32 hash, bytes32 r, bytes32 vs) internal pure returns (address) {\\n        (address recovered, RecoverError error) = tryRecover(hash, r, vs);\\n        _throwError(error);\\n        return recovered;\\n    }\\n\\n    /**\\n     * @dev Overload of {ECDSA-tryRecover} that receives the `v`,\\n     * `r` and `s` signature fields separately.\\n     *\\n     * _Available since v4.3._\\n     */\\n    function tryRecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal pure returns (address, RecoverError) {\\n        // EIP-2 still allows signature malleability for ecrecover(). Remove this possibility and make the signature\\n        // unique. Appendix F in the Ethereum Yellow paper (https://ethereum.github.io/yellowpaper/paper.pdf), defines\\n        // the valid range for s in (301): 0 < s < secp256k1n \\u00f7 2 + 1, and for v in (302): v \\u2208 {27, 28}. Most\\n        // signatures from current libraries generate a unique signature with an s-value in the lower half order.\\n        //\\n        // If your library generates malleable signatures, such as s-values in the upper range, calculate a new s-value\\n        // with 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141 - s1 and flip v from 27 to 28 or\\n        // vice versa. If your library also generates signatures with 0/1 for v instead 27/28, add 27 to v to accept\\n        // these malleable signatures as well.\\n        if (uint256(s) > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0) {\\n            return (address(0), RecoverError.InvalidSignatureS);\\n        }\\n\\n        // If the signature is valid (and not malleable), return the signer address\\n        address signer = ecrecover(hash, v, r, s);\\n        if (signer == address(0)) {\\n            return (address(0), RecoverError.InvalidSignature);\\n        }\\n\\n        return (signer, RecoverError.NoError);\\n    }\\n\\n    /**\\n     * @dev Overload of {ECDSA-recover} that receives the `v`,\\n     * `r` and `s` signature fields separately.\\n     */\\n    function recover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) internal pure returns (address) {\\n        (address recovered, RecoverError error) = tryRecover(hash, v, r, s);\\n        _throwError(error);\\n        return recovered;\\n    }\\n\\n    /**\\n     * @dev Returns an Ethereum Signed Message, created from a `hash`. This\\n     * produces hash corresponding to the one signed with the\\n     * https://eth.wiki/json-rpc/API#eth_sign[`eth_sign`]\\n     * JSON-RPC method as part of EIP-191.\\n     *\\n     * See {recover}.\\n     */\\n    function toEthSignedMessageHash(bytes32 hash) internal pure returns (bytes32) {\\n        // 32 is the length in bytes of hash,\\n        // enforced by the type signature above\\n        return keccak256(abi.encodePacked(\\\"\\\\x19Ethereum Signed Message:\\\\n32\\\", hash));\\n    }\\n\\n    /**\\n     * @dev Returns an Ethereum Signed Message, created from `s`. This\\n     * produces hash corresponding to the one signed with the\\n     * https://eth.wiki/json-rpc/API#eth_sign[`eth_sign`]\\n     * JSON-RPC method as part of EIP-191.\\n     *\\n     * See {recover}.\\n     */\\n    function toEthSignedMessageHash(bytes memory s) internal pure returns (bytes32) {\\n        return keccak256(abi.encodePacked(\\\"\\\\x19Ethereum Signed Message:\\\\n\\\", Strings.toString(s.length), s));\\n    }\\n\\n    /**\\n     * @dev Returns an Ethereum Signed Typed Data, created from a\\n     * `domainSeparator` and a `structHash`. This produces hash corresponding\\n     * to the one signed with the\\n     * https://eips.ethereum.org/EIPS/eip-712[`eth_signTypedData`]\\n     * JSON-RPC method as part of EIP-712.\\n     *\\n     * See {recover}.\\n     */\\n    function toTypedDataHash(bytes32 domainSeparator, bytes32 structHash) internal pure returns (bytes32) {\\n        return keccak256(abi.encodePacked(\\\"\\\\x19\\\\x01\\\", domainSeparator, structHash));\\n    }\\n}\\n\",\"keccak256\":\"0x54ee424bfc83ce63b2a918b9a1efb5090a0fb68dbd1de3b10bc667776885dd4f\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.8.0) (utils/math/Math.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Standard math utilities missing in the Solidity language.\\n */\\nlibrary Math {\\n    enum Rounding {\\n        Down, // Toward negative infinity\\n        Up, // Toward infinity\\n        Zero // Toward zero\\n    }\\n\\n    /**\\n     * @dev Returns the largest of two numbers.\\n     */\\n    function max(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a > b ? a : b;\\n    }\\n\\n    /**\\n     * @dev Returns the smallest of two numbers.\\n     */\\n    function min(uint256 a, uint256 b) internal pure returns (uint256) {\\n        return a < b ? a : b;\\n    }\\n\\n    /**\\n     * @dev Returns the average of two numbers. The result is rounded towards\\n     * zero.\\n     */\\n    function average(uint256 a, uint256 b) internal pure returns (uint256) {\\n        // (a + b) / 2 can overflow.\\n        return (a & b) + (a ^ b) / 2;\\n    }\\n\\n    /**\\n     * @dev Returns the ceiling of the division of two numbers.\\n     *\\n     * This differs from standard division with `/` in that it rounds up instead\\n     * of rounding down.\\n     */\\n    function ceilDiv(uint256 a, uint256 b) internal pure returns (uint256) {\\n        // (a + b - 1) / b can overflow on addition, so we distribute.\\n        return a == 0 ? 0 : (a - 1) / b + 1;\\n    }\\n\\n    /**\\n     * @notice Calculates floor(x * y / denominator) with full precision. Throws if result overflows a uint256 or denominator == 0\\n     * @dev Original credit to Remco Bloemen under MIT license (https://xn--2-umb.com/21/muldiv)\\n     * with further edits by Uniswap Labs also under MIT license.\\n     */\\n    function mulDiv(uint256 x, uint256 y, uint256 denominator) internal pure returns (uint256 result) {\\n        unchecked {\\n            // 512-bit multiply [prod1 prod0] = x * y. Compute the product mod 2^256 and mod 2^256 - 1, then use\\n            // use the Chinese Remainder Theorem to reconstruct the 512 bit result. The result is stored in two 256\\n            // variables such that product = prod1 * 2^256 + prod0.\\n            uint256 prod0; // Least significant 256 bits of the product\\n            uint256 prod1; // Most significant 256 bits of the product\\n            assembly {\\n                let mm := mulmod(x, y, not(0))\\n                prod0 := mul(x, y)\\n                prod1 := sub(sub(mm, prod0), lt(mm, prod0))\\n            }\\n\\n            // Handle non-overflow cases, 256 by 256 division.\\n            if (prod1 == 0) {\\n                return prod0 / denominator;\\n            }\\n\\n            // Make sure the result is less than 2^256. Also prevents denominator == 0.\\n            require(denominator > prod1, \\\"Math: mulDiv overflow\\\");\\n\\n            ///////////////////////////////////////////////\\n            // 512 by 256 division.\\n            ///////////////////////////////////////////////\\n\\n            // Make division exact by subtracting the remainder from [prod1 prod0].\\n            uint256 remainder;\\n            assembly {\\n                // Compute remainder using mulmod.\\n                remainder := mulmod(x, y, denominator)\\n\\n                // Subtract 256 bit number from 512 bit number.\\n                prod1 := sub(prod1, gt(remainder, prod0))\\n                prod0 := sub(prod0, remainder)\\n            }\\n\\n            // Factor powers of two out of denominator and compute largest power of two divisor of denominator. Always >= 1.\\n            // See https://cs.stackexchange.com/q/138556/92363.\\n\\n            // Does not overflow because the denominator cannot be zero at this stage in the function.\\n            uint256 twos = denominator & (~denominator + 1);\\n            assembly {\\n                // Divide denominator by twos.\\n                denominator := div(denominator, twos)\\n\\n                // Divide [prod1 prod0] by twos.\\n                prod0 := div(prod0, twos)\\n\\n                // Flip twos such that it is 2^256 / twos. If twos is zero, then it becomes one.\\n                twos := add(div(sub(0, twos), twos), 1)\\n            }\\n\\n            // Shift in bits from prod1 into prod0.\\n            prod0 |= prod1 * twos;\\n\\n            // Invert denominator mod 2^256. Now that denominator is an odd number, it has an inverse modulo 2^256 such\\n            // that denominator * inv = 1 mod 2^256. Compute the inverse by starting with a seed that is correct for\\n            // four bits. That is, denominator * inv = 1 mod 2^4.\\n            uint256 inverse = (3 * denominator) ^ 2;\\n\\n            // Use the Newton-Raphson iteration to improve the precision. Thanks to Hensel's lifting lemma, this also works\\n            // in modular arithmetic, doubling the correct bits in each step.\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^8\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^16\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^32\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^64\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^128\\n            inverse *= 2 - denominator * inverse; // inverse mod 2^256\\n\\n            // Because the division is now exact we can divide by multiplying with the modular inverse of denominator.\\n            // This will give us the correct result modulo 2^256. Since the preconditions guarantee that the outcome is\\n            // less than 2^256, this is the final result. We don't need to compute the high bits of the result and prod1\\n            // is no longer required.\\n            result = prod0 * inverse;\\n            return result;\\n        }\\n    }\\n\\n    /**\\n     * @notice Calculates x * y / denominator with full precision, following the selected rounding direction.\\n     */\\n    function mulDiv(uint256 x, uint256 y, uint256 denominator, Rounding rounding) internal pure returns (uint256) {\\n        uint256 result = mulDiv(x, y, denominator);\\n        if (rounding == Rounding.Up && mulmod(x, y, denominator) > 0) {\\n            result += 1;\\n        }\\n        return result;\\n    }\\n\\n    /**\\n     * @dev Returns the square root of a number. If the number is not a perfect square, the value is rounded down.\\n     *\\n     * Inspired by Henry S. Warren, Jr.'s \\\"Hacker's Delight\\\" (Chapter 11).\\n     */\\n    function sqrt(uint256 a) internal pure returns (uint256) {\\n        if (a == 0) {\\n            return 0;\\n        }\\n\\n        // For our first guess, we get the biggest power of 2 which is smaller than the square root of the target.\\n        //\\n        // We know that the \\\"msb\\\" (most significant bit) of our target number `a` is a power of 2 such that we have\\n        // `msb(a) <= a < 2*msb(a)`. This value can be written `msb(a)=2**k` with `k=log2(a)`.\\n        //\\n        // This can be rewritten `2**log2(a) <= a < 2**(log2(a) + 1)`\\n        // \\u2192 `sqrt(2**k) <= sqrt(a) < sqrt(2**(k+1))`\\n        // \\u2192 `2**(k/2) <= sqrt(a) < 2**((k+1)/2) <= 2**(k/2 + 1)`\\n        //\\n        // Consequently, `2**(log2(a) / 2)` is a good first approximation of `sqrt(a)` with at least 1 correct bit.\\n        uint256 result = 1 << (log2(a) >> 1);\\n\\n        // At this point `result` is an estimation with one bit of precision. We know the true value is a uint128,\\n        // since it is the square root of a uint256. Newton's method converges quadratically (precision doubles at\\n        // every iteration). We thus need at most 7 iteration to turn our partial result with one bit of precision\\n        // into the expected uint128 result.\\n        unchecked {\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            result = (result + a / result) >> 1;\\n            return min(result, a / result);\\n        }\\n    }\\n\\n    /**\\n     * @notice Calculates sqrt(a), following the selected rounding direction.\\n     */\\n    function sqrt(uint256 a, Rounding rounding) internal pure returns (uint256) {\\n        unchecked {\\n            uint256 result = sqrt(a);\\n            return result + (rounding == Rounding.Up && result * result < a ? 1 : 0);\\n        }\\n    }\\n\\n    /**\\n     * @dev Return the log in base 2, rounded down, of a positive value.\\n     * Returns 0 if given 0.\\n     */\\n    function log2(uint256 value) internal pure returns (uint256) {\\n        uint256 result = 0;\\n        unchecked {\\n            if (value >> 128 > 0) {\\n                value >>= 128;\\n                result += 128;\\n            }\\n            if (value >> 64 > 0) {\\n                value >>= 64;\\n                result += 64;\\n            }\\n            if (value >> 32 > 0) {\\n                value >>= 32;\\n                result += 32;\\n            }\\n            if (value >> 16 > 0) {\\n                value >>= 16;\\n                result += 16;\\n            }\\n            if (value >> 8 > 0) {\\n                value >>= 8;\\n                result += 8;\\n            }\\n            if (value >> 4 > 0) {\\n                value >>= 4;\\n                result += 4;\\n            }\\n            if (value >> 2 > 0) {\\n                value >>= 2;\\n                result += 2;\\n            }\\n            if (value >> 1 > 0) {\\n                result += 1;\\n            }\\n        }\\n        return result;\\n    }\\n\\n    /**\\n     * @dev Return the log in base 2, following the selected rounding direction, of a positive value.\\n     * Returns 0 if given 0.\\n     */\\n    function log2(uint256 value, Rounding rounding) internal pure returns (uint256) {\\n        unchecked {\\n            uint256 result = log2(value);\\n            return result + (rounding == Rounding.Up && 1 << result < value ? 1 : 0);\\n        }\\n    }\\n\\n    /**\\n     * @dev Return the log in base 10, rounded down, of a positive value.\\n     * Returns 0 if given 0.\\n     */\\n    function log10(uint256 value) internal pure returns (uint256) {\\n        uint256 result = 0;\\n        unchecked {\\n            if (value >= 10 ** 64) {\\n                value /= 10 ** 64;\\n                result += 64;\\n            }\\n            if (value >= 10 ** 32) {\\n                value /= 10 ** 32;\\n                result += 32;\\n            }\\n            if (value >= 10 ** 16) {\\n                value /= 10 ** 16;\\n                result += 16;\\n            }\\n            if (value >= 10 ** 8) {\\n                value /= 10 ** 8;\\n                result += 8;\\n            }\\n            if (value >= 10 ** 4) {\\n                value /= 10 ** 4;\\n                result += 4;\\n            }\\n            if (value >= 10 ** 2) {\\n                value /= 10 ** 2;\\n                result += 2;\\n            }\\n            if (value >= 10 ** 1) {\\n                result += 1;\\n            }\\n        }\\n        return result;\\n    }\\n\\n    /**\\n     * @dev Return the log in base 10, following the selected rounding direction, of a positive value.\\n     * Returns 0 if given 0.\\n     */\\n    function log10(uint256 value, Rounding rounding) internal pure returns (uint256) {\\n        unchecked {\\n            uint256 result = log10(value);\\n            return result + (rounding == Rounding.Up && 10 ** result < value ? 1 : 0);\\n        }\\n    }\\n\\n    /**\\n     * @dev Return the log in base 256, rounded down, of a positive value.\\n     * Returns 0 if given 0.\\n     *\\n     * Adding one to the result gives the number of pairs of hex symbols needed to represent `value` as a hex string.\\n     */\\n    function log256(uint256 value) internal pure returns (uint256) {\\n        uint256 result = 0;\\n        unchecked {\\n            if (value >> 128 > 0) {\\n                value >>= 128;\\n                result += 16;\\n            }\\n            if (value >> 64 > 0) {\\n                value >>= 64;\\n                result += 8;\\n            }\\n            if (value >> 32 > 0) {\\n                value >>= 32;\\n                result += 4;\\n            }\\n            if (value >> 16 > 0) {\\n                value >>= 16;\\n                result += 2;\\n            }\\n            if (value >> 8 > 0) {\\n                result += 1;\\n            }\\n        }\\n        return result;\\n    }\\n\\n    /**\\n     * @dev Return the log in base 256, following the selected rounding direction, of a positive value.\\n     * Returns 0 if given 0.\\n     */\\n    function log256(uint256 value, Rounding rounding) internal pure returns (uint256) {\\n        unchecked {\\n            uint256 result = log256(value);\\n            return result + (rounding == Rounding.Up && 1 << (result << 3) < value ? 1 : 0);\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x3546b156d97633f7f8cad536d5454c81d1d604687c02b2eb105fdc33cb962b41\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.8.0) (utils/math/SignedMath.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Standard signed math utilities missing in the Solidity language.\\n */\\nlibrary SignedMath {\\n    /**\\n     * @dev Returns the largest of two signed numbers.\\n     */\\n    function max(int256 a, int256 b) internal pure returns (int256) {\\n        return a > b ? a : b;\\n    }\\n\\n    /**\\n     * @dev Returns the smallest of two signed numbers.\\n     */\\n    function min(int256 a, int256 b) internal pure returns (int256) {\\n        return a < b ? a : b;\\n    }\\n\\n    /**\\n     * @dev Returns the average of two signed numbers without overflow.\\n     * The result is rounded towards zero.\\n     */\\n    function average(int256 a, int256 b) internal pure returns (int256) {\\n        // Formula from the book \\\"Hacker's Delight\\\"\\n        int256 x = (a & b) + ((a ^ b) >> 1);\\n        return x + (int256(uint256(x) >> 255) & (a ^ b));\\n    }\\n\\n    /**\\n     * @dev Returns the absolute unsigned value of a signed value.\\n     */\\n    function abs(int256 n) internal pure returns (uint256) {\\n        unchecked {\\n            // must be unchecked in order to support `n = type(int256).min`\\n            return uint256(n >= 0 ? n : -n);\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xf92515413956f529d95977adc9b0567d583c6203fc31ab1c23824c35187e3ddc\",\"license\":\"MIT\"},\"src/Challenge.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\nimport 'lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol';\\nimport {IERC20} from 'lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol';\\nimport {Ownable} from 'lib/openzeppelin-contracts/contracts/access/Ownable.sol';\\n\\nerror InvalidSignature();\\nerror InvalidContestState();\\nerror InvalidCaller();\\nerror InvalidParams();\\nerror PaymentFailed(uint256 amount);\\n\\nenum ContestState {\\n    OPEN,\\n    ACCEPTED,\\n    CLOSED,\\n    REVOKED\\n}\\n\\nstruct Contest {\\n    ContestState state;\\n    address initiator;\\n    address acceptor;\\n    uint256 potHalf; // Half of the pot\\n}\\n\\n/**\\n * A contract that allows one player to challenge another.\\n * Note: Challenge details are managed off chain and signed by the host server.\\n */\\ncontract Challenge is Ownable {\\n    using ECDSA for bytes32;\\n\\n    address public _signer;\\n    IERC20 public immutable ASTO;\\n    address public feeAddress;\\n    // Fee is charged in basis points\\n    uint256 public feeBasis;\\n\\n    mapping(bytes32 => Contest) public contests;\\n\\n    event ContestOpened(\\n        address initiator,\\n        address acceptor,\\n        uint256 potHalf,\\n        bytes32 indexed contestHash\\n    );\\n    event ContestAccepted(\\n        address initiator,\\n        address acceptor,\\n        uint256 potHalf,\\n        bytes32 indexed contestHash\\n    );\\n    event ContestClosed(\\n        address winner,\\n        address loser,\\n        uint256 winnings,\\n        bytes32 indexed contestHash\\n    );\\n    event ContestRevoked(address initiator, bytes32 indexed contestHash);\\n\\n    constructor(\\n        address asto,\\n        address signer_,\\n        address feeAddress_,\\n        uint256 feeBasis_\\n    ) Ownable() {\\n        ASTO = IERC20(asto);\\n        _signer = signer_;\\n        feeBasis = feeBasis_;\\n        feeAddress = feeAddress_;\\n    }\\n\\n    /**\\n     * Checks if the signature matches data signed by the signer.\\n     * @param data The data to sign.\\n     * @param signature The expected signed data.\\n     * @dev Reverts if the signature is invalid.\\n     */\\n    modifier signed(bytes memory data, bytes memory signature) {\\n        address dataSigner = keccak256(data).toEthSignedMessageHash().recover(\\n            signature\\n        );\\n        if (dataSigner != _signer) revert InvalidSignature();\\n        _;\\n    }\\n\\n    /**\\n     * Create an open contest.\\n     * @param acceptor The acceptor of the challenge. If address(0), anyone can accept.\\n     * @param potHalf The amount added to the pot by the initiator.\\n     * @param contestHash The contest hash.\\n     * @param signature The server signed contest hash.\\n     */\\n    function openContest(\\n        address acceptor,\\n        uint256 potHalf,\\n        bytes32 contestHash,\\n        bytes calldata signature\\n    )\\n        external\\n        signed(\\n            abi.encodePacked(ContestState.OPEN, msg.sender, contestHash),\\n            signature\\n        )\\n    {\\n        address msgSender = msg.sender;\\n        if (acceptor == msgSender) {\\n            // Caller can't be acceptor\\n            revert InvalidCaller();\\n        }\\n        if (contests[contestHash].initiator != address(0)) {\\n            // Already opened\\n            revert InvalidContestState();\\n        }\\n        // Take ASTO\\n        takeAstoAmount(msgSender, potHalf);\\n        // Create contest\\n        contests[contestHash] = Contest(\\n            ContestState.OPEN,\\n            msgSender,\\n            acceptor,\\n            potHalf\\n        );\\n        emit ContestOpened(msgSender, acceptor, potHalf, contestHash);\\n    }\\n\\n    /**\\n     * Revoke an open contest.\\n     * @param contestHash The contest to revoke.\\n     * @notice This must be called on an open contest.\\n     * @notice This must be called by the initiator of the contest.\\n     * @dev Returns ASTO to the initiator.\\n     */\\n    function revokeContest(bytes32 contestHash) external {\\n        Contest storage contest = contests[contestHash];\\n        // Check state\\n        if (contest.state != ContestState.OPEN) {\\n            revert InvalidContestState();\\n        }\\n        address msgSender = msg.sender;\\n        if (contest.initiator != msgSender) {\\n            revert InvalidCaller();\\n        }\\n        // Send back ASTO\\n        ASTO.transfer(msgSender, contest.potHalf);\\n        // Close it\\n        contest.state = ContestState.REVOKED;\\n        emit ContestRevoked(contest.initiator, contestHash);\\n    }\\n\\n    /**\\n     * Accepts an open contest.\\n     * @param contestHash The contest hash.\\n     */\\n    function acceptContest(bytes32 contestHash) external {\\n        Contest storage contest = contests[contestHash];\\n        // Check state\\n        if (contest.state != ContestState.OPEN) {\\n            revert InvalidContestState();\\n        }\\n        address msgSender = msg.sender;\\n        // Check acceptor\\n        if (contest.initiator == msgSender) {\\n            revert InvalidCaller();\\n        } else if (contest.acceptor == address(0)) {\\n            contest.acceptor = msgSender;\\n        } else if (contest.acceptor != msgSender) {\\n            revert InvalidCaller();\\n        }\\n        // Take pot\\n        takeAstoAmount(msgSender, contest.potHalf);\\n        // Update state\\n        contest.state = ContestState.ACCEPTED;\\n        emit ContestAccepted(\\n            contest.initiator,\\n            contest.acceptor,\\n            contest.potHalf,\\n            contestHash\\n        );\\n    }\\n\\n    /**\\n     * Marks a contest as won. Sends the winner the winnings.\\n     * @param winner The winner of the contest.\\n     * @param contestHash The contest hash.\\n     * @param signature The server signed contest hash.\\n     */\\n    function closeContest(\\n        address winner,\\n        bytes32 contestHash,\\n        bytes calldata signature\\n    )\\n        external\\n        signed(\\n            abi.encodePacked(ContestState.CLOSED, winner, contestHash),\\n            signature\\n        )\\n    {\\n        Contest storage contest = contests[contestHash];\\n        // Check state\\n        if (contest.state != ContestState.ACCEPTED) {\\n            revert InvalidContestState();\\n        }\\n\\n        // Validate addresses\\n        address loser;\\n        if (contest.initiator == winner) {\\n            loser = contest.acceptor;\\n        } else if (contest.acceptor == winner) {\\n            loser = contest.initiator;\\n        } else {\\n            revert InvalidParams();\\n        }\\n\\n        // Calculate winnings\\n        uint256 winnings = contest.potHalf * 2;\\n        uint256 fee = (winnings * feeBasis) / 10000;\\n        winnings -= fee;\\n        // Send winnings and fee\\n        ASTO.transfer(winner, winnings);\\n        ASTO.transfer(feeAddress, fee);\\n        // Update state\\n        contest.state = ContestState.CLOSED;\\n        emit ContestClosed(winner, loser, winnings, contestHash);\\n    }\\n\\n    //\\n    // Admin\\n    //\\n\\n    function setSigner(address signer_) external onlyOwner {\\n        _signer = signer_;\\n    }\\n\\n    function setFeeDetails(address feeAddress_, uint256 feeBasis_)\\n        external\\n        onlyOwner\\n    {\\n        feeBasis = feeBasis_;\\n        feeAddress = feeAddress_;\\n    }\\n\\n    //\\n    // Internal\\n    //\\n\\n    /**\\n     * Take ASTO from the given address.\\n     * @param from The address to take from.\\n     * @param amount The amount to take.\\n     */\\n    function takeAstoAmount(address from, uint256 amount) internal {\\n        bool success = ASTO.transferFrom(from, address(this), amount);\\n        if (!success) revert PaymentFailed(amount);\\n    }\\n\\n    /**\\n     * Get the contest.\\n     * @param contestHash The contest hash.\\n     * @return contest The contest.\\n     */\\n    function getContest(bytes32 contestHash)\\n        external\\n        view\\n        returns (Contest memory contest)\\n    {\\n        return contests[contestHash];\\n    }\\n}\\n\",\"keccak256\":\"0x125f02ad926ff88dd5b02d7cb4923dd4eade6f5ed8333c2ae033d06c84a5940e\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60a06040523480156200001157600080fd5b50604051620014ec380380620014ec8339810160408190526200003491620000e6565b6200003f3362000079565b6001600160a01b03938416608052600180549385166001600160a01b03199485161790556003556002805491909316911617905562000138565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80516001600160a01b0381168114620000e157600080fd5b919050565b60008060008060808587031215620000fd57600080fd5b6200010885620000c9565b93506200011860208601620000c9565b92506200012860408601620000c9565b6060959095015193969295505050565b60805161137c62000170600039600081816101d3015281816106860152818161093f015281816109d80152610c78015261137c6000f3fe608060405234801561001057600080fd5b50600436106100f55760003560e01c80638da5cb5b11610097578063ea269c8411610066578063ea269c84146101f5578063f22d36a214610249578063f2fde38b14610269578063fe644b8f1461027c57600080fd5b80638da5cb5b14610197578063bda9b9c9146101a8578063ca29e8c8146101bb578063d7d15482146101ce57600080fd5b806341275358116100d357806341275358146101355780635a94ee46146101655780636c19e7831461017c578063715018a61461018f57600080fd5b8063291f1f1c146100fa5780633180ea911461010f57806337ba3cc814610122575b600080fd5b61010d610108366004611077565b61028f565b005b61010d61011d3660046110df565b610495565b61010d6101303660046110df565b6105e6565b600254610148906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61016e60035481565b60405190815260200161015c565b61010d61018a3660046110f8565b610744565b61010d61076e565b6000546001600160a01b0316610148565b61010d6101b636600461111a565b610782565b600154610148906001600160a01b031681565b6101487f000000000000000000000000000000000000000000000000000000000000000081565b6102396102033660046110df565b60046020526000908152604090208054600182015460029092015460ff8216926001600160a01b03610100909304831692169084565b60405161015c94939291906111ac565b61025c6102573660046110df565b610a9e565b60405161015c91906111e1565b61010d6102773660046110f8565b610b3a565b61010d61028a366004611226565b610bb8565b600033846040516020016102a593929190611250565b60408051601f198184030181526020601f85018190048102840181019092528383529190849084908190840183828082843760009201829052508551602087012090935061030092508491506102fa90610be5565b90610c38565b6001549091506001600160a01b0380831691161461033157604051638baa579f60e01b815260040160405180910390fd5b336001600160a01b03891681900361035c576040516348f5c3ed60e01b815260040160405180910390fd5b60008781526004602052604090205461010090046001600160a01b0316156103975760405163d613ecd560e01b815260040160405180910390fd5b6103a18189610c5e565b6040805160808101825260008082526001600160a01b03848116602080850191909152908d1683850152606083018c90528a8252600490529190912081518154829060ff191660018360038111156103fb576103fb611174565b021790555060208201518154610100600160a81b0319166101006001600160a01b03928316021782556040808401516001840180546001600160a01b03191691909316179091556060909201516002909101555187907f4d46cefe3d0b3184acfacf0513bcaaafe6e2ff930302d70806c5c304727caf9f906104829084908d908d9061129e565b60405180910390a2505050505050505050565b600081815260046020526040812090815460ff1660038111156104ba576104ba611174565b146104d85760405163d613ecd560e01b815260040160405180910390fd5b8054339061010090046001600160a01b031681900361050a576040516348f5c3ed60e01b815260040160405180910390fd5b60018201546001600160a01b031661053e576001820180546001600160a01b0319166001600160a01b03831617905561056e565b60018201546001600160a01b0382811691161461056e576040516348f5c3ed60e01b815260040160405180910390fd5b61057c818360020154610c5e565b815460ff1916600190811780845590830154600284015460405186937f8eda059bb4fe0c644119f83f73612a862511effe0166757d021846a33bc0945d936105d9936001600160a01b03610100909304831693929091169161129e565b60405180910390a2505050565b600081815260046020526040812090815460ff16600381111561060b5761060b611174565b146106295760405163d613ecd560e01b815260040160405180910390fd5b8054339061010090046001600160a01b0316811461065a576040516348f5c3ed60e01b815260040160405180910390fd5b600282015460405163a9059cbb60e01b81526001600160a01b03838116600483015260248201929092527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af11580156106d1573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106f591906112c2565b508154600360ff19909116178083556040516101009091046001600160a01b0316815283907f097e6e2df26a009d24acf69cbcecc9bd4cb9970d1f3d1f6feff1373d5f0b2621906020016105d9565b61074c610d1c565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b610776610d1c565b6107806000610d76565b565b6002848460405160200161079893929190611250565b60408051601f198184030181526020601f8501819004810284018101909252838352919084908490819084018382808284376000920182905250855160208701209093506107ed92508491506102fa90610be5565b6001549091506001600160a01b0380831691161461081e57604051638baa579f60e01b815260040160405180910390fd5b60008681526004602052604090206001815460ff16600381111561084457610844611174565b146108625760405163d613ecd560e01b815260040160405180910390fd5b80546000906001600160a01b03808b166101009092041603610892575060018101546001600160a01b03166108d8565b60018201546001600160a01b03808b169116036108bf5750805461010090046001600160a01b03166108d8565b604051635435b28960e11b815260040160405180910390fd5b6000826002015460026108eb91906112fa565b905060006127106003548361090091906112fa565b61090a9190611311565b90506109168183611333565b60405163a9059cbb60e01b81526001600160a01b038d81166004830152602482018390529193507f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af115801561098a573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109ae91906112c2565b5060025460405163a9059cbb60e01b81526001600160a01b039182166004820152602481018390527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af1158015610a23573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a4791906112c2565b50835460ff191660021784556040518a907f326fcca634f6f18be17f8541b4cc108efaa64c7459a3ac23da7ba6add784605190610a89908e908790879061129e565b60405180910390a25050505050505050505050565b604080516080810182526000808252602082018190529181018290526060810191909152600082815260046020526040908190208151608081019092528054829060ff166003811115610af357610af3611174565b6003811115610b0457610b04611174565b815281546001600160a01b0361010090910481166020830152600183015416604082015260029091015460609091015292915050565b610b42610d1c565b6001600160a01b038116610bac5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b60648201526084015b60405180910390fd5b610bb581610d76565b50565b610bc0610d1c565b600355600280546001600160a01b0319166001600160a01b0392909216919091179055565b6040517f19457468657265756d205369676e6564204d6573736167653a0a3332000000006020820152603c8101829052600090605c01604051602081830303815290604052805190602001209050919050565b6000806000610c478585610dc6565b91509150610c5481610e0b565b5090505b92915050565b6040516323b872dd60e01b81526000906001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906323b872dd90610cb19086903090879060040161129e565b6020604051808303816000875af1158015610cd0573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610cf491906112c2565b905080610d1757604051631e67017f60e01b815260048101839052602401610ba3565b505050565b6000546001600160a01b031633146107805760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401610ba3565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000808251604103610dfc5760208301516040840151606085015160001a610df087828585610f55565b94509450505050610e04565b506000905060025b9250929050565b6000816004811115610e1f57610e1f611174565b03610e275750565b6001816004811115610e3b57610e3b611174565b03610e885760405162461bcd60e51b815260206004820152601860248201527f45434453413a20696e76616c6964207369676e617475726500000000000000006044820152606401610ba3565b6002816004811115610e9c57610e9c611174565b03610ee95760405162461bcd60e51b815260206004820152601f60248201527f45434453413a20696e76616c6964207369676e6174757265206c656e677468006044820152606401610ba3565b6003816004811115610efd57610efd611174565b03610bb55760405162461bcd60e51b815260206004820152602260248201527f45434453413a20696e76616c6964207369676e6174757265202773272076616c604482015261756560f01b6064820152608401610ba3565b6000807f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0831115610f8c5750600090506003611010565b6040805160008082526020820180845289905260ff881692820192909252606081018690526080810185905260019060a0016020604051602081039080840390855afa158015610fe0573d6000803e3d6000fd5b5050604051601f1901519150506001600160a01b03811661100957600060019250925050611010565b9150600090505b94509492505050565b80356001600160a01b038116811461103057600080fd5b919050565b60008083601f84011261104757600080fd5b50813567ffffffffffffffff81111561105f57600080fd5b602083019150836020828501011115610e0457600080fd5b60008060008060006080868803121561108f57600080fd5b61109886611019565b94506020860135935060408601359250606086013567ffffffffffffffff8111156110c257600080fd5b6110ce88828901611035565b969995985093965092949392505050565b6000602082840312156110f157600080fd5b5035919050565b60006020828403121561110a57600080fd5b61111382611019565b9392505050565b6000806000806060858703121561113057600080fd5b61113985611019565b935060208501359250604085013567ffffffffffffffff81111561115c57600080fd5b61116887828801611035565b95989497509550505050565b634e487b7160e01b600052602160045260246000fd5b600481106111a857634e487b7160e01b600052602160045260246000fd5b9052565b608081016111ba828761118a565b6001600160a01b039485166020830152929093166040840152606090920191909152919050565b60006080820190506111f482845161118a565b602083015160018060a01b03808216602085015280604086015116604085015250506060830151606083015292915050565b6000806040838503121561123957600080fd5b61124283611019565b946020939093013593505050565b60006004851061127057634e487b7160e01b600052602160045260246000fd5b5060f89390931b835260609190911b6bffffffffffffffffffffffff19166001830152601582015260350190565b6001600160a01b039384168152919092166020820152604081019190915260600190565b6000602082840312156112d457600080fd5b8151801515811461111357600080fd5b634e487b7160e01b600052601160045260246000fd5b8082028115828204841417610c5857610c586112e4565b60008261132e57634e487b7160e01b600052601260045260246000fd5b500490565b81810381811115610c5857610c586112e456fea2646970667358221220cc68c4ae282704ae8f665b4fb1e6faedd2ec7edd5fc59ccfaed67930406be0a164736f6c63430008110033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100f55760003560e01c80638da5cb5b11610097578063ea269c8411610066578063ea269c84146101f5578063f22d36a214610249578063f2fde38b14610269578063fe644b8f1461027c57600080fd5b80638da5cb5b14610197578063bda9b9c9146101a8578063ca29e8c8146101bb578063d7d15482146101ce57600080fd5b806341275358116100d357806341275358146101355780635a94ee46146101655780636c19e7831461017c578063715018a61461018f57600080fd5b8063291f1f1c146100fa5780633180ea911461010f57806337ba3cc814610122575b600080fd5b61010d610108366004611077565b61028f565b005b61010d61011d3660046110df565b610495565b61010d6101303660046110df565b6105e6565b600254610148906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61016e60035481565b60405190815260200161015c565b61010d61018a3660046110f8565b610744565b61010d61076e565b6000546001600160a01b0316610148565b61010d6101b636600461111a565b610782565b600154610148906001600160a01b031681565b6101487f000000000000000000000000000000000000000000000000000000000000000081565b6102396102033660046110df565b60046020526000908152604090208054600182015460029092015460ff8216926001600160a01b03610100909304831692169084565b60405161015c94939291906111ac565b61025c6102573660046110df565b610a9e565b60405161015c91906111e1565b61010d6102773660046110f8565b610b3a565b61010d61028a366004611226565b610bb8565b600033846040516020016102a593929190611250565b60408051601f198184030181526020601f85018190048102840181019092528383529190849084908190840183828082843760009201829052508551602087012090935061030092508491506102fa90610be5565b90610c38565b6001549091506001600160a01b0380831691161461033157604051638baa579f60e01b815260040160405180910390fd5b336001600160a01b03891681900361035c576040516348f5c3ed60e01b815260040160405180910390fd5b60008781526004602052604090205461010090046001600160a01b0316156103975760405163d613ecd560e01b815260040160405180910390fd5b6103a18189610c5e565b6040805160808101825260008082526001600160a01b03848116602080850191909152908d1683850152606083018c90528a8252600490529190912081518154829060ff191660018360038111156103fb576103fb611174565b021790555060208201518154610100600160a81b0319166101006001600160a01b03928316021782556040808401516001840180546001600160a01b03191691909316179091556060909201516002909101555187907f4d46cefe3d0b3184acfacf0513bcaaafe6e2ff930302d70806c5c304727caf9f906104829084908d908d9061129e565b60405180910390a2505050505050505050565b600081815260046020526040812090815460ff1660038111156104ba576104ba611174565b146104d85760405163d613ecd560e01b815260040160405180910390fd5b8054339061010090046001600160a01b031681900361050a576040516348f5c3ed60e01b815260040160405180910390fd5b60018201546001600160a01b031661053e576001820180546001600160a01b0319166001600160a01b03831617905561056e565b60018201546001600160a01b0382811691161461056e576040516348f5c3ed60e01b815260040160405180910390fd5b61057c818360020154610c5e565b815460ff1916600190811780845590830154600284015460405186937f8eda059bb4fe0c644119f83f73612a862511effe0166757d021846a33bc0945d936105d9936001600160a01b03610100909304831693929091169161129e565b60405180910390a2505050565b600081815260046020526040812090815460ff16600381111561060b5761060b611174565b146106295760405163d613ecd560e01b815260040160405180910390fd5b8054339061010090046001600160a01b0316811461065a576040516348f5c3ed60e01b815260040160405180910390fd5b600282015460405163a9059cbb60e01b81526001600160a01b03838116600483015260248201929092527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af11580156106d1573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106f591906112c2565b508154600360ff19909116178083556040516101009091046001600160a01b0316815283907f097e6e2df26a009d24acf69cbcecc9bd4cb9970d1f3d1f6feff1373d5f0b2621906020016105d9565b61074c610d1c565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b610776610d1c565b6107806000610d76565b565b6002848460405160200161079893929190611250565b60408051601f198184030181526020601f8501819004810284018101909252838352919084908490819084018382808284376000920182905250855160208701209093506107ed92508491506102fa90610be5565b6001549091506001600160a01b0380831691161461081e57604051638baa579f60e01b815260040160405180910390fd5b60008681526004602052604090206001815460ff16600381111561084457610844611174565b146108625760405163d613ecd560e01b815260040160405180910390fd5b80546000906001600160a01b03808b166101009092041603610892575060018101546001600160a01b03166108d8565b60018201546001600160a01b03808b169116036108bf5750805461010090046001600160a01b03166108d8565b604051635435b28960e11b815260040160405180910390fd5b6000826002015460026108eb91906112fa565b905060006127106003548361090091906112fa565b61090a9190611311565b90506109168183611333565b60405163a9059cbb60e01b81526001600160a01b038d81166004830152602482018390529193507f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af115801561098a573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109ae91906112c2565b5060025460405163a9059cbb60e01b81526001600160a01b039182166004820152602481018390527f00000000000000000000000000000000000000000000000000000000000000009091169063a9059cbb906044016020604051808303816000875af1158015610a23573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610a4791906112c2565b50835460ff191660021784556040518a907f326fcca634f6f18be17f8541b4cc108efaa64c7459a3ac23da7ba6add784605190610a89908e908790879061129e565b60405180910390a25050505050505050505050565b604080516080810182526000808252602082018190529181018290526060810191909152600082815260046020526040908190208151608081019092528054829060ff166003811115610af357610af3611174565b6003811115610b0457610b04611174565b815281546001600160a01b0361010090910481166020830152600183015416604082015260029091015460609091015292915050565b610b42610d1c565b6001600160a01b038116610bac5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b60648201526084015b60405180910390fd5b610bb581610d76565b50565b610bc0610d1c565b600355600280546001600160a01b0319166001600160a01b0392909216919091179055565b6040517f19457468657265756d205369676e6564204d6573736167653a0a3332000000006020820152603c8101829052600090605c01604051602081830303815290604052805190602001209050919050565b6000806000610c478585610dc6565b91509150610c5481610e0b565b5090505b92915050565b6040516323b872dd60e01b81526000906001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906323b872dd90610cb19086903090879060040161129e565b6020604051808303816000875af1158015610cd0573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610cf491906112c2565b905080610d1757604051631e67017f60e01b815260048101839052602401610ba3565b505050565b6000546001600160a01b031633146107805760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e65726044820152606401610ba3565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000808251604103610dfc5760208301516040840151606085015160001a610df087828585610f55565b94509450505050610e04565b506000905060025b9250929050565b6000816004811115610e1f57610e1f611174565b03610e275750565b6001816004811115610e3b57610e3b611174565b03610e885760405162461bcd60e51b815260206004820152601860248201527f45434453413a20696e76616c6964207369676e617475726500000000000000006044820152606401610ba3565b6002816004811115610e9c57610e9c611174565b03610ee95760405162461bcd60e51b815260206004820152601f60248201527f45434453413a20696e76616c6964207369676e6174757265206c656e677468006044820152606401610ba3565b6003816004811115610efd57610efd611174565b03610bb55760405162461bcd60e51b815260206004820152602260248201527f45434453413a20696e76616c6964207369676e6174757265202773272076616c604482015261756560f01b6064820152608401610ba3565b6000807f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0831115610f8c5750600090506003611010565b6040805160008082526020820180845289905260ff881692820192909252606081018690526080810185905260019060a0016020604051602081039080840390855afa158015610fe0573d6000803e3d6000fd5b5050604051601f1901519150506001600160a01b03811661100957600060019250925050611010565b9150600090505b94509492505050565b80356001600160a01b038116811461103057600080fd5b919050565b60008083601f84011261104757600080fd5b50813567ffffffffffffffff81111561105f57600080fd5b602083019150836020828501011115610e0457600080fd5b60008060008060006080868803121561108f57600080fd5b61109886611019565b94506020860135935060408601359250606086013567ffffffffffffffff8111156110c257600080fd5b6110ce88828901611035565b969995985093965092949392505050565b6000602082840312156110f157600080fd5b5035919050565b60006020828403121561110a57600080fd5b61111382611019565b9392505050565b6000806000806060858703121561113057600080fd5b61113985611019565b935060208501359250604085013567ffffffffffffffff81111561115c57600080fd5b61116887828801611035565b95989497509550505050565b634e487b7160e01b600052602160045260246000fd5b600481106111a857634e487b7160e01b600052602160045260246000fd5b9052565b608081016111ba828761118a565b6001600160a01b039485166020830152929093166040840152606090920191909152919050565b60006080820190506111f482845161118a565b602083015160018060a01b03808216602085015280604086015116604085015250506060830151606083015292915050565b6000806040838503121561123957600080fd5b61124283611019565b946020939093013593505050565b60006004851061127057634e487b7160e01b600052602160045260246000fd5b5060f89390931b835260609190911b6bffffffffffffffffffffffff19166001830152601582015260350190565b6001600160a01b039384168152919092166020820152604081019190915260600190565b6000602082840312156112d457600080fd5b8151801515811461111357600080fd5b634e487b7160e01b600052601160045260246000fd5b8082028115828204841417610c5857610c586112e4565b60008261132e57634e487b7160e01b600052601260045260246000fd5b500490565b81810381811115610c5857610c586112e456fea2646970667358221220cc68c4ae282704ae8f665b4fb1e6faedd2ec7edd5fc59ccfaed67930406be0a164736f6c63430008110033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "acceptContest(bytes32)": {
+        "params": {
+          "contestHash": "The contest hash."
+        }
+      },
+      "closeContest(address,bytes32,bytes)": {
+        "params": {
+          "contestHash": "The contest hash.",
+          "signature": "The server signed contest hash.",
+          "winner": "The winner of the contest."
+        }
+      },
+      "getContest(bytes32)": {
+        "params": {
+          "contestHash": "The contest hash."
+        },
+        "returns": {
+          "contest": "The contest."
+        }
+      },
+      "openContest(address,uint256,bytes32,bytes)": {
+        "params": {
+          "acceptor": "The acceptor of the challenge. If address(0), anyone can accept.",
+          "contestHash": "The contest hash.",
+          "potHalf": "The amount added to the pot by the initiator.",
+          "signature": "The server signed contest hash."
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "revokeContest(bytes32)": {
+        "details": "Returns ASTO to the initiator.",
+        "params": {
+          "contestHash": "The contest to revoke."
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "acceptContest(bytes32)": {
+        "notice": "Accepts an open contest."
+      },
+      "closeContest(address,bytes32,bytes)": {
+        "notice": "Marks a contest as won. Sends the winner the winnings."
+      },
+      "getContest(bytes32)": {
+        "notice": "Get the contest."
+      },
+      "openContest(address,uint256,bytes32,bytes)": {
+        "notice": "Create an open contest."
+      },
+      "revokeContest(bytes32)": {
+        "notice": "Revoke an open contest.This must be called on an open contest.This must be called by the initiator of the contest."
+      }
+    },
+    "notice": "A contract that allows one player to challenge another. Note: Challenge details are managed off chain and signed by the host server.",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 2296,
+        "contract": "src/Challenge.sol:Challenge",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 6144,
+        "contract": "src/Challenge.sol:Challenge",
+        "label": "_signer",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 6149,
+        "contract": "src/Challenge.sol:Challenge",
+        "label": "feeAddress",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 6151,
+        "contract": "src/Challenge.sol:Challenge",
+        "label": "feeBasis",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 6156,
+        "contract": "src/Challenge.sol:Challenge",
+        "label": "contests",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_bytes32,t_struct(Contest)6136_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_enum(ContestState)6126": {
+        "encoding": "inplace",
+        "label": "enum ContestState",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_bytes32,t_struct(Contest)6136_storage)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => struct Contest)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Contest)6136_storage"
+      },
+      "t_struct(Contest)6136_storage": {
+        "encoding": "inplace",
+        "label": "struct Contest",
+        "members": [
+          {
+            "astId": 6129,
+            "contract": "src/Challenge.sol:Challenge",
+            "label": "state",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_enum(ContestState)6126"
+          },
+          {
+            "astId": 6131,
+            "contract": "src/Challenge.sol:Challenge",
+            "label": "initiator",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 6133,
+            "contract": "src/Challenge.sol:Challenge",
+            "label": "acceptor",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address"
+          },
+          {
+            "astId": 6135,
+            "contract": "src/Challenge.sol:Challenge",
+            "label": "potHalf",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "96"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

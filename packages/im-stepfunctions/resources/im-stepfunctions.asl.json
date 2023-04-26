@@ -1,0 +1,151 @@
+{
+  "Comment": "An example of the Amazon States Language using a map state to process elements of an array with a max concurrency of 2.",
+  "StartAt": "NotifyIMStarted",
+  "States": {
+    "NotifyIMStarted": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "QueueUrl": "${im_events_sqs_queue_url}",
+        "MessageBody": {
+          "event_type": "IMStarted",
+          "training_id.$": "$.training_id"
+        },
+        "MessageGroupId.$": "$.training_id",
+        "MessageDeduplicationId.$": "States.UUID()"
+      },
+      "ResultPath": null,
+      "Next": "Train"
+    },
+    "Train": {
+      "Type": "Task",
+      "Resource": "${training_lambda_arn}",
+      "Next": "NotifyIMTrainingUnitCompleted",
+      "ResultPath": "$.training_output"
+    },
+    "NotifyIMTrainingUnitCompleted": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "QueueUrl": "${im_events_sqs_queue_url}",
+        "MessageBody": {
+          "event_type": "IMTrainingUnitCompleted",
+          "training_id.$": "$.training_id",
+          "completed_training_units.$": "$.training_output.completed_training_units",
+          "is_completed.$": "$.training_output.is_completed"
+        },
+        "MessageGroupId.$": "$.training_id",
+        "MessageDeduplicationId.$": "States.UUID()"
+      },
+      "ResultPath": null,
+      "Next": "CheckTrainingIterations"
+    },
+    "CheckTrainingIterations": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.training_output.is_completed",
+          "BooleanEquals": true,
+          "Next": "NotifyIMTrainingCompleted"
+        }
+      ],
+      "Default": "Train"
+    },
+    "NotifyIMTrainingCompleted": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "QueueUrl": "${im_events_sqs_queue_url}",
+        "MessageBody": {
+          "event_type": "IMTrainingCompleted",
+          "training_id.$": "$.training_id",
+          "training_output.$": "$.training_output"
+        },
+        "MessageGroupId.$": "$.training_id",
+        "MessageDeduplicationId.$": "States.UUID()"
+      },
+      "ResultPath": null,
+      "Next": "GetEvaluationConfig"
+    },
+    "GetEvaluationConfig": {
+      "Type": "Task",
+      "Resource": "${get_evaluation_config_lambda_arn}",
+      "Parameters": {},
+      "Next": "RunEvaluationScenarios",
+      "ResultPath": "$.evaluation_config"
+    },
+    "RunEvaluationScenarios": {
+      "Type": "Map",
+      "ItemsPath": "$.evaluation_config.scenarios",
+      "ResultPath": "$.evaluations",
+      "Parameters": {
+        "evaluation.$": "$$.Map.Item.Value",
+        "genome_attributes.$": "$.player_config.genome_attributes",
+        "training_id.$": "$.training_id",
+        "training_output.$": "$.training_output"
+      },
+      "Next": "NotifyIMCompleted",
+      "Iterator": {
+        "StartAt": "NotifyIMEvaluationStarted",
+        "States": {
+          "NotifyIMEvaluationStarted": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sqs:sendMessage",
+            "Parameters": {
+              "QueueUrl": "${im_events_sqs_queue_url}",
+              "MessageBody": {
+                "event_type": "IMEvaluationStarted",
+                "training_id.$": "$.training_id",
+                "evaluation_id.$": "$.evaluation.id"
+              },
+              "MessageGroupId.$": "$.training_id",
+              "MessageDeduplicationId.$": "States.UUID()"
+            },
+            "ResultPath": null,
+            "Next": "RunEvaluation"
+          },
+          "RunEvaluation": {
+            "Type": "Task",
+            "Resource": "${evaluation_lambda_arn}",
+            "Next": "NotifyIMEvaluationCompleted",
+            "ResultPath": "$.evaluation_output"
+          },
+          "NotifyIMEvaluationCompleted": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sqs:sendMessage",
+            "Parameters": {
+              "QueueUrl": "${im_events_sqs_queue_url}",
+              "MessageBody": {
+                "event_type": "IMEvaluationCompleted",
+                "training_id.$": "$.training_id",
+                "evaluation_output.$": "$.evaluation_output"
+              },
+              "MessageGroupId.$": "$.training_id",
+              "MessageDeduplicationId.$": "States.UUID()"
+            },
+            "ResultPath": null,
+            "OutputPath": "$.evaluation_output",
+            "End": true
+          }
+        }
+      }
+    },
+    "NotifyIMCompleted": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "QueueUrl": "${im_events_sqs_queue_url}",
+        "MessageBody": {
+          "event_type": "IMCompleted",
+          "training_id.$": "$.training_id",
+          "training_output.$": "$.training_output",
+          "evaluation_output.$": "$.evaluations"
+        },
+        "MessageGroupId": "$.training_id",
+        "MessageDeduplicationId.$": "States.UUID()"
+      },
+      "ResultPath": null,
+      "End": true
+    }
+  }
+}

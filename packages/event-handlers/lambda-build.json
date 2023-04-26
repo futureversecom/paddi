@@ -1,0 +1,10 @@
+{
+  "handlers": [
+    {
+      "entrypoint": "./src/handlers/training-event-handler.ts"
+    },
+    {
+      "entrypoint": "./src/handlers/im-event-handler.ts"
+    }
+  ]
+}

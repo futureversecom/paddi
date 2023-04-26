@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://acp.futureverse.com/schemas/evaluation_config_output.json",
+  "title": "EvaluationScenarioConfig",
+  "description": "Evaluation scenario config output",
+  "type": "object",
+  "properties": {
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "$ref": "./segments/scenario_config.json"
+      }
+    }
+  },
+  "required": ["scenarios"]
+}

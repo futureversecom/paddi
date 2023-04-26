@@ -1,0 +1,5 @@
+mutation trainingCancel($hash: UInt256!) {
+  trainingCancel(hash: $hash) {
+    success
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IMProgressEvent",
+  "description": "Events from IM Step Function",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/IMStarted"
+    },
+    {
+      "$ref": "#/definitions/IMTrainingUnitCompleted"
+    },
+    {
+      "$ref": "#/definitions/IMTrainingCompleted"
+    },
+    {
+      "$ref": "#/definitions/IMEvaluationStarted"
+    },
+    {
+      "$ref": "#/definitions/IMEvaluationCompleted"
+    },
+    {
+      "$ref": "#/definitions/IMCompleted"
+    }
+  ],
+  "definitions": {
+    "IMStarted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMStarted",
+          "type": "string",
+          "enum": ["IMStarted"]
+        },
+        "training_id": {
+          "type": "string"
+        }
+      },
+      "required": ["event_type", "training_id"]
+    },
+    "IMTrainingUnitCompleted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMTrainingUnitCompleted",
+          "type": "string",
+          "enum": ["IMTrainingUnitCompleted"]
+        },
+        "training_id": {
+          "type": "string"
+        },
+        "completed_training_units": {
+          "type": "integer"
+        },
+        "is_completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "event_type",
+        "training_id",
+        "completed_training_units",
+        "is_completed"
+      ]
+    },
+    "IMTrainingCompleted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMTrainingCompleted",
+          "type": "string",
+          "enum": ["IMTrainingCompleted"]
+        },
+        "training_id": {
+          "type": "string"
+        },
+        "training_output": {
+          "$ref": "./training_output.json"
+        }
+      },
+      "required": ["event_type", "training_id", "training_output"]
+    },
+    "IMEvaluationStarted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMEvaluationStarted",
+          "type": "string",
+          "enum": ["IMEvaluationStarted"]
+        },
+        "training_id": {
+          "type": "string"
+        },
+        "evaluation_id": {
+          "type": "string"
+        }
+      },
+      "required": ["event_type", "training_id", "evaluation_id"]
+    },
+    "IMEvaluationCompleted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMEvaluationCompleted",
+          "type": "string",
+          "enum": ["IMEvaluationCompleted"]
+        },
+        "training_id": {
+          "type": "string"
+        },
+        "evaluation_output": {
+          "$ref": "./evaluation_output.json"
+        }
+      },
+      "required": [
+        "event_type",
+        "training_id",
+        "evaluation_id",
+        "evaluation_output"
+      ]
+    },
+    "IMCompleted": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "IMCompleted",
+          "type": "string",
+          "enum": ["IMCompleted"]
+        },
+        "training_id": {
+          "type": "string"
+        },
+        "training_output": {
+          "$ref": "./training_output.json"
+        },
+        "evaluation_output": {
+          "type": "array",
+          "items": {
+            "$ref": "./evaluation_output.json"
+          }
+        }
+      },
+      "required": [
+        "event_type",
+        "training_id",
+        "training_output",
+        "evaluation_output"
+      ]
+    }
+  }
+}

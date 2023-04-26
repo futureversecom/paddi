@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "EvaluationRequest",
+  "type": "object",
+  "properties": {
+    "training_id": {
+      "title": "Training Id",
+      "type": "string"
+    },
+    "training_output": {
+      "$ref": "./training_output.json"
+    },
+    "genome_attributes": {
+      "$ref": "./segments/agent_config.json#/definitions/GenomeAttributes"
+    },
+    "evaluation": {
+      "$ref": "./segments/scenario_config.json"
+    }
+  },
+  "required": [
+    "training_id",
+    "training_output",
+    "evaluation",
+    "genome_attributes"
+  ]
+}

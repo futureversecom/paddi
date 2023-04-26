@@ -1,0 +1,22 @@
+mutation gasFaucet($address: ChainAddress!) {
+  gasFaucet(address: $address) {
+    ... on GasFaucetSuccessResponse {
+      __typename
+      hash
+    }
+
+    ... on GasFaucetFailureResponse {
+      reason {
+        ... on NotEnoughGasInFaucet {
+          __typename
+        }
+        ... on NotEnoughGasInServer {
+          __typename
+        }
+        ... on UnknownError {
+          __typename
+        }
+      }
+    }
+  }
+}

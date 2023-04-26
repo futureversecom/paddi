@@ -1,0 +1,14 @@
+mutation trainingRequest($input: TrainingRequestInput!) {
+  trainingRequest(input: $input) {
+    ... on TrainingRequestFailure {
+      __typename
+      message
+    }
+    ... on TrainingRequestSuccess {
+      __typename
+      training {
+        hash
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# Compiler files
+cache/
+out/
+
+# Config
+.env
+
+# Forge deps
+broadcast/
+
+# Hardhat deps
+node_modules/
+artifacts/
+cache_hardhat/
+
+# build
+dist

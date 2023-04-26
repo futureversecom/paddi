@@ -1,0 +1,5 @@
+query pendingNodeSignature($hash: UInt256!) {
+  pendingNodeSignature(hash: $hash) {
+    signature
+  }
+}

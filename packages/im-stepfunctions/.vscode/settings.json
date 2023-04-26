@@ -1,0 +1,18 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "python.linting.mypyEnabled": true,
+  "python.analysis.importFormat": "absolute",
+  "python.languageServer": "Default",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.formatting.provider": "autopep8",
+  "editor.tabSize": 2,
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "python.linting.enabled": true
+}

@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://www.graphql-code-generator.com/config.schema.json
+overwrite: true
+schema: '../core/src/graphql/*.graphql.ts'
+generates:
+  src/generated/gql/index.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-resolvers'
+    config:
+      immutableTypes: true
+      constEnums: true
+      contextType: '../../graphql/context#Context'
+      # nonOptionalTypename: true
+      directiveContextTypes:
+        - 'authenticated#../../graphql/context#AuthenticatedContext'
+      scalars:
+        ChainAddress: 'core/src/types/chain-address#ChainAddress'
+        UInt256: 'core/src/types/uint256#UInt256'
+        Timestamp: 'core/src/types/timestamp#Timestamp'
+        HexColour: 'core/src/types/hex-colour#HexColour'
+      useTypeImports: true
+      useIndexSignature: true
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

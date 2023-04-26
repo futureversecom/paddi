@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "allowJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["dom", "es2020"],
+    "outDir": "dist",
+    "isolatedModules": false,
+    "types": ["jest", "node"]
+  },
+  "include": ["./global.d.ts", "src", "src/**/*.json"],
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../smart-contracts/tsconfig.ext.json"
+    }
+  ]
+}

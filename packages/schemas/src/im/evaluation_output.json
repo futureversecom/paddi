@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://acp.futureverse.com/schemas/evaluation_output.json",
+  "title": "EvaluationOutput",
+  "description": "The output of a single evaluation run",
+  "type": "object",
+  "properties": {
+    "evaluation_id": {
+      "type": "string"
+    },
+    "replay_path": {
+      "type": "string",
+      "description": "The path to the replay file"
+    },
+    "stats": {
+      "type": "array",
+      "description": "The stats for the evaluation interpretations",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": "./segments/histogram_stats.json"
+          },
+          {
+            "$ref": "./segments/aggregation_stats.json"
+          }
+        ]
+      }
+    }
+  },
+  "required": ["evaluation_id", "stats", "replay_path"]
+}

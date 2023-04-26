@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EvaluationStats",
+  "type": "object",
+  "description": "EvaluationStats",
+  "oneOf": [
+    {
+      "$ref": "./segments/histogram_stats.json"
+    },
+    {
+      "$ref": "./segments/aggregation_stats.json"
+    }
+  ]
+}

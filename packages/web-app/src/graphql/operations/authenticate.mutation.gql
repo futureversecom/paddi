@@ -1,0 +1,15 @@
+mutation authenticate($input: AuthenticateInput!) {
+  authenticate(input: $input) {
+    __typename
+    ... on AuthenticateFailure {
+      errors {
+        ... on ErrorInterface {
+          message
+        }
+      }
+    }
+    ... on AuthenticateSuccess {
+      token
+    }
+  }
+}

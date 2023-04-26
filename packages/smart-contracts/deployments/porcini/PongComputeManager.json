@@ -1,0 +1,737 @@
+{
+  "address": "0xc9Aba27ad5a8c3A352789BC4240137abEfbD911b",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "computeRequestManager_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "completer_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ASTOPaymentFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        }
+      ],
+      "name": "AccessError",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ComputeInactive",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ComputeRequestClosed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ComputeRequestRevoked",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "slaTimestamp",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "currentTimestamp",
+          "type": "uint64"
+        }
+      ],
+      "name": "ComputeSLANotReached",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "availableAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requestedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "InsufficientBalance",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "expectedCaller",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "actualCaller",
+          "type": "address"
+        }
+      ],
+      "name": "InvalidCaller",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidComputeIndex",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidComputeRequest",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        }
+      ],
+      "name": "InvalidDisbursement",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        }
+      ],
+      "name": "InvalidInput",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidRegistryIndex",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidSignature",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "errMsg",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requiredAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "receivedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "PaymentError",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "unitCost",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitMinutes",
+          "type": "uint256"
+        }
+      ],
+      "name": "addComputeOption",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimAsto",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "computeId",
+          "type": "uint256"
+        }
+      ],
+      "name": "completeCompute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "completer",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "computeOptions",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "enabled",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitCost",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitSeconds",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "computeRequestManager",
+      "outputs": [
+        {
+          "internalType": "contract IComputeRequestManager",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "getComputeOptionDisbursement",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "addresses",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint64",
+          "name": "startTime",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "units",
+          "type": "uint64"
+        }
+      ],
+      "name": "getComputeOptionSLA",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "maxTime",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint64",
+          "name": "units",
+          "type": "uint64"
+        }
+      ],
+      "name": "getComputeOptionUnitCost",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "cost",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalComputeOptions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "computeId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitCost",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitMinutes",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateComputeOption",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x19824a8e55f26ab2d94277a2659d128d413b7797cf2d55224fb70f27ca762769",
+  "receipt": {
+    "to": null,
+    "from": "0xeb24a849E6C908D4166D34D7E3133B452CB627D2",
+    "contractAddress": "0xc9Aba27ad5a8c3A352789BC4240137abEfbD911b",
+    "transactionIndex": 0,
+    "gasUsed": "2681725",
+    "logsBloom": "0x00000000000000000000000000000004000000000000100000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000080000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000002000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x8f481df2e86e8c25fbe3a9298c56ae1482aad759854794bea93c71e774319a58",
+    "transactionHash": "0x19824a8e55f26ab2d94277a2659d128d413b7797cf2d55224fb70f27ca762769",
+    "logs": [
+      {
+        "transactionIndex": 0,
+        "blockNumber": 3921098,
+        "transactionHash": "0x19824a8e55f26ab2d94277a2659d128d413b7797cf2d55224fb70f27ca762769",
+        "address": "0xc9Aba27ad5a8c3A352789BC4240137abEfbD911b",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000eb24a849e6c908d4166d34d7e3133b452cb627d2"
+        ],
+        "data": "0x",
+        "logIndex": 0,
+        "blockHash": "0x8f481df2e86e8c25fbe3a9298c56ae1482aad759854794bea93c71e774319a58"
+      }
+    ],
+    "blockNumber": 3921098,
+    "cumulativeGasUsed": "2681725",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x6B417eCC3C8485116cdbDA06C82b0a1F3a6807A0",
+    "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "e47e23a4170d25f3a00afab125e9e230",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"computeRequestManager_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"completer_\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"ASTOPaymentFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"}],\"name\":\"AccessError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ComputeInactive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ComputeRequestClosed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ComputeRequestRevoked\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"slaTimestamp\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"currentTimestamp\",\"type\":\"uint64\"}],\"name\":\"ComputeSLANotReached\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"availableAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"requestedAmount\",\"type\":\"uint256\"}],\"name\":\"InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"expectedCaller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"actualCaller\",\"type\":\"address\"}],\"name\":\"InvalidCaller\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidComputeIndex\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"InvalidComputeRequest\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"}],\"name\":\"InvalidDisbursement\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"}],\"name\":\"InvalidInput\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"InvalidRegistryIndex\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"errMsg\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"requiredAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"receivedAmount\",\"type\":\"uint256\"}],\"name\":\"PaymentError\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"unitCost\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unitMinutes\",\"type\":\"uint256\"}],\"name\":\"addComputeOption\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"claimAsto\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"computeId\",\"type\":\"uint256\"}],\"name\":\"completeCompute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"completer\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"computeOptions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"enabled\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"unitCost\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unitSeconds\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"computeRequestManager\",\"outputs\":[{\"internalType\":\"contract IComputeRequestManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"getComputeOptionDisbursement\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"addresses\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"startTime\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"units\",\"type\":\"uint64\"}],\"name\":\"getComputeOptionSLA\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"maxTime\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"units\",\"type\":\"uint64\"}],\"name\":\"getComputeOptionUnitCost\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"cost\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalComputeOptions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"computeId\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"active\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"unitCost\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"unitMinutes\",\"type\":\"uint256\"}],\"name\":\"updateComputeOption\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"addComputeOption(uint256,uint256)\":{\"params\":{\"unitCost\":\"The unit cost of the compute option.\",\"unitMinutes\":\"The expected number of minutes per compute unit.\"},\"returns\":{\"index\":\"The added compute option id.\"}},\"claimAsto(address,uint256)\":{\"params\":{\"amount\":\"The amount of ASTO to claim.\",\"to\":\"The address to send the claimed ASTO to.\"}},\"completeCompute(uint256)\":{\"params\":{\"computeId\":\"The compute id to update.\"}},\"getComputeOptionDisbursement(uint256,uint256)\":{\"details\":\"The total amounts must be less or equal to the input amount.This function must return even when a compute option is no longer valid.\",\"params\":{\"amount\":\"The amount of ASTO to be distributed.\",\"index\":\"The given compute option index.\"},\"returns\":{\"addresses\":\"The addresses to distribute to.\",\"amounts\":\"The amount to distribute to each address.\"}},\"getComputeOptionSLA(uint256,uint64,uint64)\":{\"details\":\"This function must return even when a compute option is no longer valid.\",\"params\":{\"index\":\"The given compute option index.\",\"startTime\":\"The time compute is started (block.timestamp).\",\"units\":\"The number of compute units to run.\"},\"returns\":{\"maxTime\":\"The max time compute is expected to run (block.timestamp).\"}},\"getComputeOptionUnitCost(uint256,uint64)\":{\"details\":\"This function should revert if the compute option is no longer valid.\",\"params\":{\"index\":\"The given compute option index.\",\"units\":\"The number of compute units to run.\"},\"returns\":{\"cost\":\"The cost in ASTO.\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"supportsInterface(bytes4)\":{\"details\":\"See {IERC165-supportsInterface}.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"},\"updateComputeOption(uint256,bool,uint256,uint256)\":{\"params\":{\"active\":\"The active setting of the compute option.\",\"computeId\":\"The compute id to update.\",\"unitCost\":\"The unit cost of the compute option.\",\"unitMinutes\":\"The expected number of minutes per compute unit.\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"addComputeOption(uint256,uint256)\":{\"notice\":\"Add a new compute option.Only callable by owner.\"},\"claimAsto(address,uint256)\":{\"notice\":\"Claim unlocked ASTO for the compute manager.Only callable by owner.\"},\"completeCompute(uint256)\":{\"notice\":\"Complete a compute request.Only callable by the completer.\"},\"getComputeOptionDisbursement(uint256,uint256)\":{\"notice\":\"Get the disbursement information for given compute option.\"},\"getComputeOptionSLA(uint256,uint64,uint64)\":{\"notice\":\"Get the compute SLA timeout for the given compute option.\"},\"getComputeOptionUnitCost(uint256,uint64)\":{\"notice\":\"Get the cost for a given compute option.\"},\"updateComputeOption(uint256,bool,uint256,uint256)\":{\"notice\":\"Update an compute option.Only callable by owner.\"}},\"notice\":\"An implementation of the Compute Manager for Pong.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PongComputeManager.sol\":\"PongComputeManager\"},\"evmVersion\":\"london\",\"libraries\":{\":__CACHE_BREAKER__\":\"0x0000000000000031363830303534343631333534\"},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/introspection/ERC165.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"./IERC165.sol\\\";\\n\\n/**\\n * @dev Implementation of the {IERC165} interface.\\n *\\n * Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check\\n * for the additional interface id that will be supported. For example:\\n *\\n * ```solidity\\n * function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n *     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId);\\n * }\\n * ```\\n *\\n * Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation.\\n */\\nabstract contract ERC165 is IERC165 {\\n    /**\\n     * @dev See {IERC165-supportsInterface}.\\n     */\\n    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n        return interfaceId == type(IERC165).interfaceId;\\n    }\\n}\\n\",\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\"},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/introspection/IERC165.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Interface of the ERC165 standard, as defined in the\\n * https://eips.ethereum.org/EIPS/eip-165[EIP].\\n *\\n * Implementers can declare support of contract interfaces, which can then be\\n * queried by others ({ERC165Checker}).\\n *\\n * For an implementation, see {ERC165}.\\n */\\ninterface IERC165 {\\n    /**\\n     * @dev Returns true if this contract implements the interface defined by\\n     * `interfaceId`. See the corresponding\\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]\\n     * to learn more about how these ids are created.\\n     *\\n     * This function call must use less than 30 000 gas.\\n     */\\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\"},\"lib/protocol-core/contracts/helpers/Errors.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\n/**\\n * @dev ASM Protocol - Errors\\n */\\ncontract Errors {\\n    error InvalidInput(string errMsg);\\n    string constant INVALID_MULTISIG = \\\"Invalid Multisig contract\\\";\\n    string constant INVALID_MANAGER = \\\"Invalid Manager contract\\\";\\n    string constant INVALID_ADDRESS = \\\"Invalid wallet address\\\";\\n    string constant INVALID_AMOUNT = \\\"Invalid amount\\\";\\n\\n    error AccessError(string errMsg);\\n    string internal constant WRONG_TOKEN_ID = \\\"Wrong token ID\\\";\\n    string internal constant WRONG_TOKEN_OWNER = \\\"Wrong token owner\\\";\\n    string internal constant WRONG_HASH = \\\"Wrong hash\\\";\\n    string internal constant NOT_ASSIGNED = \\\"Address not assigned\\\";\\n\\n    error PaymentError(string errMsg, uint256 requiredAmount, uint256 receivedAmount);\\n    string internal constant INSUFFICIENT_BALANCE = \\\"Insufficient balance\\\";\\n    string internal constant NO_PAYMENT_RECEIVED = \\\"No payment received\\\";\\n    string internal constant NO_PAYMENT_RECOGNIZED = \\\"MintType/Currency not recognized\\\";\\n    string internal constant CURRENCY_DOES_NOT_SUIT_TYPE = \\\"Currency doesn't suit type\\\";\\n    string internal constant MINT_TYPE_IS_NOT_SUPPORTED = \\\"MintType isn't supported\\\";\\n\\n    error InvalidCaller(string errMsg, address expectedCaller, address actualCaller);\\n    string internal constant MUST_BE_CALLED_BY_COMPUTE_CUSTODIAN = \\\"Must be called by custodian\\\";\\n    string internal constant MUST_BE_CALLED_BY_OWNER = \\\"Must be called by owner\\\";\\n    string internal constant MUST_BE_CALLED_BY_REQUESTER = \\\"Must be called by requester\\\";\\n    string internal constant MUST_BE_CALLED_BY_DAO = \\\"Must be called by DAO\\\";\\n    string internal constant WRONG_REQUESTER = \\\"Wrong requester address\\\";\\n\\n    error ASTOPaymentFailed(uint256 amount);\\n\\n    // Compute Manager\\n\\n    error InvalidComputeIndex();\\n    error ComputeInactive();\\n\\n    // Compute Request Manager\\n\\n    error InvalidComputeRequest(string errMsg, uint256 value);\\n    string internal constant INVALID_COMPUTE_UNITS = \\\"Invalid compute units\\\";\\n\\n    error ComputeRequestClosed();\\n    error ComputeRequestRevoked();\\n\\n    error ComputeSLANotReached(uint64 slaTimestamp, uint64 currentTimestamp);\\n\\n    error InvalidDisbursement(string errMsg);\\n    string internal constant INVALID_ARRAY_LENGTHS = \\\"Invalid array lengths\\\";\\n    string internal constant INVALID_TOTAL_AMOUNT = \\\"Invalid total amount\\\";\\n\\n    error InsufficientBalance(string errMsg, uint256 availableAmount, uint256 requestedAmount);\\n    string internal constant INSUFFICIENT_UNLOCKED_ASTO = \\\"Insufficient unlocked ASTO\\\";\\n    string internal constant INSUFFICIENT_COMPUTE_CUSTODIAN_ASTO = \\\"Insufficient Compute Manager ASTO\\\";\\n\\n    // Memory Tree\\n\\n    error InvalidSignature();\\n\\n    // Asset Stats Registry\\n\\n    error InvalidRegistryIndex(uint256 index);\\n}\\n\",\"keccak256\":\"0x56e214f1cceefe2ba3ff93c39abbf8a56196adcbb1b60a59e42d35cc9376ef21\",\"license\":\"MIT\"},\"lib/protocol-core/contracts/interfaces/IComputeManager.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\ninterface IComputeManager {\\n    /**\\n     * Get the cost for a given compute option.\\n     * @param index The given compute option index.\\n     * @param units The number of compute units to run.\\n     * @return cost The cost in ASTO.\\n     * @dev This function should revert if the compute option is no longer valid.\\n     */\\n    function getComputeOptionUnitCost(uint256 index, uint64 units) external view returns (uint256 cost);\\n\\n    /**\\n     * Get the disbursement information for given compute option.\\n     * @param index The given compute option index.\\n     * @param amount The amount of ASTO to be distributed.\\n     * @return addresses The addresses to distribute to.\\n     * @return amounts The amount to distribute to each address.\\n     * @dev The total amounts must be equal to the input amount.\\n     * @dev This function must return even when a compute option is no longer valid.\\n     */\\n    function getComputeOptionDisbursement(uint256 index, uint256 amount)\\n        external\\n        view\\n        returns (address[] memory addresses, uint256[] memory amounts);\\n\\n    /**\\n     * Get the compute SLA timeout for the given compute option.\\n     * @param index The given compute option index.\\n     * @param startTime The time compute is started (block.timestamp).\\n     * @param units The number of compute units to run.\\n     * @return maxTime The max time compute is expected to run (block.timestamp).\\n     * @dev This function must return even when a compute option is no longer valid.\\n     */\\n    function getComputeOptionSLA(\\n        uint256 index,\\n        uint64 startTime,\\n        uint64 units\\n    ) external view returns (uint64 maxTime);\\n\\n    function supportsInterface(bytes4 interfaceId) external returns (bool);\\n}\\n\",\"keccak256\":\"0x793aa0fe4e8af91a3e5323ac86de74fc0ae49ac14f66ceb7ec0ad3bb0e5be1a6\",\"license\":\"MIT\"},\"lib/protocol-core/contracts/interfaces/IComputeRequestManager.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\nimport \\\"./IPayment.sol\\\";\\n\\ninterface IComputeRequestManager is IPayment {\\n    enum RequestStatus {\\n        OPEN,\\n        CLOSED,\\n        REVOKED\\n    }\\n    struct ComputeRequest {\\n        RequestStatus status;\\n        address requester;\\n        address computeManager;\\n        uint256 optionId;\\n        uint64 startTime;\\n        uint64 computeUnits;\\n        uint256 escrowAmount;\\n    }\\n\\n    event ComputeRequested(\\n        address indexed requester,\\n        address indexed computeManager,\\n        uint256 optionId,\\n        uint256 computeId,\\n        uint256 computeUnits,\\n        bytes32 computeHash\\n    );\\n    event ComputeCompleted(address indexed requester, address indexed computeManager, uint256 computeId);\\n    event ComputeRevoked(address indexed requester, address indexed computeManager, uint256 computeId);\\n\\n    /**\\n     * Request for compute.\\n     * @param computeManager The address of the compute manager contract.\\n     * @param optionId The given compute option index.\\n     * @param units The number of compute units to run.\\n     * @return computeId The id of the resulting compute record.\\n     * @param computeHash A compute manager identifier for this compute request.\\n     * @notice This contract must be authorised to spend ASTO on behalf of the caller.\\n     */\\n    function requestCompute(\\n        address computeManager,\\n        uint256 optionId,\\n        uint64 units,\\n        bytes32 computeHash\\n    ) external returns (uint256 computeId);\\n\\n    /**\\n     * Revoke a compute request that has exceeded the SLA.\\n     * @param computeId The id of the compute record.\\n     * @notice This returns ASTO held in escrow.\\n     * @notice The compute request must not be completed and the SLA must have expired.\\n     */\\n    function revokeCompute(uint256 computeId) external;\\n\\n    /**\\n     * Complete a compute request.\\n     * @param computeId The id of the compute record.\\n     * @notice This unlocks ASTO held in escrow.\\n     * @dev This must be called by the compute manager.\\n     */\\n    function completeCompute(uint256 computeId) external;\\n\\n    function supportsInterface(bytes4 interfaceId) external returns (bool);\\n}\\n\",\"keccak256\":\"0x5bacc7c8acdd0ae893bbabd8181fd328d618955407b8adf6ca9ada53352b7177\",\"license\":\"MIT\"},\"lib/protocol-core/contracts/interfaces/IPayment.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\ninterface IPayment {\\n    event AccountBalanceCorrected(address indexed account, uint256 amount);\\n    event DaoFeeUpdated(uint256 minimumFee, uint24 percentageFee);\\n\\n    /**\\n     * Claim unlocked ASTO for a claimee.\\n     * @param to The address to send the claimed ASTO to.\\n     * @param amount The amount of ASTO to claim.\\n     * @notice After compute is completed, ASTO is unlocked for claiming.\\n     * @notice Caller may claim their unlocked ASTO with this method.\\n     */\\n    function claimAsto(address to, uint256 amount) external;\\n\\n    /**\\n     * Stake ASTO to be used for payments.\\n     * @param to The address to recieve the staked amount.\\n     * @param amount The amount of ASTO to stake.\\n     * @notice Staked ASTO will be used to pay for compute requests.\\n     * @notice Caller may claim their staked ASTO at any time.\\n     * @dev This ASTO is added to the callers unlocked balance.\\n     */\\n    function stakeAsto(address to, uint256 amount) external;\\n}\\n\",\"keccak256\":\"0xcf00aa4fc43ae7a4734a9fb099217e353c8e9a97d34167c230118d1989096cfa\",\"license\":\"MIT\"},\"lib/protocol-core/contracts/samples/ComputeManagerSimple.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity 0.8.17;\\n\\nimport \\\"../interfaces/IComputeManager.sol\\\";\\nimport \\\"../interfaces/IComputeRequestManager.sol\\\";\\nimport \\\"../helpers/Errors.sol\\\";\\nimport \\\"lib/openzeppelin-contracts/contracts/access/Ownable.sol\\\";\\nimport \\\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\\\";\\n\\n/**\\n * ComputeManager.\\n * @notice This is a sample implementation.\\n */\\ncontract ComputeManagerSimple is IComputeManager, ERC165, Ownable, Errors {\\n    IComputeRequestManager public immutable computeRequestManager;\\n\\n    struct ComputeOption {\\n        bool enabled; // Compute option is active\\n        uint256 unitCost; // ASTO per compute unit\\n        uint256 unitSeconds; // Seconds per compute unit\\n    }\\n    mapping(uint256 => ComputeOption) public computeOptions;\\n    uint256 public totalComputeOptions;\\n\\n    constructor(address computeRequestManager_) {\\n        computeRequestManager = IComputeRequestManager(computeRequestManager_);\\n    }\\n\\n    modifier validComputeIndex(uint256 index) {\\n        if (index >= totalComputeOptions) revert InvalidComputeIndex();\\n        else _;\\n    }\\n\\n    /**\\n     * Get the cost for a given compute option.\\n     * @param index The given compute option index.\\n     * @param units The number of compute units to run.\\n     * @return cost The cost in ASTO.\\n     * @dev This function should revert if the compute option is no longer valid.\\n     */\\n    function getComputeOptionUnitCost(uint256 index, uint64 units)\\n        public\\n        view\\n        virtual\\n        validComputeIndex(index)\\n        returns (uint256 cost)\\n    {\\n        if (!computeOptions[index].enabled) revert ComputeInactive();\\n        return computeOptions[index].unitCost * units;\\n    }\\n\\n    /**\\n     * Get the disbursement information for given compute option.\\n     * @param index The given compute option index.\\n     * @param amount The amount of ASTO to be distributed.\\n     * @return addresses The addresses to distribute to.\\n     * @return amounts The amount to distribute to each address.\\n     * @dev The total amounts must be less or equal to the input amount.\\n     * @dev This function must return even when a compute option is no longer valid.\\n     */\\n    function getComputeOptionDisbursement(uint256 index, uint256 amount)\\n        public\\n        view\\n        virtual\\n        validComputeIndex(index)\\n        returns (address[] memory addresses, uint256[] memory amounts)\\n    {\\n        // We always take it all\\n        addresses = new address[](1);\\n        addresses[0] = owner();\\n        amounts = new uint256[](1);\\n        amounts[0] = amount;\\n        return (addresses, amounts);\\n    }\\n\\n    /**\\n     * Get the compute SLA timeout for the given compute option.\\n     * @param index The given compute option index.\\n     * @param startTime The time compute is started (block.timestamp).\\n     * @param units The number of compute units to run.\\n     * @return maxTime The max time compute is expected to run (block.timestamp).\\n     * @dev This function must return even when a compute option is no longer valid.\\n     */\\n    function getComputeOptionSLA(\\n        uint256 index,\\n        uint64 startTime,\\n        uint64 units\\n    ) public view virtual validComputeIndex(index) returns (uint64 maxTime) {\\n        return startTime + (uint64(computeOptions[index].unitSeconds) * units);\\n    }\\n\\n    //\\n    // Administration\\n    //\\n\\n    /**\\n     * Add a new compute option.\\n     * @param unitCost The unit cost of the compute option.\\n     * @param unitMinutes The expected number of minutes per compute unit.\\n     * @return index The added compute option id.\\n     * @notice Only callable by owner.\\n     */\\n    function addComputeOption(uint256 unitCost, uint256 unitMinutes)\\n        external\\n        virtual\\n        onlyOwner\\n        returns (uint256 index)\\n    {\\n        computeOptions[totalComputeOptions] = ComputeOption(true, unitCost, unitMinutes * 1 minutes);\\n        return totalComputeOptions++;\\n    }\\n\\n    /**\\n     * Update an compute option.\\n     * @param computeId The compute id to update.\\n     * @param active The active setting of the compute option.\\n     * @param unitCost The unit cost of the compute option.\\n     * @param unitMinutes The expected number of minutes per compute unit.\\n     * @notice Only callable by owner.\\n     */\\n    function updateComputeOption(\\n        uint256 computeId,\\n        bool active,\\n        uint256 unitCost,\\n        uint256 unitMinutes\\n    ) external virtual onlyOwner {\\n        computeOptions[computeId] = ComputeOption(active, unitCost, unitMinutes);\\n    }\\n\\n    /**\\n     * Complete a compute request.\\n     * @param computeId The compute id to update.\\n     * @notice Only callable by owner.\\n     */\\n    function completeCompute(uint256 computeId) external virtual onlyOwner {\\n        return computeRequestManager.completeCompute(computeId);\\n    }\\n\\n    /**\\n     * Claim unlocked ASTO for the compute manager.\\n     * @param to The address to send the claimed ASTO to.\\n     * @param amount The amount of ASTO to claim.\\n     * @notice Only callable by owner.\\n     */\\n    function claimAsto(address to, uint256 amount) external virtual onlyOwner {\\n        computeRequestManager.claimAsto(to, amount);\\n    }\\n\\n    //\\n    // View methods\\n    //\\n\\n    /**\\n     * @dev See {IERC165-supportsInterface}.\\n     */\\n    function supportsInterface(bytes4 interfaceId)\\n        public\\n        view\\n        virtual\\n        override(IComputeManager, ERC165)\\n        returns (bool)\\n    {\\n        return interfaceId == type(IComputeManager).interfaceId || ERC165.supportsInterface(interfaceId);\\n    }\\n}\\n\",\"keccak256\":\"0x16252e7903d53d3da7cc5ac859992759ad125426d3a6a61c35875ba8355d932f\",\"license\":\"MIT\"},\"src/PongComputeManager.sol\":{\"content\":\"// SPDX-License-Identifier: UNLICENSED\\npragma solidity ^0.8.17;\\n\\nimport {ComputeManagerSimple} from 'lib/protocol-core/contracts/samples/ComputeManagerSimple.sol';\\n\\n/**\\n * An implementation of the Compute Manager for Pong.\\n */\\ncontract PongComputeManager is ComputeManagerSimple {\\n    address public completer;\\n    string internal constant MUST_BE_CALLED_BY_COMPLETER =\\n        'Must be called by completer';\\n\\n    constructor(address computeRequestManager_, address completer_)\\n        ComputeManagerSimple(computeRequestManager_)\\n    {\\n        completer = completer_;\\n    }\\n\\n    modifier onlyCompleter() {\\n        if (msg.sender != completer)\\n            revert InvalidCaller(\\n                MUST_BE_CALLED_BY_COMPLETER,\\n                completer,\\n                msg.sender\\n            );\\n        _;\\n    }\\n\\n    /**\\n     * Get the disbursement information for given compute option.\\n     * @param index The given compute option index.\\n     * @param amount The amount of ASTO to be distributed.\\n     * @return addresses The addresses to distribute to.\\n     * @return amounts The amount to distribute to each address.\\n     * @dev The total amounts must be less or equal to the input amount.\\n     * @dev This function must return even when a compute option is no longer valid.\\n     */\\n    function getComputeOptionDisbursement(uint256 index, uint256 amount)\\n        public\\n        view\\n        override\\n        validComputeIndex(index)\\n        returns (address[] memory addresses, uint256[] memory amounts)\\n    {\\n        // Completer takes it all\\n        addresses = new address[](1);\\n        addresses[0] = completer;\\n        amounts = new uint256[](1);\\n        amounts[0] = amount;\\n        return (addresses, amounts);\\n    }\\n\\n    /**\\n     * Complete a compute request.\\n     * @param computeId The compute id to update.\\n     * @notice Only callable by the completer.\\n     */\\n    function completeCompute(uint256 computeId)\\n        external\\n        override\\n        onlyCompleter\\n    {\\n        return computeRequestManager.completeCompute(computeId);\\n    }\\n}\\n\",\"keccak256\":\"0xfd86be8d6a4257e3f1fed49d2111cda664b36ae67b70733a3adb09ccc1b8fa05\",\"license\":\"UNLICENSED\"}},\"version\":1}",
+  "bytecode": "0x60a060405234801561001057600080fd5b50604051610c99380380610c9983398101604081905261002f916100d1565b8161003933610065565b6001600160a01b03908116608052600380546001600160a01b0319169290911691909117905550610104565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80516001600160a01b03811681146100cc57600080fd5b919050565b600080604083850312156100e457600080fd5b6100ed836100b5565b91506100fb602084016100b5565b90509250929050565b608051610b6c61012d6000396000818161025b0152818161052b015261063f0152610b6c6000f3fe608060405234801561001057600080fd5b50600436106100f55760003560e01c80637c414b8711610097578063d7b69cb311610066578063d7b69cb314610256578063eae5b6281461027d578063f2fde38b14610290578063f7c925a0146102a357600080fd5b80637c414b8714610216578063830d3f471461021f5780638da5cb5b14610232578063ae5a57cf1461024357600080fd5b80631bc278b5116100d35780631bc278b5146101945780631ec58b47146101c0578063570a2fc5146101e1578063715018a61461020c57600080fd5b806301ffc9a7146100fa5780630933d6b7146101225780630c34bfe714610173575b600080fd5b61010d610108366004610812565b6102b6565b60405190151581526020015b60405180910390f35b610156610130366004610843565b600160208190526000918252604090912080549181015460029091015460ff9092169183565b604080519315158452602084019290925290820152606001610119565b610186610181366004610879565b6102ed565b604051908152602001610119565b6101a76101a23660046108a5565b610373565b60405167ffffffffffffffff9091168152602001610119565b6101d36101ce3660046108e1565b6103c8565b604051610119929190610903565b6003546101f4906001600160a01b031681565b6040516001600160a01b039091168152602001610119565b61021461048c565b005b61018660025481565b61021461022d366004610843565b6104a0565b6000546001600160a01b03166101f4565b6101866102513660046108e1565b610593565b6101f47f000000000000000000000000000000000000000000000000000000000000000081565b61021461028b36600461099e565b610611565b61021461029e3660046109c8565b61069f565b6102146102b13660046109e3565b610715565b60006001600160e01b0319821663046642d960e11b14806102e757506301ffc9a760e01b6001600160e01b03198316145b92915050565b600082600254811061031257604051632ac2971f60e21b815260040160405180910390fd5b60008481526001602052604090205460ff16610341576040516303d42cfb60e01b815260040160405180910390fd5b600084815260016020819052604090912001546103699067ffffffffffffffff851690610a3b565b91505b5092915050565b600083600254811061039857604051632ac2971f60e21b815260040160405180910390fd5b6000858152600160205260409020600201546103b5908490610a52565b6103bf9085610a7e565b95945050505050565b6060808360025481106103ee57604051632ac2971f60e21b815260040160405180910390fd5b6040805160018082528183019092529060208083019080368337505060035482519295506001600160a01b03169185915060009061042e5761042e610a9f565b6001600160a01b0392909216602092830291909101820152604080516001808252818301909252918281019080368337019050509150838260008151811061047857610478610a9f565b602002602001018181525050509250929050565b610494610768565b61049e60006107c2565b565b6003546001600160a01b0316331461051557604080518082018252601b81527f4d7573742062652063616c6c656420627920636f6d706c6574657200000000006020820152600354915163b4f0c18560e01b815261050c926001600160a01b0316903390600401610ab5565b60405180910390fd5b60405163830d3f4760e01b8152600481018290527f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03169063830d3f4790602401600060405180830381600087803b15801561057757600080fd5b505af115801561058b573d6000803e3d6000fd5b505050505b50565b600061059d610768565b6040805160608101825260018152602081018590529081016105c084603c610a3b565b90526002805460009081526001602081815260408084208651815460ff191690151517815591860151928201929092559301519282019290925580549161060683610b1d565b909155509392505050565b610619610768565b604051631d5cb6c560e31b81526001600160a01b038381166004830152602482018390527f0000000000000000000000000000000000000000000000000000000000000000169063eae5b62890604401600060405180830381600087803b15801561068357600080fd5b505af1158015610697573d6000803e3d6000fd5b505050505050565b6106a7610768565b6001600160a01b03811661070c5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161050c565b610590816107c2565b61071d610768565b6040805160608101825293151584526020808501938452848201928352600095865260019081905294209251835460ff19169015151783559051928201929092559051600290910155565b6000546001600160a01b0316331461049e5760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161050c565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60006020828403121561082457600080fd5b81356001600160e01b03198116811461083c57600080fd5b9392505050565b60006020828403121561085557600080fd5b5035919050565b803567ffffffffffffffff8116811461087457600080fd5b919050565b6000806040838503121561088c57600080fd5b8235915061089c6020840161085c565b90509250929050565b6000806000606084860312156108ba57600080fd5b833592506108ca6020850161085c565b91506108d86040850161085c565b90509250925092565b600080604083850312156108f457600080fd5b50508035926020909101359150565b604080825283519082018190526000906020906060840190828701845b828110156109455781516001600160a01b031684529284019290840190600101610920565b5050508381038285015284518082528583019183019060005b8181101561097a5783518352928401929184019160010161095e565b5090979650505050505050565b80356001600160a01b038116811461087457600080fd5b600080604083850312156109b157600080fd5b6109ba83610987565b946020939093013593505050565b6000602082840312156109da57600080fd5b61083c82610987565b600080600080608085870312156109f957600080fd5b8435935060208501358015158114610a1057600080fd5b93969395505050506040820135916060013590565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176102e7576102e7610a25565b67ffffffffffffffff818116838216028082169190828114610a7657610a76610a25565b505092915050565b67ffffffffffffffff81811683821601908082111561036c5761036c610a25565b634e487b7160e01b600052603260045260246000fd5b606081526000845180606084015260005b81811015610ae35760208188018101516080868401015201610ac6565b50600060808285018101919091526001600160a01b03958616602085015293909416604083015250601f909201601f191690910101919050565b600060018201610b2f57610b2f610a25565b506001019056fea2646970667358221220e0c71ca08229b3b6fc5cc40a1060df282b4cc54156778bcc27f3a56efc30a87064736f6c63430008110033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100f55760003560e01c80637c414b8711610097578063d7b69cb311610066578063d7b69cb314610256578063eae5b6281461027d578063f2fde38b14610290578063f7c925a0146102a357600080fd5b80637c414b8714610216578063830d3f471461021f5780638da5cb5b14610232578063ae5a57cf1461024357600080fd5b80631bc278b5116100d35780631bc278b5146101945780631ec58b47146101c0578063570a2fc5146101e1578063715018a61461020c57600080fd5b806301ffc9a7146100fa5780630933d6b7146101225780630c34bfe714610173575b600080fd5b61010d610108366004610812565b6102b6565b60405190151581526020015b60405180910390f35b610156610130366004610843565b600160208190526000918252604090912080549181015460029091015460ff9092169183565b604080519315158452602084019290925290820152606001610119565b610186610181366004610879565b6102ed565b604051908152602001610119565b6101a76101a23660046108a5565b610373565b60405167ffffffffffffffff9091168152602001610119565b6101d36101ce3660046108e1565b6103c8565b604051610119929190610903565b6003546101f4906001600160a01b031681565b6040516001600160a01b039091168152602001610119565b61021461048c565b005b61018660025481565b61021461022d366004610843565b6104a0565b6000546001600160a01b03166101f4565b6101866102513660046108e1565b610593565b6101f47f000000000000000000000000000000000000000000000000000000000000000081565b61021461028b36600461099e565b610611565b61021461029e3660046109c8565b61069f565b6102146102b13660046109e3565b610715565b60006001600160e01b0319821663046642d960e11b14806102e757506301ffc9a760e01b6001600160e01b03198316145b92915050565b600082600254811061031257604051632ac2971f60e21b815260040160405180910390fd5b60008481526001602052604090205460ff16610341576040516303d42cfb60e01b815260040160405180910390fd5b600084815260016020819052604090912001546103699067ffffffffffffffff851690610a3b565b91505b5092915050565b600083600254811061039857604051632ac2971f60e21b815260040160405180910390fd5b6000858152600160205260409020600201546103b5908490610a52565b6103bf9085610a7e565b95945050505050565b6060808360025481106103ee57604051632ac2971f60e21b815260040160405180910390fd5b6040805160018082528183019092529060208083019080368337505060035482519295506001600160a01b03169185915060009061042e5761042e610a9f565b6001600160a01b0392909216602092830291909101820152604080516001808252818301909252918281019080368337019050509150838260008151811061047857610478610a9f565b602002602001018181525050509250929050565b610494610768565b61049e60006107c2565b565b6003546001600160a01b0316331461051557604080518082018252601b81527f4d7573742062652063616c6c656420627920636f6d706c6574657200000000006020820152600354915163b4f0c18560e01b815261050c926001600160a01b0316903390600401610ab5565b60405180910390fd5b60405163830d3f4760e01b8152600481018290527f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03169063830d3f4790602401600060405180830381600087803b15801561057757600080fd5b505af115801561058b573d6000803e3d6000fd5b505050505b50565b600061059d610768565b6040805160608101825260018152602081018590529081016105c084603c610a3b565b90526002805460009081526001602081815260408084208651815460ff191690151517815591860151928201929092559301519282019290925580549161060683610b1d565b909155509392505050565b610619610768565b604051631d5cb6c560e31b81526001600160a01b038381166004830152602482018390527f0000000000000000000000000000000000000000000000000000000000000000169063eae5b62890604401600060405180830381600087803b15801561068357600080fd5b505af1158015610697573d6000803e3d6000fd5b505050505050565b6106a7610768565b6001600160a01b03811661070c5760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161050c565b610590816107c2565b61071d610768565b6040805160608101825293151584526020808501938452848201928352600095865260019081905294209251835460ff19169015151783559051928201929092559051600290910155565b6000546001600160a01b0316331461049e5760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161050c565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b60006020828403121561082457600080fd5b81356001600160e01b03198116811461083c57600080fd5b9392505050565b60006020828403121561085557600080fd5b5035919050565b803567ffffffffffffffff8116811461087457600080fd5b919050565b6000806040838503121561088c57600080fd5b8235915061089c6020840161085c565b90509250929050565b6000806000606084860312156108ba57600080fd5b833592506108ca6020850161085c565b91506108d86040850161085c565b90509250925092565b600080604083850312156108f457600080fd5b50508035926020909101359150565b604080825283519082018190526000906020906060840190828701845b828110156109455781516001600160a01b031684529284019290840190600101610920565b5050508381038285015284518082528583019183019060005b8181101561097a5783518352928401929184019160010161095e565b5090979650505050505050565b80356001600160a01b038116811461087457600080fd5b600080604083850312156109b157600080fd5b6109ba83610987565b946020939093013593505050565b6000602082840312156109da57600080fd5b61083c82610987565b600080600080608085870312156109f957600080fd5b8435935060208501358015158114610a1057600080fd5b93969395505050506040820135916060013590565b634e487b7160e01b600052601160045260246000fd5b80820281158282048414176102e7576102e7610a25565b67ffffffffffffffff818116838216028082169190828114610a7657610a76610a25565b505092915050565b67ffffffffffffffff81811683821601908082111561036c5761036c610a25565b634e487b7160e01b600052603260045260246000fd5b606081526000845180606084015260005b81811015610ae35760208188018101516080868401015201610ac6565b50600060808285018101919091526001600160a01b03958616602085015293909416604083015250601f909201601f191690910101919050565b600060018201610b2f57610b2f610a25565b506001019056fea2646970667358221220e0c71ca08229b3b6fc5cc40a1060df282b4cc54156778bcc27f3a56efc30a87064736f6c63430008110033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "addComputeOption(uint256,uint256)": {
+        "params": {
+          "unitCost": "The unit cost of the compute option.",
+          "unitMinutes": "The expected number of minutes per compute unit."
+        },
+        "returns": {
+          "index": "The added compute option id."
+        }
+      },
+      "claimAsto(address,uint256)": {
+        "params": {
+          "amount": "The amount of ASTO to claim.",
+          "to": "The address to send the claimed ASTO to."
+        }
+      },
+      "completeCompute(uint256)": {
+        "params": {
+          "computeId": "The compute id to update."
+        }
+      },
+      "getComputeOptionDisbursement(uint256,uint256)": {
+        "details": "The total amounts must be less or equal to the input amount.This function must return even when a compute option is no longer valid.",
+        "params": {
+          "amount": "The amount of ASTO to be distributed.",
+          "index": "The given compute option index."
+        },
+        "returns": {
+          "addresses": "The addresses to distribute to.",
+          "amounts": "The amount to distribute to each address."
+        }
+      },
+      "getComputeOptionSLA(uint256,uint64,uint64)": {
+        "details": "This function must return even when a compute option is no longer valid.",
+        "params": {
+          "index": "The given compute option index.",
+          "startTime": "The time compute is started (block.timestamp).",
+          "units": "The number of compute units to run."
+        },
+        "returns": {
+          "maxTime": "The max time compute is expected to run (block.timestamp)."
+        }
+      },
+      "getComputeOptionUnitCost(uint256,uint64)": {
+        "details": "This function should revert if the compute option is no longer valid.",
+        "params": {
+          "index": "The given compute option index.",
+          "units": "The number of compute units to run."
+        },
+        "returns": {
+          "cost": "The cost in ASTO."
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "supportsInterface(bytes4)": {
+        "details": "See {IERC165-supportsInterface}."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      },
+      "updateComputeOption(uint256,bool,uint256,uint256)": {
+        "params": {
+          "active": "The active setting of the compute option.",
+          "computeId": "The compute id to update.",
+          "unitCost": "The unit cost of the compute option.",
+          "unitMinutes": "The expected number of minutes per compute unit."
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "addComputeOption(uint256,uint256)": {
+        "notice": "Add a new compute option.Only callable by owner."
+      },
+      "claimAsto(address,uint256)": {
+        "notice": "Claim unlocked ASTO for the compute manager.Only callable by owner."
+      },
+      "completeCompute(uint256)": {
+        "notice": "Complete a compute request.Only callable by the completer."
+      },
+      "getComputeOptionDisbursement(uint256,uint256)": {
+        "notice": "Get the disbursement information for given compute option."
+      },
+      "getComputeOptionSLA(uint256,uint64,uint64)": {
+        "notice": "Get the compute SLA timeout for the given compute option."
+      },
+      "getComputeOptionUnitCost(uint256,uint64)": {
+        "notice": "Get the cost for a given compute option."
+      },
+      "updateComputeOption(uint256,bool,uint256,uint256)": {
+        "notice": "Update an compute option.Only callable by owner."
+      }
+    },
+    "notice": "An implementation of the Compute Manager for Pong.",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 2296,
+        "contract": "src/PongComputeManager.sol:PongComputeManager",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 5254,
+        "contract": "src/PongComputeManager.sol:PongComputeManager",
+        "label": "computeOptions",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_uint256,t_struct(ComputeOption)5249_storage)"
+      },
+      {
+        "astId": 5256,
+        "contract": "src/PongComputeManager.sol:PongComputeManager",
+        "label": "totalComputeOptions",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 6992,
+        "contract": "src/PongComputeManager.sol:PongComputeManager",
+        "label": "completer",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_uint256,t_struct(ComputeOption)5249_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct ComputeManagerSimple.ComputeOption)",
+        "numberOfBytes": "32",
+        "value": "t_struct(ComputeOption)5249_storage"
+      },
+      "t_struct(ComputeOption)5249_storage": {
+        "encoding": "inplace",
+        "label": "struct ComputeManagerSimple.ComputeOption",
+        "members": [
+          {
+            "astId": 5244,
+            "contract": "src/PongComputeManager.sol:PongComputeManager",
+            "label": "enabled",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool"
+          },
+          {
+            "astId": 5246,
+            "contract": "src/PongComputeManager.sol:PongComputeManager",
+            "label": "unitCost",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 5248,
+            "contract": "src/PongComputeManager.sol:PongComputeManager",
+            "label": "unitSeconds",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "96"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

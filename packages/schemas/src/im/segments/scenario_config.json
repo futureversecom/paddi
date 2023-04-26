@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://acp.futureverse.com/schemas/segments/scenario_config",
+  "title": "EvaluationScenario",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "scenario": {
+      "$ref": "#/definitions/ScenarioConfig"
+    },
+    "iterations": {
+      "type": "integer"
+    }
+  },
+  "required": ["id", "scenario", "iterations"],
+  "definitions": {
+    "ScenarioConfig": {
+      "title": "ScenarioConfig",
+      "description": "Configuration for an opponent for training/evaluation",
+      "discriminator": {
+        "propertyName": "scenario_type",
+        "mapping": {
+          "Wall": "#/definitions/WallScenario",
+          "Agent": "#/definitions/AgentScenario"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/WallScenario"
+        },
+        {
+          "$ref": "#/definitions/AgentScenario"
+        }
+      ]
+    },
+    "WallScenario": {
+      "title": "WallScenario",
+      "type": "object",
+      "properties": {
+        "scenario_type": {
+          "title": "Scenario Type",
+          "enum": ["Wall"],
+          "type": "string"
+        }
+      },
+      "required": ["scenario_type"]
+    },
+    "AgentScenario": {
+      "title": "AgentScenario",
+      "type": "object",
+      "properties": {
+        "scenario_type": {
+          "title": "Scenario Type",
+          "enum": ["Agent"],
+          "type": "string"
+        },
+        "agent_config": {
+          "$ref": "./agent_config.json"
+        }
+      },
+      "required": ["scenario_type", "agent_config"]
+    }
+  }
+}

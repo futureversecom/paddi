@@ -1,0 +1,20 @@
+{
+  "name": "event-handlers",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "build": "node -r  ts-node/register  ../build-tools/src/scripts/build-lambdas.ts --bundle",
+    "types:trainingRequest": "json2ts --cwd=../schemas/src/im -i ../schemas/src/im/training_request.json  -o ./src/types/generated/trainingRequest.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sfn": "^3.289.0",
+    "aws-lambda": "^1.0.7",
+    "fp-ts": "^2.12.3",
+    "io-ts": "^2.2.16"
+  }
+}

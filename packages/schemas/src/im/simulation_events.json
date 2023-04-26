@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SimulationEvents",
+  "description": "JSON Schema for Pong game simulation events",
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/SimulationEvent"
+  },
+  "definitions": {
+    "SimulationEvent": {
+      "title": "SimulationEvent",
+      "discriminator": {
+        "propertyName": "event_type",
+        "mapping": {
+          "BallCollisionEvent": "#/definitions/BallCollisionEvent",
+          "PaddleFrameEvent": "#/definitions/PaddleFrameEvent"
+        }
+      },
+      "oneOf": [
+        {
+          "$ref": "#/definitions/HeaderEvent"
+        },
+        {
+          "$ref": "#/definitions/FooterEvent"
+        },
+        {
+          "$ref": "#/definitions/BallCollisionEvent"
+        },
+        {
+          "$ref": "#/definitions/PaddleFrameEvent"
+        },
+        {
+          "$ref": "#/definitions/TurnStartEvent"
+        },
+        {
+          "$ref": "#/definitions/TurnEndEvent"
+        }
+      ]
+    },
+    "HeaderEvent": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["HeaderEvent"]
+        },
+        "version": {
+          "const": "0.0.1"
+        },
+        "game": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            },
+            "paddle_l": {
+              "$ref": "#/definitions/PaddleProps"
+            },
+            "paddle_r": {
+              "$ref": "#/definitions/PaddleProps"
+            }
+          },
+          "required": ["width", "height", "paddle_l", "paddle_r"]
+        }
+      },
+      "required": ["event_type", "version", "game"]
+    },
+    "FooterEvent": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["FooterEvent"]
+        }
+      },
+      "required": ["event_type"]
+    },
+    "TurnStartEvent": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["TurnStartEvent"]
+        },
+        "turn_index": {
+          "type": "integer"
+        }
+      },
+      "required": ["event_type", "turn_index"]
+    },
+    "TurnEndEvent": {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["TurnEndEvent"]
+        },
+        "result": {
+          "type": "string",
+          "enum": ["left", "right", "draw"]
+        },
+        "turn_index": {
+          "type": "integer"
+        }
+      },
+      "required": ["event_type", "result", "turn_index"]
+    },
+    "BallCollisionEvent": {
+      "type": "object",
+      "title": "BallCollisionEvent",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["BallCollisionEvent"]
+        },
+        "frame_index": {
+          "type": "integer"
+        },
+        "position": {
+          "$ref": "#/definitions/Vec2D"
+        },
+        "collision_type": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right", "paddle_l", "paddle_r"]
+        }
+      },
+      "required": ["position", "event_type", "frame_index", "collision_type"]
+    },
+    "PaddleFrameEvent": {
+      "type": "object",
+      "title": "PaddleFrameEvent",
+      "properties": {
+        "event_type": {
+          "type": "string",
+          "enum": ["PaddleFrameEvent"]
+        },
+        "frame_index": {
+          "type": "integer"
+        },
+        "paddle_l": {
+          "$ref": "#/definitions/PaddleFrameState"
+        },
+        "paddle_r": {
+          "$ref": "#/definitions/PaddleFrameState"
+        }
+      },
+      "required": ["event_type", "frame_index", "paddle_l", "paddle_r"]
+    },
+    "PaddleFrameState": {
+      "type": "object",
+      "properties": {
+        "force": {
+          "$ref": "#/definitions/Vec2D"
+        },
+        "position": {
+          "$ref": "#/definitions/Vec2D"
+        },
+        "velocity": {
+          "$ref": "#/definitions/Vec2D"
+        },
+        "endurance": {
+          "type": "number"
+        }
+      },
+      "required": ["action", "position", "velocity", "endurance"]
+    },
+    "Vec2D": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": ["x", "y"]
+    },
+    "PaddleProps": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number"
+        }
+      },
+      "required": ["width"]
+    }
+  }
+}

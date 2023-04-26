@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "./test",
+    "./src",
+    "./hardhat_scripts",
+    "./abi",
+    "./typechain-types",
+    "./hardhat.config.ts",
+    "./scripts/*",
+    "./deploy/*",
+    "./lib/protocol-core/gen",
+    "./lib/protocol-core/abi"
+  ],
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "noImplicitOverride": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "importsNotUsedAsValues": "remove",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  }
+}

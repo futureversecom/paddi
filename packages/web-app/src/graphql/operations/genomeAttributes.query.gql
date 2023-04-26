@@ -1,0 +1,23 @@
+query genomeAttributes($tokenId: Int!) {
+  genomeAttributes(tokenId: $tokenId) {
+    ... on GenomeAttributesSuccessResponse {
+      __typename
+      genomeAttributes {
+        __typename
+        ... on GenomeAttributeInt {
+          name
+          valueInt: value
+        }
+        ... on GenomeAttributeHex {
+          name
+          valueHex: value
+        }
+      }
+    }
+    ... on GenomeAttributesFailureResponse {
+      reason {
+        __typename
+      }
+    }
+  }
+}

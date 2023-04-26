@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["./src"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "exactOptionalPropertyTypes": false,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "importsNotUsedAsValues": "preserve",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "src/*": ["src/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../smart-contracts/tsconfig.ext.json"
+    }
+  ]
+}

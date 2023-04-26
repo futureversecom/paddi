@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "https://acp.futureverse.com/schemas/segments/scenario_config",
+  "title": "AgentConfig",
+  "description": "Describes a configuration of an agent",
+  "type": "object",
+  "properties": {
+    "memory_config": {
+      "$ref": "#/definitions/MemoryNode"
+    },
+    "genome_attributes": {
+      "$ref": "#/definitions/GenomeAttributes"
+    }
+  },
+  "required": ["memory_config", "genome_attributes"],
+  "definitions": {
+    "MemoryNode": {
+      "title": "ParentMemoryNodeConfig",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/RootNode"
+        },
+        {
+          "$ref": "#/definitions/TrainedNode"
+        }
+      ]
+    },
+    "RootNode": {
+      "title": "RootNode",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["RootNode"]
+        }
+      },
+      "required": ["type"]
+    },
+    "TrainedNode": {
+      "title": "TrainedNode",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["TrainedNode"]
+        },
+        "memory": {
+          "$ref": "#/definitions/MemoryConfig"
+        }
+      },
+      "required": ["type", "memory"]
+    },
+    "MemoryConfig": {
+      "title": "MemoryConfig",
+      "type": "object",
+      "properties": {
+        "memory_id": {
+          "title": "memory Id",
+          "type": "string"
+        },
+        "memory_url": {
+          "title": "memory Url",
+          "type": "string"
+        }
+      },
+      "required": ["memory_id", "memory_url"]
+    },
+    "GenomeAttributes": {
+      "title": "GenomeAttributes",
+      "type": "object",
+      "properties": {
+        "size": {
+          "title": "Size",
+          "type": "number"
+        },
+        "strength": {
+          "title": "Strength",
+          "type": "number"
+        },
+        "max_speed": {
+          "title": "Max Speed",
+          "type": "number"
+        },
+        "endurance": {
+          "title": "Endurance",
+          "type": "number"
+        }
+      },
+      "required": ["size", "strength", "max_speed", "endurance"]
+    }
+  }
+}

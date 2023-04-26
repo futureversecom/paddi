@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrainingOutput",
+  "description": "TrainingOutput contains the information about the training job.",
+  "type": "object",
+  "properties": {
+    "output_path": {
+      "description": "The S3 path where the training job saves the model artifacts.",
+      "type": "string"
+    },
+    "completed_training_units": {
+      "description": "The number of training units completed.",
+      "type": "integer"
+    },
+    "is_completed": {
+      "description": "Indicates whether the training job has completed, when all training units are  carried out",
+      "type": "boolean"
+    }
+  },
+  "required": ["output_path", "completed_training_units", "is_completed"]
+}
