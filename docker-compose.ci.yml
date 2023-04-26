@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  build-cache:
+    build:
+      context: .
+      dockerfile: build-cache.Dockerfile
+    image: '437218020055.dkr.ecr.us-west-2.amazonaws.com/build-artifacts:build-cache-acp-demo-1'
+
+  ci:
+    build:
+      context: .
+      dockerfile: build.Dockerfile
+    depends_on:
+      - dynamodb
+    image: '437218020055.dkr.ecr.us-west-2.amazonaws.com/build-artifacts:acp-demo'
+    environment:
+      - BUILDKITE
+      - BUILDKITE_COMMIT
+      - BUILDKITE_BRANCH
+      - BUILDKITE_PULL_REQUEST
+      - BUILDKITE_BUILD_ID
+      - CODECOV_TOKEN
+      - DYNAMO_ENDPOINT=http://dynamodb:8000
+    volumes:
+      - './.git:/build/.git'
+
+  python-ci:
+    build:
+      context: .
+      dockerfile: pants.Dockerfile
+    image: '437218020055.dkr.ecr.us-west-2.amazonaws.com/build-artifacts:acp-demo-python'
+    environment:
+      - BUILDKITE
+      - BUILDKITE_COMMIT
+      - BUILDKITE_BRANCH
+      - BUILDKITE_PULL_REQUEST
+      - BUILDKITE_BUILD_ID
+
+  python-lambda:
+    build:
+      context: .
+      dockerfile: python-lambda.Dockerfile
+    image: '437218020055.dkr.ecr.us-west-2.amazonaws.com/build-artifacts:acp-demo-python'
+    environment:
+      - BUILDKITE
+      - BUILDKITE_COMMIT
+      - BUILDKITE_BRANCH
+      - BUILDKITE_PULL_REQUEST
+      - BUILDKITE_BUILD_ID
+
+  terraform:
+    image: hashicorp/terraform:1.3.9
+    volumes:
+      - './terraform:/terraform'
+      - './packages:/packages'
+    environment:
+      - AWS_VAULT
+      - AWS_DEFAULT_REGION
+      - AWS_REGION
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - AWS_SECURITY_TOKEN
+      - TF_LOG
+      - TF_CLOUD_TOKEN
+
+  dynamodb:
+    image: public.ecr.aws/aws-dynamodb-local/aws-dynamodb-local:1.18.0
+    command: '-jar DynamoDBLocal.jar -sharedDb -inMemory'
