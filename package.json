@@ -1,0 +1,45 @@
+{
+  "private": true,
+  "devDependencies": {
+    "@tsconfig/node16-strictest": "1.0.4",
+    "@types/node": "18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-react": "^7.32.2",
+    "glob": "^10.2.1",
+    "hardhat": "^2.12.6",
+    "hardhat-deploy": "^0.11.22",
+    "hardhat-gas-reporter": "^1.0.8",
+    "hardhat-preprocessor": "^0.1.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
+    "prettier": "^2.8.3",
+    "typescript": "^4.9.5"
+  },
+  "resolutions": {
+    "typescript": "^4.9.5"
+  },
+  "scripts": {
+    "build": "yarn workspace gql-api run build && yarn workspace event-handlers run build",
+    "gql:codegen": "yarn workspace gql-api run gql:codegen && yarn workspace web-app run gql:codegen",
+    "postinstall": "husky install",
+    "test": "yarn workspace smart-contracts run test",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "packageManager": "yarn@1.22.19",
+  "dependencies": {},
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "**/*.{md,yaml,json}": "prettier --write"
+  }
+}
