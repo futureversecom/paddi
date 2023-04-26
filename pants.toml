@@ -1,0 +1,91 @@
+[GLOBAL]
+pants_version = "2.15.0"
+
+backend_packages = [
+  "pants.backend.build_files.fmt.black",  
+  "pants.backend.python",
+  "pants.backend.python.lint.docformatter",
+  "pants.backend.python.lint.black",
+  "pants.backend.python.lint.flake8",
+  "pants.backend.python.lint.isort",
+  "pants.backend.python.typecheck.mypy",
+  "pants.backend.awslambda.python",
+  "pants.backend.shell"
+]
+
+pants_ignore.add = [
+  "*.Dockerfile",
+  "packages/smart-contracts",
+]
+
+[source]
+root_patterns = [
+  "/pants/3rdparty",
+  "/packages/pong-simulation/src/py",
+  "/packages/pong-simulation/tests",
+  "/packages/im-stepfunctions/src/py",
+  "/packages/im-stepfunctions/tests",
+  "/packages/im-stepfunctions/resources",
+  "/packages/schemas/gen/py",
+]
+
+[python]
+# This will become the default in Pants 2.15.
+tailor_pex_binary_targets = false
+interpreter_constraints = ["==3.8.*"]
+
+# Enable the "resolves" mechanism, which turns on lockfiles for user code. See
+# https://www.pantsbuild.org/docs/python-third-party-dependencies. This also adds the
+# `generate-lockfiles` goal for Pants to generate the lockfile for you.
+enable_resolves = true
+
+[python.resolves]
+python-default = "pants/3rdparty/python-default.lock"
+ci = "pants/3rdparty/ci.lock"
+
+[python-bootstrap]
+# We search for interpreters both on the $PATH and in the `$(pyenv root)/versions` folder.
+#  If you're using macOS, you may want to leave off the <PATH> entry to avoid using the
+#  problematic system Pythons. See
+#  https://www.pantsbuild.org/docs/python-interpreter-compatibility#changing-the-interpreter-search-path.
+search_path = ["<PYENV_LOCAL>", "<PATH>"]
+
+[pytest]
+
+
+[mypy]
+lockfile = "pants/3rdparty/mypy.lock"
+version = "mypy==0.991"
+extra_requirements.add = [
+  # This is a mypy plugin, as well as a type stubs repository. So it must be mentioned
+  # here as well as in requirements.txt.
+  "pydantic"
+]
+
+# Extra type stubs to use.
+extra_type_stubs = [
+  "pandas-stubs>=1.5.3",
+]
+extra_type_stubs_lockfile = "pants/3rdparty/mypy_extra_type_stubs.lock"
+
+
+[docformatter]
+args = ["--wrap-summaries=100", "--wrap-descriptions=100"]
+
+[cli.alias]
+# Update lockfiles when dependencies change
+update-locks = "pants generate-lockfiles ::"
+
+# Creates a venv at ./dist/export/python/virtualenvs/python-default
+# and other export for tooling by IDEs
+venv = "export --symlink-python-virtualenv --resolve=\"['python-default','black','mypy','flake8']\""
+
+# Lint files that have changed since the main branch
+# This lints and type checks in parallel
+lint-changed = "--changed-since=origin/main tailor --check update-build-files --check lint check"
+
+# Test files that have changed since the main branch
+test-changed = "--changed-since=origin/main tailor --check test"
+
+# generate pydantic event classes
+gen-events = "run packages/schemas:generate-events"
