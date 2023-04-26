@@ -1,0 +1,6 @@
+XXX_README=Also update /packages/smart-contracts/remappings.txt for forge
+ds-test/=packages/smart-contracts/lib/forge-std/lib/ds-test/src/
+forge-std/=packages/smart-contracts/lib/forge-std/src/
+@openzeppelin/=packages/smart-contracts/lib/openzeppelin-contracts/
+erc721a/=packages/smart-contracts/lib/erc721a/
+protocol-core/=packages/smart-contracts/lib/protocol-core/
