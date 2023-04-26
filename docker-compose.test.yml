@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  python-ci:
+    depends_on:
+      - sfn-endpoint
+    environment:
+      STEP_FUNCTIONS_ENDPOINT: http://sfn-endpoint:8083
+
+  sfn-endpoint:
+    image: amazon/aws-stepfunctions-local:1.12.0
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: xxx
+      AWS_SECRET_ACCESS_KEY: xxx
+      WAIT_TIME_SCALE: 0
+      STEP_FUNCTIONS_ENDPOINT: http://sfn-endpoint:8083
+      SFN_MOCK_CONFIG: "/home/stepfunctionslocal/MockConfigFile.json"
+    volumes:
+      - type: "bind"
+        source: ./packages/im-stepfunctions/resources/im-stepfunctions.mock.json
+        target: /home/stepfunctionslocal/MockConfigFile.json
+        read_only: true
