@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [],
+  "references": [
+    {
+      "path": "packages/smart-contracts"
+    },
+    {
+      "path": "packages/smart-contracts/tsconfig.ext.json"
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/core-backend"
+    },
+    {
+      "path": "packages/gql-api"
+    },
+    {
+      "path": "packages/web-app"
+    },
+    {
+      "path": "packages/replay-component"
+    },
+    {
+      "path": "packages/event-handlers"
+    }
+  ]
+}
