@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  localstack-main:
+    container_name: acp-demo_localstack-main
+    image: localstack/localstack
+    environment:
+      - DYNAMODB_SHARE_DB=1
+      - PERSISTENCE=1
+    ports:
+      - 127.0.0.1:4566:4566 # LocalStack Gateway
+      - 127.0.0.1:4510-4559:4510-4559 # external services port range
+      - 127.0.0.1:53:53 # DNS config (only required for Pro)
+      - 127.0.0.1:53:53/udp # DNS config (only required for Pro)
+      - 127.0.0.1:443:443 # LocalStack HTTPS Gateway (only required for Pro)
+    volumes:
+      - localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    depends_on:
+      - localstack-main
+    environment:
+      - DYNAMO_ENDPOINT=http://localstack-main:4566
+    ports:
+      - 127.0.0.1:8001:8001
+
+  terraform-local:
+    image: hashicorp/terraform:1.2.6
+    command: -c "terraform init -lock=false && terraform apply -auto-approve -lock=false"
+    depends_on:
+      - localstack-main
+    entrypoint: sh
+    volumes:
+      - './terraform:/terraform'
+    working_dir: /terraform/local
+
+volumes:
+  localstack:
