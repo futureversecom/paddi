@@ -1,0 +1,26 @@
+[GLOBAL]
+# Colors often work in CI, but the shell is usually not a TTY so Pants 
+# doesn't attempt to use them by default.
+colors = true
+
+[python]
+default_resolve = "ci"
+
+[python-repos]
+find_links = [
+  # to find wheels for pytorch-cpu
+  "https://download.pytorch.org/whl/torch_stable.html"
+]
+
+[stats]
+log = true
+
+[test]
+use_coverage = true
+
+[coverage-py]
+report = ["xml"]
+global_report = true
+
+[pytest]
+args = ["-vv", "--no-header"]
