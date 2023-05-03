@@ -5,6 +5,7 @@ import { pipe } from 'fp-ts/function'
 import { sign, verify } from 'jsonwebtoken'
 import { generateNonce } from 'siwe'
 
+type JwtPayload = { sub: ChainAddress }
 export class AuthenticationService {
   public constructor(
     private loginNonceRepository: LoginNonceRepository,
@@ -52,7 +53,10 @@ export class AuthenticationService {
    */
   verifyJwt = (jwtToken: string) => {
     return pipe(
-      either.tryCatch(() => verify(jwtToken, this.jwtSecret), either.toError),
+      either.tryCatch(
+        () => verify(jwtToken, this.jwtSecret) as JwtPayload,
+        either.toError,
+      ),
       either.map(payload => payload.sub),
     )
   }

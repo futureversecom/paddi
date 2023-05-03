@@ -54,9 +54,9 @@ export const Faucet = () => {
             </Grid>
           </Grid>
           <Typography marginTop={10}>
-            After claiming all 3 test net assets (XRP, ASTO and Gen ll Brains).
+            After claiming all 3 test net assets (XRP, ASTO and Gen II Brains).
             <br />
-            You can now start training you agent to play Bati.
+            You can now start training you agent to play Paddi.
           </Typography>
           <Stack direction="row" gap={2} marginTop={2} alignItems="center">
             <NavLink to="/train">

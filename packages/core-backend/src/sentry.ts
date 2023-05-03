@@ -11,7 +11,7 @@ if (sentryDSN) {
     integrations: [
       new CaptureConsole({
         levels: ['error'],
-      }),
+      }) as any,
     ],
     environment,
     beforeSend: (event, hint) => {

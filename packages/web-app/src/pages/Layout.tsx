@@ -18,6 +18,26 @@ const pages = [
   },
 ]
 
+const MobileWarning = styled('div')(({ theme }) => ({
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  right: '0',
+  bottom: '0',
+  background: 'black',
+  opacity: 0.8,
+  padding: '30px',
+  textAlign: 'center',
+  'z-index': '999',
+  display: 'flex',
+  'justify-content': 'center',
+  'align-items': 'center',
+  'font-size': '40px',
+  [theme.breakpoints.up('md')]: {
+    display: 'none',
+  },
+}))
+
 const FooterContainer = styled('footer')(() => css``)
 const Footer = styled(Container)(
   () => css`
@@ -88,13 +108,14 @@ export const Layout = () => {
   }
   return (
     <div>
+      <MobileWarning>This experience requires a bigger screen</MobileWarning>
       <HeaderBar position="static">
         <NavLinkContainer>
           {/* TODO: Remove this and use the logo img */}
           <div style={{ height: 66 }}></div>
           {/* <img
             src="/images/header_logo.png"
-            alt="bati logo"
+            alt="logo"
             width="95"
             height="66"
           /> */}
@@ -114,7 +135,7 @@ export const Layout = () => {
             ))}
 
             <StyledNavLink
-              to="https://github.com/futureversecom/acp-demo-open"
+              to="https://github.com/futureversecom/paddi"
               target="_blank"
             >
               <Stack direction="row" alignItems="center" gap={1}>

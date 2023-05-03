@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-sfn": "^3.289.0",
-    "aws-lambda": "^1.0.7",
     "fp-ts": "^2.12.3",
     "io-ts": "^2.2.16"
   }

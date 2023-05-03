@@ -2,12 +2,13 @@ import { Button, css, Grid, styled, Typography } from '@mui/material'
 import type { BigNumberish } from 'ethers'
 import { BigNumber } from 'ethers'
 import type { FC } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { client } from 'src/graphql/client'
 import { useGenomeAttributesQuery } from 'src/graphql/generated'
 import { useBrainMetadata } from 'src/hooks/useBrainMetadata'
 
 import { BrainImage } from './BrainImage'
-import { GENOME_ATTRIBUTES, GenomeMatrix } from './GenomeMatrix'
+import { GenomeMatrix, getGenomeConfigByName } from './GenomeMatrix'
 
 type Props = {
   tokenId: BigNumberish
@@ -24,11 +25,11 @@ const Attribute = styled('span')(
 const AttributeCircle = styled('div')(
   () =>
     css`
-      width: 6px;
-      height: 6px;
+      width: 10px;
+      height: 10px;
       background: red;
       display: inline-block;
-      border-radius: 100px;
+      // border-radius: 100px;
       margin-right: 5px;
     `,
 )
@@ -67,8 +68,8 @@ const BrainImageContainer = styled('div')(
       position: absolute;
       width: 100px;
       height: 100px;
-      bottom: 5px;
-      right: 5px;
+      bottom: 15px;
+      right: 15px;
       background: #767676;
       padding: 10px;
       display: flex;
@@ -89,7 +90,12 @@ const Title = styled(Typography)(
     line-height: 133.5%;
   `,
 )
-export const BrainPanel: FC<Props> = ({ tokenId, onSelect }) => {
+export const BrainPanel: FC<Props> = (props: Props) => {
+  const { ref, inView } = useInView()
+  return <Container ref={ref}>{inView && <Visual {...props} />}</Container>
+}
+
+const Visual: FC<Props> = ({ onSelect, tokenId }: Props) => {
   const tokenIdNum = BigNumber.from(tokenId).toNumber()
   const { data } = useGenomeAttributesQuery(client, {
     tokenId: tokenIdNum,
@@ -105,7 +111,7 @@ export const BrainPanel: FC<Props> = ({ tokenId, onSelect }) => {
     onSelect(tokenIdNum)
   }
   return (
-    <Container>
+    <>
       <BrainContainer>
         {brainData && <GenomeMatrix matrix={brainData.genome_matrix} />}
         <BrainImageContainer>
@@ -118,32 +124,42 @@ export const BrainPanel: FC<Props> = ({ tokenId, onSelect }) => {
         </Title>
 
         <Grid container columns={2}>
-          {attrs?.map(attr => {
-            const config = GENOME_ATTRIBUTES.flatMap(a =>
-              a.key === attr.name ? [a] : [],
-            )[0]
-            return (
-              <Grid
-                key={attr.name}
-                item
-                xs={1}
-                sx={{ paddingBottom: '10px', fontWeight: 'bold' }}
-              >
-                <Attribute>
-                  <AttributeCircle sx={{ background: config?.baseColor }} />
-                  <AttributeName>{attr.name}:</AttributeName>
-                  &nbsp;
-                  {attr.__typename === 'GenomeAttributeHex' && attr.valueHex}
-                  {attr.__typename === 'GenomeAttributeInt' && attr.valueInt}
-                </Attribute>
-              </Grid>
-            )
-          })}
+          {attrs
+            ?.sort((a, b) => {
+              const aExtended = getGenomeConfigByName(a.name)
+              const bExtended = getGenomeConfigByName(b.name)
+              if (!aExtended) return -1
+              if (!bExtended) return 1
+              if (aExtended?.order > bExtended?.order) return 1
+              if (aExtended?.order < bExtended?.order) return -1
+
+              return 0
+            })
+            .map(attr => {
+              const config = getGenomeConfigByName(attr.name)
+
+              return (
+                <Grid
+                  key={attr.name}
+                  item
+                  xs={1}
+                  sx={{ paddingBottom: '10px', fontWeight: 'bold' }}
+                >
+                  <Attribute>
+                    <AttributeCircle sx={{ background: config?.baseColor }} />
+                    <AttributeName>{attr.name}:</AttributeName>
+                    &nbsp;
+                    {attr.__typename === 'GenomeAttributeHex' && attr.valueHex}
+                    {attr.__typename === 'GenomeAttributeInt' && attr.valueInt}
+                  </Attribute>
+                </Grid>
+              )
+            })}
         </Grid>
         <Button variant="outlined" sx={{ mt: 6 }} onClick={onClick}>
           Select Brain #{tokenIdNum}
         </Button>
       </ContentContainer>
-    </Container>
+    </>
   )
 }

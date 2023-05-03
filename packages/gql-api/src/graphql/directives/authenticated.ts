@@ -1,7 +1,6 @@
 import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils'
-import { AuthenticationError } from 'apollo-server-core'
 import type { GraphQLFieldConfig, GraphQLSchema } from 'graphql'
-import { defaultFieldResolver } from 'graphql'
+import { defaultFieldResolver, GraphQLError } from 'graphql'
 
 import type { AuthenticatedContext, Context } from '../context'
 
@@ -44,8 +43,13 @@ export const authenticatedDirective = (schema: GraphQLSchema) => {
           // If the user is not authenticated, throw an error
           const { walletAddress } = context
           if (!walletAddress) {
-            throw new AuthenticationError(
+            throw new GraphQLError(
               'You must be authenticated to use this field.',
+              {
+                extensions: {
+                  code: 'UNAUTHENTICATED',
+                },
+              },
             )
           }
 

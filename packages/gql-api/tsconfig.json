@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "lib": ["dom", "es2020"],
     "outDir": "dist",
     "module": "commonjs",
     "resolveJsonModule": true,

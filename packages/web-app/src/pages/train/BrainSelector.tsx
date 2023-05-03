@@ -15,6 +15,8 @@ import { useBrainTokens } from 'src/hooks/contracts/useBrainContract'
 import { secondaryFontFamily } from 'src/styles/theme'
 import { reportEvent } from 'src/utils/ga'
 
+import { TrainingCheckBox } from './TrainingCheckBox'
+
 const BrainSelectorContainer = styled('button')(
   ({ theme }) => css`
     position: relative;
@@ -61,6 +63,12 @@ const GridItem = styled('div')(
     `,
 )
 
+const Parent = styled('div')(
+  () => css`
+    position: relative;
+  `,
+)
+
 export const BrainSelector: FC<Props> = ({ address, brainId, setBrainId }) => {
   const { data: brainTokens } = useBrainTokens(address)
   const [open, setOpen] = useState(false)
@@ -83,7 +91,8 @@ export const BrainSelector: FC<Props> = ({ address, brainId, setBrainId }) => {
   }
 
   return (
-    <>
+    <Parent>
+      {brainId !== undefined && <TrainingCheckBox />}
       <BrainSelectorContainer onClick={handleOpen}>
         {brainId !== undefined ? (
           <>
@@ -127,6 +136,6 @@ export const BrainSelector: FC<Props> = ({ address, brainId, setBrainId }) => {
           </DescriptionBox>
         </DialogContent>
       </Dialog>
-    </>
+    </Parent>
   )
 }

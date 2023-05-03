@@ -43,7 +43,7 @@ const StatItem = styled('div')(
 const Container = styled('div')(
   ({ theme }) => css`
     background: ${theme.palette.divider};
-    border: 1px solid white;
+    // border: 1px solid white;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -69,7 +69,7 @@ export const FaucetPanel: FC<Props> = ({
       </ImageContainer>
       <ContentContainer>
         <Title>{title}</Title>
-        <Typography>{explainer}</Typography>
+        <Typography sx={{ opacity: 0.5 }}>{explainer}</Typography>
         {stats.map(stat => (
           <StatItem key={stat}>{stat}</StatItem>
         ))}

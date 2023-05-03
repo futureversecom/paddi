@@ -14,6 +14,7 @@ import { reportEvent } from 'src/utils/ga'
 import { Opponent } from './Opponent'
 import { OpponentButton } from './OpponentButton'
 import { preTrainedModel } from './preTrainedModel'
+import { TrainingCheckBox } from './TrainingCheckBox'
 
 const OpponentDialog = styled(Dialog)(
   () => css`
@@ -22,7 +23,11 @@ const OpponentDialog = styled(Dialog)(
     }
   `,
 )
-
+const Parent = styled('div')(
+  () => css`
+    position: relative;
+  `,
+)
 type Props = {
   scenario?: ScenarioInput
   setScenario: (scenario: ScenarioInput) => void
@@ -63,7 +68,8 @@ export const OpponentSelector: FC<Props> = ({ scenario, setScenario }) => {
   }
 
   return (
-    <>
+    <Parent>
+      {scenario && <TrainingCheckBox />}
       <OpponentButton onClick={handleOpen} scenario={scenario} />
 
       <OpponentDialog open={open} onClose={handleClose}>
@@ -88,6 +94,6 @@ export const OpponentSelector: FC<Props> = ({ scenario, setScenario }) => {
           </Stack>
         </DialogContent>
       </OpponentDialog>
-    </>
+    </Parent>
   )
 }

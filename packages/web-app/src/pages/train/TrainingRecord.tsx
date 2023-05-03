@@ -46,8 +46,8 @@ const Container = styled('div')(
   () =>
     css`
       background-color: #1b1b1b;
-      padding: 24px 32px;
-      margin-bottom: 24px;
+      padding: 60px 32px;
+      margin-bottom: 44px;
     `,
 )
 
@@ -66,6 +66,7 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       )
     : undefined
 
+  const [isPinning, setIsPinning] = useState(false)
   const [open, setOpen] = useState(false)
   const [replayPath, setReplayPath] = useState<string>()
   const handleOpen = (replayPath: string) => {
@@ -120,12 +121,15 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       page_title: 'Training History',
       button_name: 'Pin to the memory tree',
     })
+    setIsPinning(true)
     const { data } = await fetchPendingNodeSignature()
     const pendingNodeSignature = data?.pendingNodeSignature
     if (!pendingNodeSignature) {
+      setIsPinning(false)
       return toast('Get Signature error', { type: 'error' })
     }
     if (!storageURI) {
+      setIsPinning(false)
       return toast('Cannot pin an unfinished training', { type: 'error' })
     }
 
@@ -158,18 +162,30 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       const nodeId =
         pinnedMemoryNode?.id.toString() ?? (await pinMemoryOnChain())
       if (nodeId) {
-        await savePinnedNodeId({
-          hash: training.hash,
-          nodeId: nodeId.toString(),
-        })
+        try {
+          await savePinnedNodeId({
+            hash: training.hash,
+            nodeId: nodeId.toString(),
+          })
+        } catch (error) {
+          setIsPinning(false)
+        } finally {
+          setIsPinning(false)
+        }
+      } else {
+        setIsPinning(false)
       }
     }
 
-    return toast.promise(pinMemory, {
-      pending: 'Pinning memory node...',
-      success: 'Memory node Pinned!',
-      error: 'Pin memory node failed!',
-    })
+    return toast
+      .promise(pinMemory, {
+        pending: 'Pinning memory node...',
+        success: 'Memory node Pinned!',
+        error: 'Pin memory node failed!',
+      })
+      .finally(() => {
+        setIsPinning(false)
+      })
   }
 
   const opponentName = useMemo(() => {
@@ -282,10 +298,12 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
           <Button
             variant="outlined"
             onClick={handlePin}
-            disabled={hasPinned}
+            disabled={hasPinned || isPinning}
             sx={{ mt: '48px', ml: '158px' }}
           >
-            {hasPinned
+            {isPinning
+              ? `Pinning Memory`
+              : hasPinned
               ? `Memory Saved (Node: ${training.pinnedNodeId})`
               : `Save Memory`}
           </Button>

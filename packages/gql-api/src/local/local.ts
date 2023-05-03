@@ -1,20 +1,16 @@
 import './local-setup'
 
-import { ApolloServer } from 'apollo-server'
-import type { ExpressContext } from 'apollo-server-express'
+import { ApolloServer } from '@apollo/server'
+import { startStandaloneServer } from '@apollo/server/standalone'
 
-const getHeaders = (context: ExpressContext) => {
-  return context.req.headers
-}
+import { ApolloSettings, getContext } from '../handlers/graphql-handler'
 
 export const startServer = async () => {
-  const { getApolloSettings } = await import('../handlers/graphql-handler')
-
-  await new ApolloServer(getApolloSettings(getHeaders))
-    .listen()
-    .then(({ url }) => {
-      console.log(`🚀 Server ready at ${url}`)
-    })
+  await startStandaloneServer(new ApolloServer(ApolloSettings), {
+    context: async ({ req }) => getContext(req.headers),
+  }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`)
+  })
 }
 
 startServer().catch(err => {

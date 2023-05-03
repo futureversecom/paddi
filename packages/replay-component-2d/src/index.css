@@ -1,0 +1,33 @@
+:root {
+  
+  background-color: black;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+}
+
+.goal{
+  text-align: center;
+  color:white;
+  font-size: 30px;
+  pointer-events: none;
+}
+.scoreContainer{
+  text-align: center;
+  width:400px;
+  color:black;
+  font-size:20px;
+  left:50% !important;
+  top:30px !important;
+  transform: none !important;
+}

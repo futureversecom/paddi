@@ -17,52 +17,59 @@ const Container = styled('div')(
       height: 100%;
     `,
 )
-
-export const GENOME_ATTRIBUTES = [
+export const getGenomeConfigByName = (key: string) => {
+  return GENOME_ATTRIBUTES.flatMap(a => (a.key === key ? [a] : []))[0]
+}
+const GENOME_ATTRIBUTES = [
   {
-    baseColor: '#ff0000',
+    baseColor: '#EA3323',
     label: 'Colour',
     key: 'colour',
     areaX: 0,
     areaY: 3,
     areaDX: 5,
     areaDY: 5,
+    order: 5,
   },
   {
-    baseColor: '#00ff00',
+    baseColor: '#7F0FC3',
     label: 'Speed',
     key: 'speed',
     areaX: 20,
     areaY: 4,
     areaDX: 18,
     areaDY: 13,
+    order: 2,
   },
   {
-    baseColor: '#0000ff',
+    baseColor: '#1689F3',
     label: 'Strength',
     key: 'strength',
     areaX: 11,
     areaY: 21,
     areaDX: 13,
     areaDY: 12,
+    order: 3,
   },
   {
-    baseColor: '#ff00ff',
+    baseColor: '#4BA634',
     label: 'Endurance',
     key: 'endurance',
     areaX: 4,
     areaY: 14,
     areaDX: 11,
     areaDY: 12,
+    order: 4,
   },
   {
-    baseColor: '#D4A603',
+    baseColor: '#DB950D',
     label: 'Size',
     key: 'size',
     areaX: 13,
     areaY: 16,
     areaDX: 5,
     areaDY: 19,
+    order: 1,
   },
 ]
 const getAttributesByRowCol = (row: number, col: number) => {
@@ -145,7 +152,7 @@ const ThreeDee = ({ matrix }: Props) => {
       <ambientLight intensity={0.5} />
       <spotLight intensity={1} position={[0, 20, 0]} castShadow />
       <OrthographicCamera makeDefault position={[0, 45, 55]} zoom={8} />
-      <OrbitControls enableZoom={false} />
+      <OrbitControls enableZoom={false} enablePan={false} />
 
       <group ref={containerRef} position={[0, 0, 0]}>
         {/* {attributes.map(a => {
@@ -184,10 +191,11 @@ const ThreeDee = ({ matrix }: Props) => {
             selectedAtts.length > 0
               ? getPercentageOfColor(
                   blendedColor,
-                  MathUtils.mapLinear(value, 0, 1, 30, 100),
+                  MathUtils.mapLinear(value, 0, 1, 90, 100),
                 )
               : getPercentageOfColor(
-                  '0x242424',
+                  // '0x242424',
+                  '0xffffff',
                   MathUtils.mapLinear(value, 0, 1, 100, 100),
                 )
 

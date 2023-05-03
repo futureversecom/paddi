@@ -1,3 +1,4 @@
+import { Link } from '@mui/material'
 import type { Narrow } from 'abitype'
 import { chainAddressFromString } from 'core/src/types/chain-address'
 import type { BigNumberish } from 'ethers'
@@ -60,7 +61,21 @@ export const FaucetPanelXRP = ({ address }: Props) => {
       .promise(requestGas, {
         pending: 'Claiming XRP...',
         success: 'XRP claimed!',
-        error: 'XRP claiming error!',
+        error: {
+          render: () => (
+            <span>
+              XRP claiming error! <br /> Try{' '}
+              <Link
+                href="https://faucet.rootnet.cloud/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Porcini Faucet
+              </Link>{' '}
+              instead.
+            </span>
+          ),
+        },
       })
       .finally(() => setRequesting(false))
     await refetchBalance()

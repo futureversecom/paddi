@@ -18,6 +18,8 @@ import { secondaryFontFamily } from 'src/styles/theme'
 import { reportEvent } from 'src/utils/ga'
 import { humanCamel } from 'src/utils/humanCamel'
 
+import { TrainingCheckBox } from './TrainingCheckBox'
+
 export type TrainingParams = {
   wins: number
   lose: number
@@ -112,6 +114,11 @@ const SelectorContainer = styled('button')(
     color: ${theme.palette.text.primary};
   `,
 )
+const Parent = styled('div')(
+  () => css`
+    position: relative;
+  `,
+)
 
 type Props = {
   trainingParams: TrainingParams
@@ -173,7 +180,8 @@ export const TrainingParamsSelector: FC<Props> = ({
   }
 
   return (
-    <>
+    <Parent>
+      {(trainingParams || presetParam) && <TrainingCheckBox />}
       <SelectorContainer onClick={handleOpen}>
         <span>
           Training <br />
@@ -245,6 +253,6 @@ export const TrainingParamsSelector: FC<Props> = ({
           </Button>
         </DialogContent>
       </Dialog>
-    </>
+    </Parent>
   )
 }

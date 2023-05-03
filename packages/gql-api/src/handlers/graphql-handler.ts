@@ -1,18 +1,13 @@
+import { ApolloServer } from '@apollo/server'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground'
+import {
+  handlers,
+  startServerAndCreateLambdaHandler,
+} from '@as-integrations/aws-lambda'
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { SecretsManagerClient } from '@aws-sdk/client-secrets-manager'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import {
-  ApolloServerPluginLandingPageGraphQLPlayground,
-  AuthenticationError,
-} from 'apollo-server-core'
-import type { Config } from 'apollo-server-lambda'
-import { ApolloServer } from 'apollo-server-lambda'
-import type { LambdaContextFunctionParams } from 'apollo-server-lambda/dist/ApolloServer'
-import type {
-  APIGatewayProxyEventHeaders,
-  APIGatewayProxyEventV2,
-} from 'aws-lambda'
 import { typeDefs } from 'core/src/graphql/type-defs'
 import { BrainMetadataInteractions } from 'core-backend/src/assets/brain-metadata-interactions'
 import { ComputeManagerInteractions } from 'core-backend/src/contracts/compute-manager-interactions'
@@ -23,6 +18,8 @@ import { sentryWrapper } from 'core-backend/src/sentry'
 import { providers, Wallet } from 'ethers'
 import { either } from 'fp-ts'
 import type { GraphQLFormattedError } from 'graphql'
+import { GraphQLError } from 'graphql'
+import type { IncomingHttpHeaders } from 'http'
 import * as decoder from 'io-ts/Decoder'
 import type {
   AuthenticatedContext,
@@ -38,12 +35,6 @@ import { HealthCheckService } from 'src/services/health-check-service'
 import { TrainingService } from 'src/services/training-service'
 
 import { SecretsC } from './handler-secrets'
-
-interface APIGatewayV2ContextFunctionParams
-  extends LambdaContextFunctionParams {
-  event: APIGatewayProxyEventV2
-  context: Context
-}
 
 const buildCachedServicesPromise = (async (): Promise<Context> => {
   const env = getEnvOrThrow({
@@ -129,56 +120,62 @@ const augmentedSchema = directives.reduce(
   schema,
 )
 
-interface APIGatewayV2ContextFunctionParams
-  extends LambdaContextFunctionParams {
-  event: APIGatewayProxyEventV2
-  context: Context
-}
+export const getContext = async (
+  headers: IncomingHttpHeaders,
+): Promise<Context> => {
+  const services: BaseContext = await buildCachedServicesPromise
 
-const getHeaders = (req: APIGatewayV2ContextFunctionParams) => {
-  return req.event?.headers as APIGatewayProxyEventHeaders
+  // auth token is passed in the request header
+  const token = headers['authorization']?.slice('Bearer '.length)
+  if (token) {
+    const decodedWalletAddress = services.authenticationService.verifyJwt(token)
+
+    if (either.isLeft(decodedWalletAddress)) {
+      throw new GraphQLError('Invalid wallet address', {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+        },
+      })
+    }
+
+    const context: AuthenticatedContext<BaseContext> = {
+      ...services,
+      walletAddress: decodedWalletAddress.right,
+    }
+
+    return context
+  }
+
+  return services
 }
 
 // GraphQL Server Initialization
-export const getApolloSettings = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getHeaders: (req: any) => any,
-): Config<APIGatewayV2ContextFunctionParams> => ({
+export const ApolloSettings = {
   schema: augmentedSchema,
-  context: async (req): Promise<Context> => {
-    const headers = getHeaders(req)
-    const services: BaseContext = await buildCachedServicesPromise
 
-    // auth token is passed in the request header
-    const token = headers['authorization']?.slice('Bearer '.length)
-    if (token) {
-      const decodedWalletAddress =
-        services.authenticationService.verifyJwt(token)
-
-      if (either.isLeft(decodedWalletAddress)) {
-        throw new AuthenticationError('Invalid wallet address')
-      }
-
-      return {
-        ...services,
-        walletAddress: decodedWalletAddress.right,
-      } as AuthenticatedContext<BaseContext>
-    }
-
-    return services
-  },
   introspection: true,
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
-  formatError: err => {
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+  formatError: (err: GraphQLFormattedError) => {
     console.log(err)
 
     // Otherwise return the original error. The error can also
     // be manipulated in other ways, as long as it's returned.
-    return err as GraphQLFormattedError
+    return err
   },
-})
+}
 
 /* Run the graphql server as a lambda */
-const server = new ApolloServer(getApolloSettings(getHeaders))
+const server = new ApolloServer(ApolloSettings)
 
-export const handler = sentryWrapper(server.createHandler())
+const graphqlHandler = startServerAndCreateLambdaHandler(
+  server,
+  // We will be using the Proxy V2 handler
+  handlers.createAPIGatewayProxyEventV2RequestHandler(),
+  {
+    context: async req => {
+      return getContext(req.event.headers)
+    },
+  },
+)
+
+export const handler = sentryWrapper(graphqlHandler)

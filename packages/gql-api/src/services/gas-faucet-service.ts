@@ -28,6 +28,7 @@ export class GasFaucetService {
         this.wallet,
       )
       const tx = await contract.faucet(walletAddress, {
+        gasLimit: 100000,
         gasPrice: '15000000000000',
       })
       return right({ __typename: 'GasFaucetSuccessResponse', hash: tx.hash })

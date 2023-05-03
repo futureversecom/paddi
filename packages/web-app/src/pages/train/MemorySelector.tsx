@@ -1,4 +1,12 @@
-import { Box, Button, Dialog, DialogContent, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  css,
+  Dialog,
+  DialogContent,
+  styled,
+  Typography,
+} from '@mui/material'
 import type { FC } from 'react'
 import { useState } from 'react'
 import type { ParentMemoryNodeConfig } from 'src/graphql/generated'
@@ -8,6 +16,7 @@ import { reportEvent } from 'src/utils/ga'
 
 import { Memory } from './Memory'
 import { MemoryTree } from './MemoryTree'
+import { TrainingCheckBox } from './TrainingCheckBox'
 
 type Props = {
   brainId?: number
@@ -16,6 +25,13 @@ type Props = {
     parentMemoryNodeConfig: ParentMemoryNodeConfig,
   ) => void
 }
+
+const Parent = styled('div')(
+  () =>
+    css`
+      position: relative;
+    `,
+)
 
 export const MemorySelector: FC<Props> = ({
   brainId,
@@ -40,12 +56,13 @@ export const MemorySelector: FC<Props> = ({
   const hasBrainId = brainId !== undefined
 
   return (
-    <>
+    <Parent>
       <Memory
         onClick={handleOpen}
         parentMemoryNodeConfig={parentMemoryNodeConfig}
         disabled={!hasBrainId}
       />
+      {parentMemoryNodeConfig && <TrainingCheckBox />}
       {hasBrainId && (
         <Dialog open={open} onClose={handleClose} maxWidth="md">
           <MemorySelectorDialogContent
@@ -54,7 +71,7 @@ export const MemorySelector: FC<Props> = ({
           />
         </Dialog>
       )}
-    </>
+    </Parent>
   )
 }
 
