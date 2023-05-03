@@ -24,6 +24,9 @@
       "path": "packages/replay-component"
     },
     {
+      "path": "packages/replay-component-2d"
+    },
+    {
       "path": "packages/event-handlers"
     }
   ]
