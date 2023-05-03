@@ -1,37 +1,38 @@
 # ASM-Core-Protocol (ACP) Demo
 
-Welcome to the open-source repository for Bati, powered by Altered State Machine Protocol and The Root Network. Our mission is to make it easy for developers to start with Bati, extend the game and showcase what’s possible. Success for us means the community & game studios are using this demo to build their own experiences and learn.
+Welcome to the open-source repository for Paddi, powered by Altered State Machine Protocol and The Root Network. Our mission is to make it easy for developers to start with Paddi, extend the game and showcase what’s possible. Success for us means the community & game studios are using this demo to build their own experiences and learn.
 
 This monorepo contains everything that is needed to build a gamified AI experience, run intelligence mining at scale via smart-contracts and AWS infrastructure and render that in a game engine. The only missing component from the repo is chain-sync service, which is an internal service similar to [Alchemy Webhooks](https://www.alchemy.com/overviews/what-is-a-webhook) that is used to listen to contract events.
 
 ## Purpose of repo
 
-In mid-May 2023, we launched Bati to the community as an open-source project on GitHub. We have created this landing page to make it easy for developers to understand the project, see a high-level view of all the components, and access them easily.
+In mid-May 2023, we launched Paddi to the community as an open-source project on GitHub. We have created this landing page to make it easy for developers to understand the project, see a high-level view of all the components, and access them easily.
 
-## About Bati
+## About Paddi
 
-Bati is like a classic table tennis video game that people of all ages have enjoyed for decades.
+Paddi is like a classic table tennis video game that people of all ages have enjoyed for decades.
 
 - This version has ASM Brains which power the paddles. Each Brain brings diverse attributes, so no two paddles are the same. We have included speed, strength, endurance & size in this example.
-- Bati demonstrates the ASM Core Protocol, which facilitates AI/ML training payments with ASTO and provides Memory Trees that hold AI models from training.
-- Bati demonstrates how AI training can be incorporated into games using reinforcement learning algorithms and open-source Python libraries. We don’t show everything possible but just enough to spark your creativity. We also show examples of extending this further, so check out the examples section for this.
+- Paddi demonstrates the ASM Core Protocol, which facilitates AI/ML training payments with ASTO and provides Memory Trees that hold AI models from training.
+- Paddi demonstrates how AI training can be incorporated into games using reinforcement learning algorithms and open-source Python libraries. We don’t show everything possible but just enough to spark your creativity. We also show examples of extending this further, so check out the examples section for this.
 
 ## Components
 
-The open-source repository for Bati includes the following components:
+The open-source repository for Paddi includes the following components:
 
-- [Pong Simulation](packages/pong-simulation/README.md) Reinforcement Learning to teach a paddle to play Bati
-- [Replay](packages/replay-component/README.md) ThreeJs based replay engine for interpreting what happened during a simulation.
+- [Pong Simulation](packages/pong-simulation/README.md) Reinforcement Learning to teach a paddle to play Paddi
+- [Replay - 3d](packages/replay-component) ThreeJs based replay engine for interpreting what happened during a simulation.
+- [Replay - 2d](packages/replay-component-2d) VanillaJS based replay engine for interpreting what happened during a simulation.
 - [Smart Contracts](packages/smart-contracts/README.md) Smart contracts extending the ASM Core Protocol.
 - [Schemas](packages/schemas/README.md) Json schema definitions for replay events and internal intelligence mining events.
 - [IM Stepfunctions](packages/im-stepfunctions/README.md) The Intelligence Mining service layer logic and step function definitions.
-- [Web App](packages/web-app/README.md) React.js based web experience for Bati.
+- [Web App](packages/web-app/README.md) React.js based web experience for Paddi.
 - [GraphQL Api and `core`, `core-backend`, `event-handlers`](packages/gql-api/README.md) The backend Apis, event handlers, types and common packages.
-- `Terraform` Scalable AWS Infrastructure as code for Bati.
+- `Terraform` Scalable AWS Infrastructure as code for Paddi.
 
 ## Getting Started
 
-To start working with Bati, you can clone the repository from GitHub and follow the README instructions. You can also find examples of extending the code in our documentation.
+To start working with Paddi, you can clone the repository from GitHub and follow the README instructions. You can also find examples of extending the code in our documentation.
 
 ## Packages
 
