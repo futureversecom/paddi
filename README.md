@@ -1,6 +1,6 @@
-# ASM-Core-Protocol (ACP) Demo
+# ASM AI Protocol Demo
 
-Welcome to the open-source repository for Paddi, powered by Altered State Machine Protocol and The Root Network. Our mission is to make it easy for developers to start with Paddi, extend the game and showcase what’s possible. Success for us means the community & game studios are using this demo to build their own experiences and learn.
+Welcome to the open-source repository for Paddi, powered by Altered State Machine AI Protocol and The Root Network. Our mission is to make it easy for developers to start with Paddi, extend the game and showcase what’s possible. Success for us means the community & game studios are using this demo to build their own experiences and learn.
 
 This monorepo contains everything that is needed to build a gamified AI experience, run intelligence mining at scale via smart-contracts and AWS infrastructure and render that in a game engine. The only missing component from the repo is chain-sync service, which is an internal service similar to [Alchemy Webhooks](https://www.alchemy.com/overviews/what-is-a-webhook) that is used to listen to contract events.
 
@@ -10,7 +10,7 @@ In mid-May 2023, we launched Paddi to the community as an open-source project on
 
 ## About Paddi
 
-Paddi is like a classic table tennis video game that people of all ages have enjoyed for decades.
+Introducing Paddi, a futuristic take on a nostalgic arcade game where you can train an AI Agent to compete in your place.
 
 - This version has ASM Brains which power the paddles. Each Brain brings diverse attributes, so no two paddles are the same. We have included speed, strength, endurance & size in this example.
 - Paddi demonstrates the ASM Core Protocol, which facilitates AI/ML training payments with ASTO and provides Memory Trees that hold AI models from training.
