@@ -52,7 +52,7 @@ resource "aws_s3_bucket" "results-bucket" {
 
 
 # upload training models
-resource "aws_s3_bucket_object" "training-models" {
+resource "aws_s3_object" "training-models" {
   # iterate over the training models
   for_each = local.training_models
 

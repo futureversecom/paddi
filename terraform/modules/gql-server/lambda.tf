@@ -2,7 +2,7 @@ locals {
   lambda_package_path = "../../../../packages/gql-api/dist/graphql-handler.js.zip"
 }
 
-resource "aws_s3_bucket_object" "lambda-package" {
+resource "aws_s3_object" "lambda-package" {
   bucket = module.lambda_s3_bucket.s3_bucket_id
   key    = "acp-demo-gql-server-${filemd5(local.lambda_package_path)}.zip"
   source = local.lambda_package_path
@@ -21,8 +21,8 @@ module "gql_server_handler_lambda" {
 
   create_package = false
   s3_existing_package = {
-    bucket = aws_s3_bucket_object.lambda-package.bucket
-    key    = aws_s3_bucket_object.lambda-package.id
+    bucket = aws_s3_object.lambda-package.bucket
+    key    = aws_s3_object.lambda-package.id
   }
 
   environment_variables = {

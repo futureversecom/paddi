@@ -67,5 +67,5 @@ module "acp_demo_event_handlers" {
 
 module "networking" {
   source      = "../../../modules/networking"
-  domain_name = "paddi-dev.al8st.me"
+  domain_name = "paddi-staging.al8st.me"
 }
