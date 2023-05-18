@@ -24,7 +24,6 @@ import { reportEvent } from 'src/utils/ga'
 
 import { ApproveASTO } from './ApproveASTO'
 import { BrainSelector } from './BrainSelector'
-import { MemorySelector } from './MemorySelector'
 import { OpponentSelector } from './OpponentSelector'
 import type { TrainingParams } from './TrainingParamsSelector'
 import { PRESET_PARAMS, TrainingParamsSelector } from './TrainingParamsSelector'
@@ -162,16 +161,12 @@ export const DoTrainingPanel: React.FC<props> = ({ address }) => {
         <Grid item xs={4}>
           <BrainSelector
             address={address}
-            brainId={brainId}
-            setBrainId={id => {
-              setBrainId(id)
-              setParentMemoryNodeConfig(undefined)
-            }}
-          />
-          <MemorySelector
-            brainId={brainId}
             parentMemoryNodeConfig={parentMemoryNodeConfig}
-            setParentMemoryNodeConfig={setParentMemoryNodeConfig}
+            brainId={brainId}
+            setBrain={({ id, parentMemoryNodeConfig }) => {
+              setBrainId(id)
+              setParentMemoryNodeConfig(parentMemoryNodeConfig)
+            }}
           />
         </Grid>
 

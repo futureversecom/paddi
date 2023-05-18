@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
 import {
   useBrainBalance,
@@ -5,7 +6,7 @@ import {
 } from 'src/hooks/contracts/useBrainContract'
 import { reportEvent } from 'src/utils/ga'
 
-import { FaucetPanel, FaucetPanelActionButton } from './FaucetPanel'
+import { FaucetPanel } from './FaucetPanel'
 
 type Props = {
   address: `0x${string}`
@@ -37,17 +38,14 @@ export const FaucetPanelBrain = ({ address }: Props) => {
       {brainError && <p>Unable to load Brains.</p>}
       {!brainLoading && (
         <FaucetPanel
+          type="Brain"
+          balance={`${brainBal}`}
           imgPath="images/brain.png"
-          title="03. Gen II Brain"
-          explainer={`Claim a brain to play.`}
-          stats={[`You have ${brainBal} brains.`]}
+          explainer="Claim an ASM Brain to play."
         >
-          <FaucetPanelActionButton
-            variant="contained"
-            onClick={handleClaimBrain}
-          >
+          <Button fullWidth variant="outlined" onClick={handleClaimBrain}>
             Claim Brains
-          </FaucetPanelActionButton>
+          </Button>
         </FaucetPanel>
       )}
     </>

@@ -23,20 +23,21 @@ const BrainImageContainer = styled(
 
 interface BrainImageDivProps {
   $imageURL?: string | undefined
+  $isCentered?: boolean
 }
 
 const BrainImageDiv = styled(
   'div',
   transientPropCheck,
 )<BrainImageDivProps>(
-  ({ $imageURL }) => css`
+  ({ $imageURL, $isCentered }) => css`
     width: 100%;
     height: 100%;
     ${$imageURL &&
     `background-image: url(${$imageURL});
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: ${$isCentered ? 'center' : 'initial'};
     `};
   `,
 )
@@ -44,9 +45,14 @@ const BrainImageDiv = styled(
 interface BrainImageProps {
   id: number
   fixedHeight?: string
+  isCentered?: boolean
 }
 
-export const BrainImage: FC<BrainImageProps> = ({ id, fixedHeight }) => {
+export const BrainImage: FC<BrainImageProps> = ({
+  id,
+  fixedHeight,
+  isCentered = true,
+}) => {
   const { data } = useBrainMetadata(id)
   const imageURL = data?.image_transparent
 
@@ -54,7 +60,7 @@ export const BrainImage: FC<BrainImageProps> = ({ id, fixedHeight }) => {
     <>
       <BrainImageContainer $fixedHeight={fixedHeight}>
         {/* TODO: adding loading holder */}
-        <BrainImageDiv $imageURL={imageURL} />
+        <BrainImageDiv $imageURL={imageURL} $isCentered={isCentered} />
       </BrainImageContainer>
     </>
   )

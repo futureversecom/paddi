@@ -1,8 +1,8 @@
 import type { Provider } from '@ethersproject/providers'
+import { abis } from 'core-backend/src/contracts/abi'
 import type { BigNumber } from 'ethers'
 import type { Either } from 'fp-ts/lib/Either'
 import { left, right } from 'fp-ts/lib/Either'
-import { abis } from 'smart-contracts/abi'
 import { PongComputeManager__factory as PongComputeManagerFactory } from 'smart-contracts/typechain-types/factories/src/PongComputeManager__factory'
 import type { PongComputeManager } from 'smart-contracts/typechain-types/src/PongComputeManager'
 

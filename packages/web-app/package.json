@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
     "build:dev": "vite build --mode dev",
+    "build:staging": "vite build --mode staging",
+    "build:prod": "vite build --mode prod",
     "preview": "vite preview",
     "gql:codegen": "graphql-codegen --config gql-codegen.yml"
   },
@@ -17,12 +19,9 @@
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@react-three/drei": "^9.65.3",
     "@react-three/fiber": "^8.12.1",
-    "ahooks": "^3.7.4",
     "chart.js": "^4.2.1",
     "ethers": "^5.7.2",
-    "js-yaml": "^4.1.0",
     "jwt-decode": "^3.1.2",
-    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
@@ -41,6 +40,7 @@
     "@vitejs/plugin-react": "^3.1.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "typescript": "^4.9.5",
-    "vite": "^4.2.0"
+    "vite": "^4.2.0",
+    "vite-plugin-svgr": "^3.2.0"
   }
 }

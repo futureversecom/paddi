@@ -1,80 +1,83 @@
-import { Button, css, styled, Typography } from '@mui/material'
-import type { FC, ReactNode } from 'react'
+import { Card, css, Divider, styled, Typography } from '@mui/material'
 
-type Props = {
-  title: string
-  explainer: string
-  stats: string[]
-  imgPath: string
-  children: ReactNode
-}
-
-export const FaucetPanelActionButton = styled(Button)(
-  () => css`
-    margin: 2em;
-  `,
-)
-const ContentContainer = styled('div')(
-  () => css`
-    padding-left: 2em;
-    padding-right: 2em;
-    flex: 1;
-  `,
-)
+const StyledCard = styled(Card)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
 
 const ImageContainer = styled('div')(
-  () => css`
-    background: #000000;
-    padding: 2em;
-    text-align: center;
-    height: 200px;
-    & img {
-      height: 100%;
+  ({ theme }) => css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: ${theme.spacing(0, 3, 2)};
+
+    img {
+      width: 95px;
+      align-self: center;
+      margin: ${theme.spacing(6, 4, 4)};
     }
   `,
 )
-const StatItem = styled('div')(
+
+const ContentContainer = styled('div')(
   ({ theme }) => css`
-    font-weight: bold;
-    margin-top: ${theme.spacing(2)};
+    padding: ${theme.spacing(2, 3, 4)};
   `,
 )
 
-const Container = styled('div')(
-  ({ theme }) => css`
-    background: ${theme.palette.divider};
-    // border: 1px solid white;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  `,
-)
-export const Title = styled('h2')(
-  () => css`
-    font-weight: 700;
-    font-size: 20px;
-  `,
-)
-export const FaucetPanel: FC<Props> = ({
+type Asset = 'XRP' | 'ASTO' | 'Brain'
+
+type FaucetPanelProps = {
+  imgPath: string
+  balance: string
+  explainer: string
+  children: React.ReactNode
+  type: Asset
+}
+
+const getFaucetTypeInfo = (type: Asset) => {
+  switch (type) {
+    case 'XRP':
+      return { title: '1. XRP', currency: '$XRP' }
+    case 'ASTO':
+      return { title: '2. ASTO', currency: '$ASTO' }
+    case 'Brain':
+      return { title: '3. XRP', currency: 'ASM Brain(s)' }
+  }
+}
+
+export const FaucetPanel = ({
+  type,
   children,
   imgPath,
   explainer,
-  title,
-  stats,
-}) => {
+  balance,
+}: FaucetPanelProps) => {
+  const { title, currency } = getFaucetTypeInfo(type)
+
   return (
-    <Container>
+    <StyledCard>
       <ImageContainer>
         <img src={imgPath} />
+        <Typography mb={1} variant="body4">
+          {title}
+        </Typography>
+        <Typography variant="body1" color="primary.dark">
+          {explainer}
+        </Typography>
       </ImageContainer>
+      <Divider />
       <ContentContainer>
-        <Title>{title}</Title>
-        <Typography sx={{ opacity: 0.5 }}>{explainer}</Typography>
-        {stats.map(stat => (
-          <StatItem key={stat}>{stat}</StatItem>
-        ))}
+        <Typography variant="overline" color="primary.dark">
+          You have:
+        </Typography>
+        <Typography variant="body2" mb={4}>
+          {balance} {currency}
+        </Typography>
+        {children}
       </ContentContainer>
-      {children}
-    </Container>
+    </StyledCard>
   )
 }

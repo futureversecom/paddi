@@ -33,7 +33,7 @@ export const TrainingParamsViewer: FC<Props> = ({ rewardConfig }) => {
   return (
     <>
       <Typography sx={{ fontWeight: 700, mb: 1 }}>
-        Training Input parameters
+        Learning Parameters
       </Typography>
       <Grid container>
         {Object.keys(trainingParams).map(key => {

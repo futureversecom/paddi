@@ -5,7 +5,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  Grid,
   Stack,
   styled,
   Tooltip,
@@ -19,10 +19,11 @@ import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import type { BrainsData } from 'replay-component/src/components/Pong/Pong'
 import Pong from 'replay-component/src/components/Pong/Pong'
+import { BrainImage } from 'src/components/Brain/BrainImage'
 import { useConfirmationDialog } from 'src/components/common/ConfirmationContext'
 import { ShareLinkModal } from 'src/components/common/ShareLinkModal'
 import { client } from 'src/graphql/client'
-import type { Training } from 'src/graphql/generated'
+import type { EvaluationOutput, Training } from 'src/graphql/generated'
 import {
   TrainingState,
   useGenomeAttributesQuery,
@@ -37,11 +38,18 @@ import {
 } from 'src/hooks/contracts/useMemoryTreeContract'
 import { reportEvent } from 'src/utils/ga'
 
+import { NormalizedNodeId } from './NormalizedNodeId'
 import { preTrainedModel } from './preTrainedModel'
-// import { TrainingParamsViewer } from './TrainingParamsViewer'
+import { TrainingInputModal } from './TrainingInputModal'
 import { TrainingStateIndicator } from './TrainingStateIndicator'
 import { TrainingStatsModal } from './TrainingStatsModal'
 
+const ReplayGrid = styled(Grid)({
+  height: '100%',
+  background: 'black',
+  borderRadius: '50px',
+  textAlign: 'left',
+})
 const Container = styled('div')(
   () =>
     css`
@@ -57,29 +65,36 @@ type Props = {
 
 export const TrainingRecord: FC<Props> = ({ training }) => {
   const showDialog = useConfirmationDialog()
-  const { data: memoryTrees } = useMemoryTreesOfBrain(training.brainId)
+  const { data: memoryTreesOfBrain } = useMemoryTreesOfBrain(training.brainId)
   const storageURI = training.trainingOutput?.outputPath
   const hasPinned = !!training.pinnedNodeId // Has pinned on chain and to the database
-  const pinnedMemoryNode = memoryTrees?.nodes
-    ? Object.values(memoryTrees.nodes).find(
+  const pinnedMemoryNode = memoryTreesOfBrain?.memoryTrees?.nodes
+    ? Object.values(memoryTreesOfBrain?.memoryTrees.nodes).find(
         node => node.storageURI === storageURI,
       )
     : undefined
 
   const [isPinning, setIsPinning] = useState(false)
   const [open, setOpen] = useState(false)
+  const [currentEvaluation, setCurrentEvaluation] = useState<
+    EvaluationOutput | undefined
+  >(undefined)
+
   const [replayPath, setReplayPath] = useState<string>()
-  const handleOpen = (replayPath: string) => {
+
+  const handleOpen = (replayPath: string, evaluation: EvaluationOutput) => {
     reportEvent('button_click', {
       page_title: 'Training History',
       button_name: 'Watch Replay',
     })
     setOpen(true)
+    setCurrentEvaluation(evaluation)
     setReplayPath(replayPath)
   }
   const handleClose = () => {
     setOpen(false)
     setReplayPath(undefined)
+    setCurrentEvaluation(undefined)
   }
 
   const { refetch: fetchPendingNodeSignature } = usePendingNodeSignatureQuery(
@@ -194,6 +209,7 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       const model = preTrainedModel.find(
         p => p.agentType === scenario.agentType,
       )
+
       return model?.agentName
     }
     return 'Wall'
@@ -214,11 +230,18 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
 
   const brainsData: BrainsData | null = hexAttribute
     ? {
-        paddle_l: { color: hexAttribute.valueHex },
+        paddle_l: {
+          color: hexAttribute.valueHex,
+          name: `Brain ${training.brainId}`,
+        },
         // TODO: hardcoded for pre-trained agents
-        paddle_r: { color: 'red' },
+        paddle_r: { color: 'red', name: opponentName },
       }
     : null
+
+  const pinnedNodeId = training.pinnedNodeId
+    ? Number.parseInt(training.pinnedNodeId)
+    : 0
 
   return (
     <>
@@ -228,6 +251,7 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
             <Typography
               sx={{ fontSize: 22, fontWeight: 900 }}
             >{`Brain #${training.brainId} - Trained against ${opponentName} opponent`}</Typography>
+
             <Typography sx={{ my: 1 }}>
               {new Date(training.timestamp).toLocaleString()}
             </Typography>
@@ -273,7 +297,7 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
                         >{`${evaluation.evaluationId}: `}</Typography>
                         <Button
                           variant="outlined"
-                          onClick={() => handleOpen(replayPath)}
+                          onClick={() => handleOpen(replayPath, evaluation)}
                         >
                           Replay
                         </Button>
@@ -301,28 +325,66 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
             disabled={hasPinned || isPinning}
             sx={{ mt: '48px', ml: '158px' }}
           >
-            {isPinning
-              ? `Pinning Memory`
-              : hasPinned
-              ? `Memory Saved (Node: ${training.pinnedNodeId})`
-              : `Save Memory`}
+            {isPinning ? (
+              `Pinning Memory`
+            ) : hasPinned ? (
+              <span>
+                Memory Saved (Node:{' '}
+                <NormalizedNodeId
+                  brainId={training.brainId}
+                  nodeId={pinnedNodeId}
+                />
+                )
+              </span>
+            ) : (
+              `Save Memory`
+            )}
           </Button>
         )}
       </Container>
 
       <Dialog open={open} onClose={handleClose} fullScreen>
-        {replayPath && brainsData && (
+        {replayPath && brainsData && currentEvaluation && (
           <>
-            <DialogTitle>{`Brain Id: ${training.brainId}, ${new Date(
+            <Typography variant="subtitle1" pl={4} pt={2}>{`${new Date(
               training.timestamp,
-            ).toLocaleString()}`}</DialogTitle>
-            <DialogContent>
-              <Pong path={replayPath} brainsData={brainsData} />
+            ).toLocaleString()} `}</Typography>
+            <DialogContent sx={{ mb: '10px', pb: 0 }}>
+              <ReplayGrid container>
+                <Grid item xs={5}>
+                  <Grid container height={'100%'} paddingTop={'30px'}>
+                    <Grid item xs={6} padding={'30px'}>
+                      <BrainImage
+                        id={training.brainId}
+                        fixedHeight="100%"
+                        isCentered={false}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body2">
+                        #{training.brainId}
+                      </Typography>
+                      {/* <p>Brain Id: #{training.brainId}</p> */}
+                      <p>Memory Node: {pinnedNodeId}</p>
+
+                      <TrainingInputModal
+                        rewardConfig={training.rewardConfig}
+                      />
+                      <p>{currentEvaluation.evaluationId} Opponent</p>
+                      <p>Training rounds({training.units})</p>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={7}>
+                  <Pong path={replayPath} brainsData={brainsData} />
+                </Grid>
+              </ReplayGrid>
             </DialogContent>
             <DialogActions sx={{ mb: 2, mr: 2 }}>
               <Button variant="outlined" onClick={handleClose}>
                 Close
               </Button>
+              <ShareLinkModal link={replayPath} title="Share" />
             </DialogActions>
           </>
         )}

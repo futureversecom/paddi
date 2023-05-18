@@ -14,6 +14,12 @@ const styles = css`
     -webkit-font-smoothing: antialiased;
   }
 
+  body,
+  button,
+  a {
+    font-feature-settings: 'tnum' on, 'lnum' on;
+  }
+
   a {
     color: inherit;
     text-decoration: none;

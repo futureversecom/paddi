@@ -2,4 +2,6 @@ build
 dist
 .env.local
 .env.dev
+.env.staging
+.env.prod
 .env

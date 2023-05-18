@@ -7,8 +7,8 @@ function App() {
     <Pong2D
       path="events.jsonl"
       brainsData={{
-        paddle_l: { color: 'green' },
-        paddle_r: { color: 'purple' },
+        paddle_l: { color: 'green', name: 'Player' },
+        paddle_r: { color: 'purple', name: 'Opponent' },
       }}
     />
   )

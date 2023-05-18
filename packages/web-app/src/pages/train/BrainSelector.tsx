@@ -11,50 +11,32 @@ import { useState } from 'react'
 import { BrainImage } from 'src/components/Brain/BrainImage'
 import { BrainPanel } from 'src/components/Brain/BrainPanel'
 import { DescriptionBox } from 'src/components/common/DescriptionBox'
+import type { ParentMemoryNodeConfig } from 'src/graphql/generated'
 import { useBrainTokens } from 'src/hooks/contracts/useBrainContract'
-import { secondaryFontFamily } from 'src/styles/theme'
 import { reportEvent } from 'src/utils/ga'
 
-import { TrainingCheckBox } from './TrainingCheckBox'
-
-const BrainSelectorContainer = styled('button')(
-  ({ theme }) => css`
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-    font-family: ${secondaryFontFamily};
-    text-align: center;
-    width: 100%;
-    height: 120px;
-    margin-bottom: 20px;
-    flex-direction: column;
-    align-items: center;
-    border-color: ${theme.palette.text.primary};
-    border-style: solid;
-    border-width: 4px;
-    cursor: pointer;
-    background: none;
-    color: ${theme.palette.text.primary};
-  `,
-)
+import { MemorySelectorDialogContent } from './MemorySelector'
+import { StepButton } from './StepButton'
 
 const BrainImageContainer = styled('div')(
   () => css`
     position: absolute;
-    top: -50px;
-    bottom: -50px;
+    top: 0;
+    bottom: 0;
     width: 100%;
+    padding-top: 15px;
     z-index: -1;
-    filter: grayscale(100%);
   `,
 )
 
 type Props = {
   address: string
   brainId?: number
-  setBrainId: (id: number) => void
+  parentMemoryNodeConfig?: ParentMemoryNodeConfig
+  setBrain: (param: {
+    id: number
+    parentMemoryNodeConfig: ParentMemoryNodeConfig
+  }) => void
 }
 const GridItem = styled('div')(
   () =>
@@ -69,44 +51,82 @@ const Parent = styled('div')(
   `,
 )
 
-export const BrainSelector: FC<Props> = ({ address, brainId, setBrainId }) => {
+export const BrainSelector: FC<Props> = ({
+  brainId,
+  parentMemoryNodeConfig,
+  address,
+  setBrain,
+}) => {
+  const [_brainId, _setBrainId] = useState<number>()
   const { data: brainTokens } = useBrainTokens(address)
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => {
+  const [brainDialogOpen, setBrainDialogOpen] = useState(false)
+  const handleBrainDialogOpen = () => {
     reportEvent('button_click', {
       page_title: 'Training',
       button_name: 'Open Select Brain',
     })
-    setOpen(true)
+    setBrainDialogOpen(true)
   }
-  const handleClose = () => setOpen(false)
+  const handleBrainDialogClose = () => setBrainDialogOpen(false)
 
   const handleSelectBrain = (id: number) => {
     reportEvent('button_click', {
       page_title: 'Training',
       button_name: 'Select Brain',
     })
-    setBrainId(id)
-    handleClose()
+    _setBrainId(id)
+
+    handleBrainDialogClose()
+    handleMemoryDialogOpen()
+  }
+
+  const [memoryDialogOpen, setMemoryDialogOpen] = useState(false)
+  const handleMemoryDialogOpen = () => {
+    setMemoryDialogOpen(true)
+  }
+  const MemoryDialogClose = () => setMemoryDialogOpen(false)
+
+  const handleSelectMemory = (config: ParentMemoryNodeConfig) => {
+    if (!_brainId) {
+      return
+    }
+    setBrain({
+      id: _brainId,
+      parentMemoryNodeConfig: config,
+    })
+    MemoryDialogClose()
   }
 
   return (
     <Parent>
-      {brainId !== undefined && <TrainingCheckBox />}
-      <BrainSelectorContainer onClick={handleOpen}>
+      <StepButton
+        onClick={handleBrainDialogOpen}
+        $selected={brainId !== undefined}
+      >
+        <Typography mb={2}>Step 1</Typography>
         {brainId !== undefined ? (
           <>
             <BrainImageContainer>
               <BrainImage id={brainId} fixedHeight="100%" />
             </BrainImageContainer>
             <span>{`Brain #${brainId}`}</span>
+            <span>{`(Memory Node ${
+              parentMemoryNodeConfig?.memoryId
+                ? parentMemoryNodeConfig.memoryId
+                : 'Untrained'
+            })`}</span>
           </>
         ) : (
           <span>Select Brain</span>
         )}
-      </BrainSelectorContainer>
+      </StepButton>
 
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'md'}>
+      <Dialog
+        open={brainDialogOpen}
+        onClose={handleBrainDialogClose}
+        fullWidth
+        maxWidth={'md'}
+      >
         <DialogContent>
           <DescriptionBox sx={{ my: 2, backgroundColor: 'transparent' }}>
             <Typography variant="h5">Select Brain</Typography>
@@ -136,6 +156,18 @@ export const BrainSelector: FC<Props> = ({ address, brainId, setBrainId }) => {
           </DescriptionBox>
         </DialogContent>
       </Dialog>
+      {_brainId && (
+        <Dialog
+          open={memoryDialogOpen}
+          onClose={MemoryDialogClose}
+          maxWidth="md"
+        >
+          <MemorySelectorDialogContent
+            brainId={_brainId}
+            handleSelectMemory={handleSelectMemory}
+          />
+        </Dialog>
+      )}
     </Parent>
   )
 }

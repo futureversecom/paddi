@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Effects, OrbitControls, OrthographicCamera } from '@react-three/drei'
+import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import { Canvas, extend } from '@react-three/fiber'
 import { degToRad } from 'three/src/math/MathUtils'
 import { UnrealBloomPass } from 'three-stdlib'
@@ -14,7 +14,7 @@ import { ThreeD } from '../ThreeD/ThreeD'
 extend({ UnrealBloomPass })
 // import { useFetch } from 'usehooks-ts'
 
-export type BrainData = { color: string | number }
+export type BrainData = { color: string | number; name: string | undefined }
 export type BrainsData = { [key in PlayerID]: BrainData }
 
 type Props = {
@@ -30,7 +30,6 @@ const Pong = ({ path, brainsData }: Props) => {
   return (
     <Canvas shadows gl={{ antialias: false }}>
       <ambientLight intensity={0.4} color={'0xffffff'} />
-      <color attach="background" args={['#000000']} />
       <hemisphereLight intensity={1} color="#ffffff" groundColor="red" />
       <directionalLight
         castShadow
@@ -52,13 +51,8 @@ const Pong = ({ path, brainsData }: Props) => {
         minAzimuthAngle={degToRad(-45)}
         enableRotate
       />
-      <OrthographicCamera makeDefault position={[0, 60, 10]} zoom={8} />
+      <OrthographicCamera makeDefault position={[0, 60, 10]} zoom={5} />
       <ThreeD simulationData={parsedData} brainsData={brainsData} />
-      <Effects disableGamma>
-        {/* threshhold has to be 1, so nothing at all gets bloom by default */}
-        {/* @ts-ignore */}
-        <unrealBloomPass threshold={1} strength={0.8} radius={1} />
-      </Effects>
     </Canvas>
   )
 }

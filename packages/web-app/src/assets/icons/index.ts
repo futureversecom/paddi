@@ -1,0 +1,6 @@
+export { ReactComponent as PaddiIcon } from './paddi.svg'
+export { ReactComponent as ExpandIcon } from './expand.svg'
+export { ReactComponent as ConnectIcon } from './connect.svg'
+export { ReactComponent as FooterLine } from './footer-line.svg'
+export { ReactComponent as PairedLogos } from './paired-logos.svg'
+export { ReactComponent as ExternalLinkIcon } from './external-link.svg'

@@ -10,15 +10,15 @@ import {
   Radio,
   RadioGroup,
   styled,
+  Typography,
 } from '@mui/material'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { SelectWithRange } from 'src/components/common/SelectWithRange'
-import { secondaryFontFamily } from 'src/styles/theme'
 import { reportEvent } from 'src/utils/ga'
 import { humanCamel } from 'src/utils/humanCamel'
 
-import { TrainingCheckBox } from './TrainingCheckBox'
+import { StepButton } from './StepButton'
 
 export type TrainingParams = {
   wins: number
@@ -95,25 +95,6 @@ export const PRESET_PARAMS: [PresetTrainingParam, ...PresetTrainingParam[]] = [
   },
 ]
 
-const SelectorContainer = styled('button')(
-  ({ theme }) => css`
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    font-size: 24px;
-    font-family: ${secondaryFontFamily};
-    width: 100%;
-    height: 260px;
-    flex-direction: column;
-    align-items: center;
-    border-color: ${theme.palette.text.primary};
-    border-style: solid;
-    border-width: 4px;
-    cursor: pointer;
-    background: none;
-    color: ${theme.palette.text.primary};
-  `,
-)
 const Parent = styled('div')(
   () => css`
     position: relative;
@@ -133,6 +114,7 @@ export const TrainingParamsSelector: FC<Props> = ({
   presetParam,
   setPresetParam,
 }) => {
+  const [hasConfigured, setHasConfigured] = useState(false)
   const [open, setOpen] = useState(false)
   const handleOpen = () => {
     reportEvent('button_click', {
@@ -143,6 +125,7 @@ export const TrainingParamsSelector: FC<Props> = ({
   }
   const handleClose = () => setOpen(false)
   const handleConfirm = () => {
+    setHasConfigured(true)
     reportEvent('button_click', {
       page_title: 'Training',
       button_name: 'Confirm training input',
@@ -181,14 +164,10 @@ export const TrainingParamsSelector: FC<Props> = ({
 
   return (
     <Parent>
-      {(trainingParams || presetParam) && <TrainingCheckBox />}
-      <SelectorContainer onClick={handleOpen}>
-        <span>
-          Training <br />
-          Params <br />
-          Set
-        </span>
-      </SelectorContainer>
+      <StepButton onClick={handleOpen} $selected={hasConfigured}>
+        <Typography mb={2}>Step 2</Typography>
+        <span>Training Parameters</span>
+      </StepButton>
 
       <Dialog open={open} onClose={handleClose} maxWidth="md" sx={{ px: 4 }}>
         <DialogContent>

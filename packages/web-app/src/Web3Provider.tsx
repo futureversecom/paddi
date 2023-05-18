@@ -1,11 +1,16 @@
 import '@rainbow-me/rainbowkit/styles.css'
 
 import {
+  connectorsForWallets,
   createAuthenticationAdapter,
-  getDefaultWallets,
   RainbowKitAuthenticationProvider,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
+import {
+  coinbaseWallet,
+  metaMaskWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import { gql } from 'graphql-request'
 import type { ReactNode } from 'react'
 import { useEffect, useMemo } from 'react'
@@ -51,10 +56,19 @@ const porcini: Chain = {
 
 const { chains, provider } = configureChains([porcini], [publicProvider()])
 
-const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  chains,
-})
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [metaMaskWallet({ chains })],
+  },
+  {
+    groupName: 'Others',
+    wallets: [
+      walletConnectWallet({ chains }),
+      coinbaseWallet({ appName: 'Paddi', chains }),
+    ],
+  },
+])
 
 const wagmiClient = createClient({
   autoConnect: true,

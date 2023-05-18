@@ -193,6 +193,30 @@ export const Replay = ({ simulationData, brainsData }: Props) => {
       >
         {material()}
       </Box>
+      <Center position={[-fieldWidth / 2 - 9, wallDepth / 2, 0]}>
+        <Text3D
+          letterSpacing={-0.06}
+          size={3}
+          font={fontPath}
+          rotation={[Math.PI / -2, 0, Math.PI / 2]}
+          height={1}
+        >
+          {brainsData.paddle_l.name || 'Brain'}
+          <meshStandardMaterial color="white" />
+        </Text3D>
+      </Center>
+      <Center position={[fieldWidth / 2 + 9, wallDepth / 2, 0]}>
+        <Text3D
+          letterSpacing={-0.06}
+          size={3}
+          font={fontPath}
+          rotation={[Math.PI / -2, 0, Math.PI / -2]}
+          height={1}
+        >
+          {`${brainsData.paddle_r.name || 'The'} opponent`}
+          <meshStandardMaterial color="white" />
+        </Text3D>
+      </Center>
       <group position={[0, wallDepth * 0.3, 0]}>
         <Player
           brainData={brainsData.paddle_l}

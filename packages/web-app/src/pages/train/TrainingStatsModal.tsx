@@ -2,13 +2,15 @@ import {
   Button,
   css,
   Dialog,
+  DialogActions,
   DialogContent,
   Stack,
   styled,
   Typography,
 } from '@mui/material'
-import type { FC } from 'react'
-import { useMemo, useState } from 'react'
+import type { FC, ReactElement } from 'react'
+import { cloneElement, useMemo, useState } from 'react'
+import { RoundedBox } from 'src/components/common/RoundedBox'
 import type {
   EvaluationOutput,
   HistogramStats,
@@ -33,14 +35,20 @@ const ScoreContainer = styled('div')(
   () =>
     css`
       flex: 1;
-      padding: 10px 16px;
-      border: 1px solid #4b4b4b;
     `,
 )
 
-type Props = { rewardConfig: RewardConfig; evaluation: EvaluationOutput }
+type Props = {
+  rewardConfig: RewardConfig
+  evaluation: EvaluationOutput
+  children?: ReactElement
+}
 
-export const TrainingStatsModal: FC<Props> = ({ evaluation, rewardConfig }) => {
+export const TrainingStatsModal: FC<Props> = ({
+  evaluation,
+  rewardConfig,
+  children,
+}) => {
   const { stats, evaluationId } = evaluation
   // const graphStats = stats.slice(0, -1)
   // const [scoreStats] = stats.slice(-1)
@@ -63,26 +71,44 @@ export const TrainingStatsModal: FC<Props> = ({ evaluation, rewardConfig }) => {
     return _score
   }, [stats])
 
+  const childWithProps = children
+    ? cloneElement(children, { onClick: handleOpen })
+    : null
+
   return (
     <>
-      <Button variant="outlined" onClick={handleOpen}>
-        Training Stats
-      </Button>
-      <ResponsiveDialog open={open} onClose={handleClose}>
+      {childWithProps ? (
+        childWithProps
+      ) : (
+        <Button variant="outlined" onClick={handleOpen}>
+          Training Stats
+        </Button>
+      )}
+      <ResponsiveDialog open={open} onClose={handleClose} scroll="body">
         <DialogContent sx={{ py: 4, px: 6 }}>
-          <Typography variant="subtitle1" sx={{ mb: 4 }}>
-            {`Training Stats vs a ${evaluationId} Opponent`}
+          <Typography variant="h6" sx={{ mb: 4 }}>
+            {`Training Stats vs a ${evaluationId} Opponent stats`}
           </Typography>
-          <TrainingParamsViewer rewardConfig={rewardConfig} />
+          <RoundedBox>
+            <TrainingParamsViewer rewardConfig={rewardConfig} />
+          </RoundedBox>
 
-          <Stack direction="row" spacing={2} sx={{ my: 4 }}>
+          <Stack direction="row" spacing={3} sx={{ my: 3 }}>
             <ScoreContainer>
-              Agent Score
-              <Typography variant="subtitle1">{score['left'] ?? 0}</Typography>
+              <RoundedBox>
+                Agent Score
+                <Typography variant="subtitle1">
+                  {score['left'] ?? 0}
+                </Typography>
+              </RoundedBox>
             </ScoreContainer>
             <ScoreContainer>
-              Opponent Score{' '}
-              <Typography variant="subtitle1">{score['right'] ?? 0}</Typography>
+              <RoundedBox>
+                Opponent Score{' '}
+                <Typography variant="subtitle1">
+                  {score['right'] ?? 0}
+                </Typography>
+              </RoundedBox>
             </ScoreContainer>
           </Stack>
           <Stack spacing={4}>
@@ -96,6 +122,11 @@ export const TrainingStatsModal: FC<Props> = ({ evaluation, rewardConfig }) => {
                 <TrainingStatChart key={stat.name} stat={stat} />
               ))}
           </Stack>
+          <DialogActions sx={{ p: 4 }}>
+            <Button variant="contained" fullWidth onClick={handleClose}>
+              Close
+            </Button>
+          </DialogActions>
         </DialogContent>
       </ResponsiveDialog>
     </>

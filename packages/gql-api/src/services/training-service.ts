@@ -1,6 +1,7 @@
 import type { Timestamp, UInt256 } from 'core/src/types'
 import type { ChainAddress } from 'core/src/types/chain-address'
 import { getHash } from 'core/src/utils/ethereum'
+import { abis } from 'core-backend/src/contracts/abi'
 import type { ComputeManagerInteractions } from 'core-backend/src/contracts/compute-manager-interactions'
 import type {
   EvaluationStats,
@@ -32,7 +33,6 @@ import type {
 } from 'gql-api/src/generated/gql'
 // TODO: avoid depending on graphql types in core
 import { NodeType } from 'gql-api/src/generated/gql'
-import { abis } from 'smart-contracts/abi'
 
 import type { BrainStatsService } from './brain-stats-service'
 import { AgentToAgentConfigMapping } from './pre-trained-agents'

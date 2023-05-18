@@ -4,12 +4,12 @@ import { utils } from 'ethers'
 import type { FC, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { abis } from 'smart-contracts/abi'
 import {
   useASTOAllowance,
   useASTOApprove,
   useASTOBalance,
 } from 'src/hooks/contracts/useASTOContract'
+import { abis } from 'src/utils/abis'
 import { reportEvent } from 'src/utils/ga'
 
 type Props = {

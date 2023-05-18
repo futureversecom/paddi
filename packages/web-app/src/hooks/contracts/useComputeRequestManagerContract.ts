@@ -1,8 +1,8 @@
 import type { BigNumberish, BytesLike } from 'ethers'
 import { useMemo } from 'react'
 import { useMutation } from 'react-query'
-import { abis } from 'smart-contracts/abi'
 import { ComputeRequestManager__factory } from 'smart-contracts/lib/protocol-core/gen/factories/ComputeRequestManager__factory'
+import { abis } from 'src/utils/abis'
 
 import { useSignerOrProvider } from './useSignerOrProvider'
 

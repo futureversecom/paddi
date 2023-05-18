@@ -1,209 +1,254 @@
-import { AppBar, Chip, Container, css, Stack, styled } from '@mui/material'
+import {
+  AppBar,
+  Container,
+  css,
+  Link,
+  Stack,
+  styled,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NavLink, Outlet } from 'react-router-dom'
+import {
+  ExternalLinkIcon,
+  FooterLine,
+  PaddiIcon,
+  PairedLogos,
+} from 'src/assets/icons'
+import allstarsUfoVideo from 'src/assets/videos/allstarsUfo.mp4'
 import { reportEvent } from 'src/utils/ga'
 
-const pages = [
-  {
-    label: 'Home',
-    link: '/',
-  },
-  {
-    label: 'Testnet Assets',
-    link: '/faucet',
-  },
-  {
-    label: 'Training',
-    link: '/train',
-  },
-]
+const SmallScreenWarning = styled('div')(
+  ({ theme }) => css`
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    position: fixed;
+    z-index: 100000;
+    align-items: center;
+    justify-content: center;
+    padding: ${theme.spacing(4)};
+    background-color: ${theme.palette.background.default};
+  `,
+)
 
-const MobileWarning = styled('div')(({ theme }) => ({
-  position: 'fixed',
-  top: '0',
-  left: '0',
-  right: '0',
-  bottom: '0',
-  background: 'black',
-  opacity: 0.8,
-  padding: '30px',
-  textAlign: 'center',
-  'z-index': '999',
-  display: 'flex',
-  'justify-content': 'center',
-  'align-items': 'center',
-  'font-size': '40px',
-  [theme.breakpoints.up('md')]: {
-    display: 'none',
-  },
+const AppContainer = styled('div')`
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+`
+
+const HeaderContent = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  ...theme.typography.button,
 }))
 
-const FooterContainer = styled('footer')(() => css``)
-const Footer = styled(Container)(
-  () => css`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'logo items';
-    padding: 20px 0;
-  `,
-)
-const LogoItem = styled('div')(() => css``)
-const FooterItems = styled('ul')(
-  () =>
-    css`
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      justify-self: flex-end;
-      display: flex;
-      align-items: center;
-    `,
-)
-const FooterItem = styled('li')(
-  () =>
-    css`
-      display: inline-block;
-      padding-right: 10px;
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 19px;
-    `,
-)
-const HeaderBar = styled(AppBar)(
-  () => css`
-    background-color: #0c0c0c;
-    background-image: none;
-    box-shadow: none;
-    padding: 20px 0;
-  `,
-)
+const StyledLinkIcon = styled(ExternalLinkIcon)`
+  margin-left: 4px;
+`
 
-const NavLinkContainer = styled(Container)(
-  () =>
-    css`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    `,
-)
+const Main = styled('main')`
+  flex: 1;
+`
 
-const StyledNavLink = styled(NavLink)(
+const Footer = styled('footer')(
   ({ theme }) => css`
-    font-weight: 800;
-    padding: ${theme.spacing(2)};
-    margin-right: ${theme.spacing(2)};
-    color: ${theme.palette.text.secondary};
-    &.active {
-      color: ${theme.palette.text.primary};
+    position: relative;
+    margin: ${theme.spacing(80, 0, 0)};
+    padding: ${theme.spacing(10, 0, 0)};
+
+    ${theme.breakpoints.down(1300)} {
+      margin: ${theme.spacing(70, 0, 0)};
+    }
+
+    ${theme.breakpoints.down(1150)} {
+      margin: ${theme.spacing(60, 0, 0)};
+    }
+
+    ${theme.breakpoints.down(1000)} {
+      margin: ${theme.spacing(50, 0, 0)};
     }
   `,
 )
 
+const VideoContainerOuter = styled('div')`
+  left: 50%;
+  width: 100%;
+  bottom: -100px;
+  max-width: 1400px;
+  position: absolute;
+  transform: translateX(-50%);
+`
+
+const VideoContainerInner = styled('div')`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`
+
+const BlackFade = styled('div')(
+  ({ theme }) => css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background: radial-gradient(
+      rgba(0, 0, 0, 0) 25%,
+      ${theme.palette.background.default} 90%
+    );
+  `,
+)
+const FooterContent = styled(Container)`
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const StyledFooterLine = styled(FooterLine)(
+  ({ theme }) => css`
+    width: 100%;
+    position: absolute;
+    top: ${theme.spacing(-26)};
+
+    ${theme.breakpoints.down(1800)} {
+      top: ${theme.spacing(-20)};
+    }
+
+    ${theme.breakpoints.down(1600)} {
+      top: ${theme.spacing(-18)};
+    }
+
+    ${theme.breakpoints.down(1400)} {
+      top: ${theme.spacing(-16)};
+    }
+
+    ${theme.breakpoints.down(1200)} {
+      top: ${theme.spacing(-12)};
+    }
+  `,
+)
+
+const headerLinks = [
+  {
+    to: '/',
+    label: 'Home',
+  },
+  {
+    to: '/faucet',
+    label: 'Testnet Assets',
+  },
+  {
+    to: '/train',
+    label: 'Training',
+  },
+]
+
+const footerLinks = [
+  {
+    label: 'Futureverse',
+    to: 'https://www.futureverse.com',
+  },
+  {
+    label: 'ASM',
+    to: 'https://www.alteredstatemachine.xyz',
+  },
+  {
+    to: '',
+    label: 'The Root Network',
+  },
+  {
+    label: 'FAQS',
+    to: 'https://www.futureverse.com/technology/root',
+  },
+  {
+    label: 'Discord',
+    to: 'https://discord.com/invite/alteredstatemachine',
+  },
+]
+
 export const Layout = () => {
+  const theme = useTheme()
+  const isBigScreen = useMediaQuery(theme.breakpoints.up('md'))
+
   const handleClick = (label: string) => {
     reportEvent('nav_click', {
       nav_label: label,
     })
   }
-  return (
-    <div>
-      <MobileWarning>This experience requires a bigger screen</MobileWarning>
-      <HeaderBar position="static">
-        <NavLinkContainer>
-          {/* TODO: Remove this and use the logo img */}
-          <div style={{ height: 66 }}></div>
-          {/* <img
-            src="/images/header_logo.png"
-            alt="logo"
-            width="95"
-            height="66"
-          /> */}
-          <Stack component="div" direction="row" alignItems="center">
-            {pages.map(({ label, link }) => (
+
+  return isBigScreen ? (
+    <AppContainer>
+      <AppBar position="static">
+        <HeaderContent>
+          <PaddiIcon />
+          <Stack component="nav" direction="row" columnGap={3}>
+            {headerLinks.map(({ to, label }) => (
               <StyledNavLink
-                to={link}
-                key={label}
-                onClick={() => handleClick(label)}
+                to={to}
+                key={to}
+                onClick={() => {
+                  handleClick(label)
+                }}
               >
-                {({ isActive }) => (
-                  <span className={isActive ? 'is-active' : undefined}>
-                    {label}
-                  </span>
-                )}
+                {label}
               </StyledNavLink>
             ))}
-
-            <StyledNavLink
-              to="https://github.com/futureversecom/paddi"
+            <Link
               target="_blank"
+              rel="noopener noreferrer"
+              href="https://github.com/futureversecom/paddi"
             >
-              <Stack direction="row" alignItems="center" gap={1}>
-                <span>Github </span>
-                <span className="material-symbols-outlined">open_in_new</span>
-              </Stack>
-            </StyledNavLink>
-            <ConnectButton />
-            <Chip
-              label="Testnet"
-              color="success"
-              sx={{ color: '#fff', ml: 2 }}
-            />
+              Github
+              <StyledLinkIcon />
+            </Link>
           </Stack>
-        </NavLinkContainer>
-      </HeaderBar>
 
-      {/* An <Outlet> renders whatever child route is currently active,
-          so you can think about this <Outlet> as a placeholder for
-          the child routes we defined above. */}
-      <Container sx={{ mb: 10, mt: 7 }}>
-        <Outlet />
-      </Container>
-      <FooterContainer>
-        <Footer>
-          <LogoItem>
-            <img src="/images/asm.svg" alt="asm logo" width="95" height="66" />
-          </LogoItem>
-          <FooterItems>
-            <FooterItem>
-              <a
-                target="_blank"
-                href="https://www.futureverse.com/"
-                rel="noreferrer"
-              >
-                Futureverse
-              </a>
-            </FooterItem>
-            <FooterItem>
-              <a
-                target="_blank"
-                href="https://www.alteredstatemachine.xyz/"
-                rel="noreferrer"
-              >
-                ASM
-              </a>
-            </FooterItem>
-            <FooterItem>
-              <a
-                target="_blank"
-                href="https://cortex.alteredstatemachine.xyz/"
-                rel="noreferrer"
-              >
-                Cortex
-              </a>
-            </FooterItem>
-            <FooterItem>
-              <a
-                target="_blank"
-                href="https://discord.com/invite/alteredstatemachine"
-                rel="noreferrer"
-              >
-                Discord
-              </a>
-            </FooterItem>
-          </FooterItems>
-        </Footer>
-      </FooterContainer>
-    </div>
+          <ConnectButton />
+        </HeaderContent>
+      </AppBar>
+      <Main>
+        <Container>
+          <Outlet />
+        </Container>
+      </Main>
+      <Footer>
+        <VideoContainerOuter>
+          <VideoContainerInner>
+            <video width="100%" muted autoPlay loop>
+              <source src={allstarsUfoVideo} type="video/mp4" />
+            </video>
+            <BlackFade />
+          </VideoContainerInner>
+        </VideoContainerOuter>
+        <StyledFooterLine />
+        <FooterContent>
+          <PairedLogos />
+          <Stack direction="row" columnGap={3}>
+            {footerLinks.map(({ to, label }) => (
+              <Link href={to} key={to} rel="noopener noreferrer">
+                {label}
+              </Link>
+            ))}
+          </Stack>
+        </FooterContent>
+      </Footer>
+    </AppContainer>
+  ) : (
+    <SmallScreenWarning>
+      <Typography variant="h2" textAlign="center">
+        This experience requires a bigger screen
+      </Typography>
+    </SmallScreenWarning>
   )
 }

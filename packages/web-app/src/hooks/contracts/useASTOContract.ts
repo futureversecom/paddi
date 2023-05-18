@@ -1,8 +1,8 @@
 import type { BigNumber } from 'ethers'
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { abis } from 'smart-contracts/abi'
 import { MockASTO__factory } from 'smart-contracts/typechain-types/factories/src/MockASTO__factory'
+import { abis } from 'src/utils/abis'
 
 import { useSignerOrProvider } from './useSignerOrProvider'
 

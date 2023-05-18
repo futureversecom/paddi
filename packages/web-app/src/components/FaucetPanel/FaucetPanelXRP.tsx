@@ -1,17 +1,17 @@
-import { Link } from '@mui/material'
+import { Button, Link, Typography } from '@mui/material'
 import type { Narrow } from 'abitype'
 import { chainAddressFromString } from 'core/src/types/chain-address'
 import type { BigNumberish } from 'ethers'
 import { utils } from 'ethers'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { abis } from 'smart-contracts/abi'
 import { client } from 'src/graphql/client'
 import { useGasFaucetMutation } from 'src/graphql/generated'
+import { abis } from 'src/utils/abis'
 import { reportEvent } from 'src/utils/ga'
 import { useBalance, useContractRead, useProvider } from 'wagmi'
 
-import { FaucetPanel, FaucetPanelActionButton } from './FaucetPanel'
+import { FaucetPanel } from './FaucetPanel'
 
 type Props = {
   address: `0x${string}`
@@ -81,30 +81,25 @@ export const FaucetPanelXRP = ({ address }: Props) => {
     await refetchBalance()
   }
 
-  return (
-    <>
-      {faucetError && <p>Unable to load XRP.</p>}
-      {!faucetLoading && (
-        <FaucetPanel
-          imgPath="images/xrp.png"
-          title="01. XRP"
-          explainer={`Claim $XRP to pay for contract interactions.`}
-          stats={[
-            `You have ${utils.formatEther(xrpBal)} $XRP.\n`,
-            `The faucet has ${utils.formatEther(
-              faucetBal as BigNumberish,
-            )} $XRP.`,
-          ]}
-        >
-          <FaucetPanelActionButton
-            variant="contained"
-            disabled={!address || requesting}
-            onClick={handleRequestGas}
-          >
-            Claim XRP
-          </FaucetPanelActionButton>
-        </FaucetPanel>
-      )}
-    </>
+  return faucetError ? (
+    <Typography>Unable to load XRP Faucet</Typography>
+  ) : faucetLoading ? null : (
+    <FaucetPanel
+      type="XRP"
+      imgPath="images/xrp.png"
+      balance={utils.formatEther(xrpBal)}
+      explainer={`Claim XRP to pay for contract interactions. The faucet has - ${utils.formatEther(
+        faucetBal as BigNumberish,
+      )} $XRP.`}
+    >
+      <Button
+        fullWidth
+        variant="outlined"
+        onClick={handleRequestGas}
+        disabled={!address || requesting}
+      >
+        Claim $XRP
+      </Button>
+    </FaucetPanel>
   )
 }

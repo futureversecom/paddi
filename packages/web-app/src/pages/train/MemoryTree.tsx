@@ -2,7 +2,7 @@ import { Box, css, styled } from '@mui/material'
 import React from 'react'
 import type {
   MemoryNode,
-  MemoryTree as MemoryTreeType,
+  MemoryTreesOfBrain,
 } from 'src/hooks/contracts/useMemoryTreeContract'
 
 const Container = styled('div')(
@@ -63,7 +63,7 @@ const Container = styled('div')(
 )
 
 type Props = {
-  tree: MemoryTreeType
+  tree: MemoryTreesOfBrain
   handleSelectTrainedMemory: (memoryId: number) => void
 }
 
@@ -71,7 +71,8 @@ export const MemoryTree: React.FC<Props> = ({
   tree,
   handleSelectTrainedMemory,
 }) => {
-  const { rootNodeIds, nodes } = tree
+  const { memoryTrees, normalizeId } = tree
+  const { rootNodeIds, nodes } = memoryTrees
 
   const renderTree = (node: MemoryNode) => (
     <li key={node.id}>
@@ -79,7 +80,7 @@ export const MemoryTree: React.FC<Props> = ({
         component="span"
         sx={{ cursor: 'pointer' }}
         onClick={() => handleSelectTrainedMemory(node.id)}
-      >{`node:${node.id}`}</Box>
+      >{`node:${normalizeId[node.id]}`}</Box>
       {node.children.length !== 0 && (
         <ul>{node.children.map(childId => renderTree(nodes[childId]!))}</ul>
       )}

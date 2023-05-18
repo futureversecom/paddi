@@ -8,8 +8,8 @@ export const Replay = () => {
   const path = searchParams.get('replay_path')
 
   const brainsData = {
-    paddle_l: { color: 'green' },
-    paddle_r: { color: 'purple' },
+    paddle_l: { color: 'green', name: 'Player' },
+    paddle_r: { color: 'purple', name: 'Opponent' },
   }
 
   return (

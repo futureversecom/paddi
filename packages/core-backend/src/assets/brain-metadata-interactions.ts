@@ -1,10 +1,10 @@
 import type { Provider } from '@ethersproject/providers'
 import type { BrainMetadata } from 'core/src/types/asset-metadata'
 import { BrainMetadataC } from 'core/src/types/asset-metadata'
+import { abis } from 'core-backend/src/contracts/abi'
 import type { Either } from 'fp-ts/lib/Either'
 import { isLeft, left, orElse, right, toError } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/function'
-import { abis } from 'smart-contracts/abi'
 import { MockBrain__factory as MockBrainFactory } from 'smart-contracts/typechain-types/factories/src/MockBrain__factory'
 
 export class BrainMetadataInteractions {

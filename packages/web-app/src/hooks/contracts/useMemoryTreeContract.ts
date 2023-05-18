@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { abis } from 'smart-contracts/abi'
 import { PongMemoryTree__factory } from 'smart-contracts/typechain-types/factories/src/PongMemoryTree__factory'
+import { abis } from 'src/utils/abis'
 
 import { useSignerOrProvider } from './useSignerOrProvider'
 
@@ -29,16 +29,22 @@ export type MemoryTree = {
   nodes: Record<number, MemoryNode>
 }
 
+export type MemoryTreesOfBrain = {
+  memoryTrees: MemoryTree
+  normalizeId: Record<number, number>
+}
+
 export const useMemoryTreesOfBrain = (brainId: number) => {
   const memoryTreeContract = useMemoryTreeContract()
 
   return useQuery(
     ['memoryTree', 'memoryTreesOfBrain', brainId],
-    async (): Promise<MemoryTree> => {
+    async (): Promise<MemoryTreesOfBrain> => {
       const treeIds = await memoryTreeContract.memoryTreesOfBrain(
         abis.MockBrain.address,
         brainId,
       )
+      const allNodeIds: number[] = []
 
       const trees = await Promise.all(
         treeIds.map(async (treeId): Promise<MemoryTree> => {
@@ -55,6 +61,7 @@ export const useMemoryTreesOfBrain = (brainId: number) => {
               if (!memoryNode) {
                 throw new Error('memoryNode not found for memoryNodeId')
               }
+              allNodeIds.push(memoryNodeId.toNumber())
 
               return [
                 memoryNodeId.toNumber(),
@@ -74,8 +81,15 @@ export const useMemoryTreesOfBrain = (brainId: number) => {
         }),
       )
 
+      const normalizeId: Record<number, number> = {}
+      allNodeIds
+        .sort((a, b) => a - b)
+        .forEach((nodeId, index) => {
+          normalizeId[nodeId] = index + 1
+        })
+
       // combine trees as root nodes are new trees anyway
-      return trees.reduce(
+      const memoryTrees = trees.reduce(
         (acc, tree): MemoryTree => ({
           rootNodeIds: [...acc.rootNodeIds, ...tree.rootNodeIds],
           nodes: {
@@ -85,6 +99,11 @@ export const useMemoryTreesOfBrain = (brainId: number) => {
         }),
         { rootNodeIds: [], nodes: {} },
       )
+
+      return {
+        memoryTrees,
+        normalizeId: normalizeId,
+      }
     },
   )
 }

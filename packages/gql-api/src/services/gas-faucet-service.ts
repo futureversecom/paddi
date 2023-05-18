@@ -1,11 +1,11 @@
 import { ErrorCode as EthersErrorCode } from '@ethersproject/logger'
 import type { ChainAddress } from 'core/src/types/chain-address'
 import type { EthersError } from 'core/src/types/ethers'
+import { abis } from 'core-backend/src/contracts/abi'
 import type { Wallet } from 'ethers'
 import { utils } from 'ethers'
 import type { Either } from 'fp-ts/Either'
 import { left, right } from 'fp-ts/Either'
-import { abis } from 'smart-contracts/abi'
 import { GasFaucet__factory as GasFaucetFactory } from 'smart-contracts/typechain-types/factories/src'
 import type {
   GasFaucetFailureResponse,
@@ -31,6 +31,7 @@ export class GasFaucetService {
         gasLimit: 100000,
         gasPrice: '15000000000000',
       })
+      await tx.wait()
       return right({ __typename: 'GasFaucetSuccessResponse', hash: tx.hash })
     } catch (error) {
       console.error(error)
