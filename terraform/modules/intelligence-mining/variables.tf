@@ -1,3 +1,7 @@
+variable "sentry_dsn" {
+  description = "Sentry DSN"
+}
+
 variable "environment" {
   type        = string
   description = "dev / staging / prod"

@@ -35,6 +35,7 @@ module "acp_demo_im" {
   source = "../../../modules/intelligence-mining"
 
   environment      = local.environment
+  sentry_dsn       = "https://fc0665d760d742f98e2070189dfecb46@o1024674.ingest.sentry.io/4505242550665216"
   image_tag_suffix = var.im_image_tag_suffix
 }
 

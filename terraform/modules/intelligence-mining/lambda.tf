@@ -16,6 +16,8 @@ module "training_lambda" {
   architectures = ["x86_64"]
 
   environment_variables = {
+    SENTRY_DSN                   = var.sentry_dsn
+    SENTRY_ENVIRONMENT           = var.environment
     ACP_DEMO_RESULTS_BUCKET      = aws_s3_bucket.results-bucket.id
     ACP_DEMO_ITERATIONS_PER_UNIT = 25000
   }
@@ -58,6 +60,11 @@ module "evaluation_config_lambda" {
   memory_size   = 128
   architectures = ["x86_64"]
 
+  environment_variables = {
+    SENTRY_DSN         = var.sentry_dsn
+    SENTRY_ENVIRONMENT = var.environment
+  }
+
   # Container Image
   image_uri            = "${data.aws_ecr_repository.im.repository_url}@${data.aws_ecr_image.im-lambda-evaluation-config.image_digest}"
   package_type         = "Image"
@@ -79,6 +86,8 @@ module "evaluation_lambda" {
   architectures = ["x86_64"]
 
   environment_variables = {
+    SENTRY_DSN              = var.sentry_dsn
+    SENTRY_ENVIRONMENT      = var.environment
     ACP_DEMO_RESULTS_BUCKET = aws_s3_bucket.results-bucket.id
   }
 
