@@ -31,21 +31,21 @@
           "artifacts": [
             {
               "algorithm": "sha256",
-              "hash": "4bf36b3071dd55f0e558ac8efe07676a120f2ed89e7a3df0fb78ddf2733bf247",
-              "url": "https://files.pythonhosted.org/packages/28/a2/91a899e048732db612686ad43444f4b984af21fdd10f8e8633d4b46ed200/pandas_stubs-1.5.3.230321-py3-none-any.whl"
+              "hash": "7ffc6528290df44881d1d78b7239161ba203e4b6570b71949fc4a4e5eabca8a5",
+              "url": "https://files.pythonhosted.org/packages/1c/5a/b39ae497a6fd4fe5b2ee2bca1d3be61972d3e9c8c6b9e23e4ab14c025610/pandas_stubs-2.0.1.230501-py3-none-any.whl"
             },
             {
               "algorithm": "sha256",
-              "hash": "2fa860df9e6058e9f0d2c09bc711c09abb8f0516eee7f0b9f9950d29b835fc6f",
-              "url": "https://files.pythonhosted.org/packages/47/7f/107f9c4b07f21ac8660a7bc2029e1139699c2c1dff305634409095beae1c/pandas_stubs-1.5.3.230321.tar.gz"
+              "hash": "2faf2c08ecfd8f5b82823279e06818d92eb642079e73d93921779bad69bd4cb0",
+              "url": "https://files.pythonhosted.org/packages/4a/0c/64222f3af8de57623ce3750248ab08fff2b68c72f6ab7c914f3221f1f3ae/pandas_stubs-2.0.1.230501.tar.gz"
             }
           ],
           "project_name": "pandas-stubs",
           "requires_dists": [
             "types-pytz>=2022.1.1"
           ],
-          "requires_python": "<3.12,>=3.8",
-          "version": "1.5.3.230321"
+          "requires_python": ">=3.8",
+          "version": "2.0.1.230501"
         },
         {
           "artifacts": [
