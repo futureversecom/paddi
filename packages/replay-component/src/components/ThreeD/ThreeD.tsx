@@ -8,6 +8,7 @@ import { RenderPixelatedPass, UnrealBloomPass } from 'three-stdlib'
 import type { PongSimulation } from '../../parsers/parseSimulation'
 import type { BrainsData } from '../Pong/Pong'
 import { Replay } from '../Replay/Replay'
+import { Rig } from '../Rig/Rig'
 
 extend({ RenderPixelatedPass })
 
@@ -17,7 +18,9 @@ extend({ UnrealBloomPass })
 export const ThreeD = ({ simulationData, brainsData }: Props) => {
   return (
     <Suspense fallback={null}>
-      <Replay simulationData={simulationData} brainsData={brainsData} />
+      <Rig>
+        <Replay simulationData={simulationData} brainsData={brainsData} />
+      </Rig>
     </Suspense>
   )
 }

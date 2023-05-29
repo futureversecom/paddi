@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { PlusIcon } from 'src/assets/icons'
 import { SelectWithRange } from 'src/components/common/SelectWithRange'
 import { client } from 'src/graphql/client'
 import type {
@@ -148,7 +149,7 @@ export const DoTrainingPanel: React.FC<props> = ({ address }) => {
     setIsStartTrainingProcess(true)
     return toast
       .promise(sendComputeRequest, {
-        pending: "Transaction's pending..",
+        pending: 'Transaction pending..',
         success: 'Transaction successful!',
         error: 'Transaction rejected!',
       })
@@ -167,38 +168,41 @@ export const DoTrainingPanel: React.FC<props> = ({ address }) => {
               setBrainId(id)
               setParentMemoryNodeConfig(parentMemoryNodeConfig)
             }}
+            complete={
+              brainId !== undefined && parentMemoryNodeConfig !== undefined
+            }
           />
         </Grid>
-
         <Grid item xs={4}>
           <TrainingParamsSelector
-            trainingParams={trainingParams}
-            setTrainingParams={setTrainingParams}
             presetParam={presetParam}
+            trainingParams={trainingParams}
             setPresetParam={setPresetParam}
+            setTrainingParams={setTrainingParams}
           />
         </Grid>
         <Grid item xs={4}>
           <OpponentSelector scenario={scenario} setScenario={setScenario} />
         </Grid>
       </Grid>
-
       <Stack
-        flexDirection="row"
-        justifyContent="center"
+        mt={6}
+        gap={4}
         alignItems="center"
-        gap={10}
-        marginTop={6}
+        flexDirection="row"
+        justifyContent="flex-end"
       >
-        <Box component={'div'} sx={{ width: 380 }}>
+        <Box component="div" width={380}>
           <SelectWithRange
-            tooltip="The amount of units the trainer wants to train. 1 training unit is 1000 rounds."
-            label={'Training Units'}
             min={1}
             max={10}
+            label="Training Units"
             value={trainingRounds}
             onChange={e => setTrainingRounds(+e.target.value)}
-            itemTextInterpolate={n => `${n} units (${n * 10} ASTO)`}
+            itemTextInterpolate={n =>
+              `${n} unit${n > 1 ? 's' : ''} (${n * 10} ASTO)`
+            }
+            tooltip="Each training unit consists of 25,000 training iterations."
           />
         </Box>
         <ApproveASTO address={address} trainingCost={predictedTrainingCost}>
@@ -212,6 +216,7 @@ export const DoTrainingPanel: React.FC<props> = ({ address }) => {
               scenario == undefined
             }
             onClick={startTraining}
+            startIcon={<PlusIcon />}
           >
             Begin Training
           </Button>

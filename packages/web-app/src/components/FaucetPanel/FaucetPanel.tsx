@@ -44,7 +44,7 @@ const getFaucetTypeInfo = (type: Asset) => {
     case 'ASTO':
       return { title: '2. ASTO', currency: '$ASTO' }
     case 'Brain':
-      return { title: '3. XRP', currency: 'ASM Brain(s)' }
+      return { title: '3. ASM Brain', currency: 'ASM Brain(s)' }
   }
 }
 

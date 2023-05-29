@@ -1,4 +1,4 @@
-import { Box, css, styled } from '@mui/material'
+import { css, styled, Typography } from '@mui/material'
 import React from 'react'
 import type {
   MemoryNode,
@@ -62,6 +62,17 @@ const Container = styled('div')(
     `,
 )
 
+const Node = styled(Typography)(
+  ({ theme }) => css`
+    cursor: pointer;
+    transition: ${theme.transitions.create('color')};
+
+    :hover {
+      color: ${theme.palette.secondary.main};
+    }
+  `,
+)
+
 type Props = {
   tree: MemoryTreesOfBrain
   handleSelectTrainedMemory: (memoryId: number) => void
@@ -74,23 +85,26 @@ export const MemoryTree: React.FC<Props> = ({
   const { memoryTrees, normalizeId } = tree
   const { rootNodeIds, nodes } = memoryTrees
 
-  const renderTree = (node: MemoryNode) => (
-    <li key={node.id}>
-      <Box
-        component="span"
-        sx={{ cursor: 'pointer' }}
-        onClick={() => handleSelectTrainedMemory(node.id)}
-      >{`node:${normalizeId[node.id]}`}</Box>
-      {node.children.length !== 0 && (
-        <ul>{node.children.map(childId => renderTree(nodes[childId]!))}</ul>
-      )}
-    </li>
-  )
+  const renderTree = (node?: MemoryNode) =>
+    !!node && (
+      <li key={node.id}>
+        <Node
+          variant="body1"
+          role="button"
+          onClick={() => handleSelectTrainedMemory(node.id)}
+        >
+          {`Memory node: ${normalizeId[node.id]}`}
+        </Node>
+        {node.children.length !== 0 && (
+          <ul>{node.children.map(childId => renderTree(nodes[childId]))}</ul>
+        )}
+      </li>
+    )
 
   return (
     <Container>
       <ul className="tree">
-        {rootNodeIds.map(rootNodeId => renderTree(nodes[rootNodeId]!))}
+        {rootNodeIds.map(rootNodeId => renderTree(nodes[rootNodeId]))}
       </ul>
     </Container>
   )

@@ -42,6 +42,9 @@ const palette: PaletteOptions = {
   background: {
     paper: '#00000',
     default: '#070707',
+    darkGrey: '#404040',
+    border: 'rgba(255, 255, 255, 0.4)',
+    transparentBlack: 'rgba(0, 0, 0, 0.85)',
   },
   action: {
     focus: 'rgba(0, 0, 0, 0.12)',
@@ -213,6 +216,36 @@ theme.components = {
         borderRadius: 50,
         padding: theme.spacing(2.75, 4.75),
       },
+      outlined: {
+        '&:hover': {
+          backgroundColor: '#120A12',
+          borderColor: theme.palette.background.border,
+        },
+        '&:disabled': {
+          opacity: 0.5,
+          color: '#fff',
+          borderColor: theme.palette.background.border,
+        },
+      },
+      contained: {
+        '&:hover': {
+          backgroundColor: '#D5D1D5',
+        },
+        '&:disabled': {
+          color: theme.palette.background.default,
+          backgroundColor: theme.palette.background.border,
+        },
+      },
+      text: {
+        padding: 0,
+        '&:hover': {
+          backgroundColor: 'transparent',
+          color: theme.palette.secondary.main,
+        },
+      },
+      sizeSmall: {
+        padding: theme.spacing(1.75, 3.75),
+      },
     },
   },
   MuiLink: {
@@ -229,6 +262,10 @@ theme.components = {
         fontFamily: objectivMk1Family,
         fontSize: theme.typography.pxToRem(14),
         lineHeight: theme.typography.pxToRem(20),
+        transition: theme.transitions.create('color'),
+        '&:hover': {
+          color: theme.palette.secondary.main,
+        },
       },
     },
     variants: [
@@ -237,6 +274,11 @@ theme.components = {
         style: {
           textDecoration: 'none',
           borderBottom: '1px solid #fff',
+          transition: theme.transitions.create(['color', 'borderBottomColor']),
+          '&:hover': {
+            color: theme.palette.secondary.main,
+            borderBottomColor: theme.palette.secondary.main,
+          },
         },
       },
     ],
@@ -247,23 +289,150 @@ theme.components = {
         padding: 0,
         borderRadius: 50,
         backgroundImage: 'none',
-        border: '1px solid rgba(255, 255, 255, 0.4)',
+        border: `1px solid ${theme.palette.background.border}`,
       },
     },
   },
   MuiDialog: {
     styleOverrides: {
-      root: { background: 'rgba(0, 0, 0, 0.85)' },
+      root: { background: theme.palette.background.transparentBlack },
       paper: {
-        border: '1px solid rgba(255, 255, 255, 0.4)',
         borderRadius: 50,
         background: 'black',
+        border: `1px solid ${theme.palette.background.border}`,
       },
 
       paperFullScreen: {
         border: '0',
         background: '#1E1E1E;',
         borderRadius: 0,
+      },
+    },
+  },
+  MuiDialogContent: {
+    styleOverrides: {
+      root: {
+        padding: theme.spacing(5, 4, 4),
+      },
+    },
+  },
+  MuiDivider: {
+    styleOverrides: {
+      root: {
+        backgroundColor: theme.palette.background.border,
+      },
+    },
+  },
+  MuiTab: {
+    styleOverrides: {
+      root: {
+        zIndex: 1,
+        borderRadius: 30,
+        color: theme.palette.text.primary,
+        transition: theme.transitions.create(['color', 'backgroundColor']),
+        '&.Mui-selected': {
+          color: '#000',
+          '&:hover': {
+            backgroundColor: '#fff',
+          },
+        },
+        '&:hover': {
+          backgroundColor: '#120A12',
+        },
+      },
+    },
+  },
+  MuiTabs: {
+    styleOverrides: {
+      flexContainer: {
+        borderRadius: 30,
+        border: `1px solid ${theme.palette.background.border}`,
+      },
+      indicator: {
+        height: '100%',
+        borderRadius: 30,
+      },
+    },
+  },
+  MuiMenu: {
+    styleOverrides: {
+      list: {
+        padding: 0,
+      },
+    },
+  },
+  MuiMenuItem: {
+    styleOverrides: {
+      root: {
+        fontWeight: 400,
+        padding: theme.spacing(1, 2),
+        fontSize: theme.typography.pxToRem(16),
+        letterSpacing: theme.typography.pxToRem(1),
+        backgroundColor: theme.palette.background.default,
+        '&:hover': {
+          backgroundColor: theme.palette.secondary.dark,
+        },
+        '&.Mui-selected': {
+          backgroundColor: theme.palette.secondary.main,
+          '&:hover': {
+            backgroundColor: theme.palette.secondary.main,
+          },
+        },
+      },
+    },
+  },
+  MuiInputLabel: {
+    styleOverrides: {
+      outlined: {
+        fontWeight: 700,
+        lineHeight: '148%',
+        fontFamily: objectivMk1Family,
+        color: theme.palette.text.primary,
+        fontSize: theme.typography.pxToRem(12),
+        letterSpacing: theme.typography.pxToRem(1),
+      },
+    },
+  },
+  MuiOutlinedInput: {
+    styleOverrides: {
+      root: {
+        borderRadius: 16,
+      },
+      input: {
+        fontWeight: 400,
+        lineHeight: '266%',
+        padding: theme.spacing(1.5, 2),
+        fontSize: theme.typography.pxToRem(16),
+        letterSpacing: theme.typography.pxToRem(1),
+      },
+    },
+  },
+  MuiTooltip: {
+    styleOverrides: {
+      tooltip: {
+        fontWeight: 500,
+        lineHeight: '160%',
+        fontFamily: objectivMk1Family,
+        color: theme.palette.text.primary,
+        fontSize: theme.typography.pxToRem(12),
+        backgroundColor: theme.palette.background.darkGrey,
+      },
+    },
+  },
+  MuiChip: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#383838',
+      },
+      label: {
+        fontWeight: 400,
+        lineHeight: '148%',
+        fontFamily: objectivMk1Family,
+        fontSize: theme.typography.pxToRem(12),
+      },
+      colorSecondary: {
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.main,
       },
     },
   },

@@ -1,4 +1,4 @@
-import { Button, Link, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import type { Narrow } from 'abitype'
 import { chainAddressFromString } from 'core/src/types/chain-address'
 import type { BigNumberish } from 'ethers'
@@ -65,13 +65,14 @@ export const FaucetPanelXRP = ({ address }: Props) => {
           render: () => (
             <span>
               XRP claiming error! <br /> Try{' '}
-              <Link
-                href="https://faucet.rootnet.cloud/"
+              <a
                 target="_blank"
                 rel="noreferrer"
+                href="https://faucet.rootnet.cloud/"
+                style={{ display: 'inline', textDecoration: 'underline' }}
               >
                 Porcini Faucet
-              </Link>{' '}
+              </a>{' '}
               instead.
             </span>
           ),

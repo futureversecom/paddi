@@ -168,7 +168,7 @@ export const Replay = ({ simulationData, brainsData }: Props) => {
               height={5}
               letterSpacing={1.6}
             >
-              SCORE!
+              SCORE
               <meshStandardMaterial color="white" />
             </Text3D>
           </Center>
@@ -195,7 +195,7 @@ export const Replay = ({ simulationData, brainsData }: Props) => {
       </Box>
       <Center position={[-fieldWidth / 2 - 9, wallDepth / 2, 0]}>
         <Text3D
-          letterSpacing={-0.06}
+          letterSpacing={1}
           size={3}
           font={fontPath}
           rotation={[Math.PI / -2, 0, Math.PI / 2]}
@@ -207,7 +207,7 @@ export const Replay = ({ simulationData, brainsData }: Props) => {
       </Center>
       <Center position={[fieldWidth / 2 + 9, wallDepth / 2, 0]}>
         <Text3D
-          letterSpacing={-0.06}
+          letterSpacing={1}
           size={3}
           font={fontPath}
           rotation={[Math.PI / -2, 0, Math.PI / -2]}

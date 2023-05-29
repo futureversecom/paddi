@@ -12,7 +12,7 @@ Step function and lambda implementations for running "Intelligence Mining".
 
 The project is structured in three layers.
 
-1. [Pong Simulation](../pong-simulation/README.md) (dependency)
+1. [Paddi Simulation](../pong-simulation/README.md) (dependency)
 
 1. Services
    This is the application-logic layer for an entrypoint (ex: lambda) to run

@@ -12,7 +12,6 @@ interface FontStyle {
 
 const objectivMk1 = 'Objektiv Mk1'
 export const objectivMk1Family = `${objectivMk1}, Roboto, Helvetica, Arial, sans-serif`
-export const pressStartFamily = `'Press Start 2P', Roboto, Helvetica, Arial, sans-serif`
 
 const generateFontFace = ({
   woff2,

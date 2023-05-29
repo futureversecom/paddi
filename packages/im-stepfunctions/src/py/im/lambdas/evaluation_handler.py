@@ -4,6 +4,7 @@ from typing import Any, Dict
 import boto3
 from aws_lambda_powertools.utilities.parser import event_parser
 from aws_lambda_powertools.utilities.typing import LambdaContext
+from im.lambdas.utils.sentry import init as init_sentry
 from im.services import opponent_resolver
 from im.services.common.configuration import ExecutionEnvironmentConfig
 from im.services.evaluation_interpreter import EvaluationInterpreter
@@ -17,6 +18,8 @@ from pong.services.evaluation_runner import EvaluationRunner
 from pydantic import BaseSettings
 from schemas.evaluation_output import EvaluationOutput
 from schemas.evaluation_request import EvaluationRequest
+
+init_sentry()
 
 
 class Settings(BaseSettings):

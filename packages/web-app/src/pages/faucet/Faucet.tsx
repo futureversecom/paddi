@@ -1,6 +1,9 @@
 import { Button, Grid, Typography } from '@mui/material'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { ScrollRestoration } from 'react-router-dom'
+import { PlusIcon } from 'src/assets/icons'
 import { FaucetPanelASTO } from 'src/components/FaucetPanel/FaucetPanelASTO'
 import { FaucetPanelBrain } from 'src/components/FaucetPanel/FaucetPanelBrain'
 import { FaucetPanelXRP } from 'src/components/FaucetPanel/FaucetPanelXRP'
@@ -23,6 +26,10 @@ export const Faucet = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Testnet Assets | Paddi</title>
+      </Helmet>
+      <ScrollRestoration />
       <Typography mt={4} component="h1" variant="h5">
         Training Assets
       </Typography>
@@ -54,7 +61,11 @@ export const Faucet = () => {
             After claiming all three assets you can begin training your AI Agent
             to play Paddi.
           </Typography>
-          <Button href={routes.train} sx={{ width: 425 }}>
+          <Button
+            href={routes.train}
+            sx={{ width: 425 }}
+            startIcon={<PlusIcon />}
+          >
             Start Training
           </Button>
           <Typography

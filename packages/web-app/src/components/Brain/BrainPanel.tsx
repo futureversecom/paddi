@@ -1,11 +1,22 @@
-import { Button, css, Grid, styled, Typography } from '@mui/material'
+import { ThreeDRotationOutlined } from '@mui/icons-material'
+import {
+  Button,
+  Card,
+  css,
+  Grid,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material'
 import type { BigNumberish } from 'ethers'
 import { BigNumber } from 'ethers'
 import type { FC } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { SquareIcon } from 'src/assets/icons'
 import { client } from 'src/graphql/client'
 import { useGenomeAttributesQuery } from 'src/graphql/generated'
 import { useBrainMetadata } from 'src/hooks/useBrainMetadata'
+import transientPropCheck from 'src/utils/transientPropCheck'
 
 import { BrainImage } from './BrainImage'
 import { GenomeMatrix, getGenomeConfigByName } from './GenomeMatrix'
@@ -15,84 +26,57 @@ type Props = {
   onSelect: (id: number) => void
 }
 
-const Attribute = styled('span')(
-  () =>
-    css`
-      display: flex;
-      align-items: center;
-    `,
-)
-const AttributeCircle = styled('div')(
-  () =>
+const AttributeSquare = styled(
+  'div',
+  transientPropCheck,
+)<{ $color?: string }>(
+  ({ $color }) =>
     css`
       width: 10px;
       height: 10px;
-      background: red;
-      display: inline-block;
-      // border-radius: 100px;
       margin-right: 5px;
-    `,
-)
-const Container = styled('div')(
-  ({ theme }) =>
-    css`
-      background: ${theme.palette.divider};
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      background: #2f2f2f;
-      border: 2px solid #ffffff;
-    `,
-)
-const BrainContainer = styled('div')(
-  () =>
-    css`
-      // flex: 1;
-      height: 300px;
-      overflow: hidden;
-      position: relative;
-    `,
-)
-const ContentContainer = styled('div')(
-  () =>
-    css`
-      padding: 20px;
-      padding-left: 40px;
-      padding-right: 40px;
-    `,
-)
-const BrainImageContainer = styled('div')(
-  () =>
-    css`
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      bottom: 15px;
-      right: 15px;
-      background: #767676;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      z-index: 10;
+      background: ${$color};
+      display: inline-block;
     `,
 )
 
-const AttributeName = styled('span')`
-  text-transform: capitalize;
-  font-weight: normal;
-  font-size: 16px;
+const BrainContainer = styled('div')`
+  height: 300px;
+  overflow: hidden;
+  position: relative;
 `
 
-const Title = styled(Typography)(
-  () => css`
-    font-size: 16px;
-    line-height: 133.5%;
-  `,
+const BrainImageContainer = styled('div')`
+  right: 8px;
+  bottom: 8px;
+  z-index: 10;
+  padding: 2px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  background: #000;
+  position: absolute;
+  align-items: center;
+`
+
+const RotateIcon = styled(ThreeDRotationOutlined)`
+  left: 16px;
+  bottom: 12px;
+  z-index: 10;
+  font-size: 32px;
+  position: absolute;
+`
+
+const ContentContainer = styled('div')(
+  ({ theme }) =>
+    css`
+      padding: ${theme.spacing(2, 3, 3)};
+    `,
 )
+
 export const BrainPanel: FC<Props> = (props: Props) => {
   const { ref, inView } = useInView()
-  return <Container ref={ref}>{inView && <Visual {...props} />}</Container>
+  return <Card ref={ref}>{inView && <Visual {...props} />}</Card>
 }
 
 const Visual: FC<Props> = ({ onSelect, tokenId }: Props) => {
@@ -114,16 +98,14 @@ const Visual: FC<Props> = ({ onSelect, tokenId }: Props) => {
     <>
       <BrainContainer>
         {brainData && <GenomeMatrix matrix={brainData.genome_matrix} />}
+        <RotateIcon />
         <BrainImageContainer>
           <BrainImage id={tokenIdNum} fixedHeight={'100px'} />
         </BrainImageContainer>
       </BrainContainer>
       <ContentContainer>
-        <Title variant="h5" sx={{ paddingBottom: '10px' }}>
-          Brain #{tokenIdNum}
-        </Title>
-
-        <Grid container columns={2}>
+        <Typography variant="body2">Brain #{tokenIdNum}</Typography>
+        <Grid container columns={2} mt={2} mb={4}>
           {attrs
             ?.sort((a, b) => {
               const aExtended = getGenomeConfigByName(a.name)
@@ -139,24 +121,27 @@ const Visual: FC<Props> = ({ onSelect, tokenId }: Props) => {
               const config = getGenomeConfigByName(attr.name)
 
               return (
-                <Grid
-                  key={attr.name}
-                  item
-                  xs={1}
-                  sx={{ paddingBottom: '10px', fontWeight: 'bold' }}
-                >
-                  <Attribute>
-                    <AttributeCircle sx={{ background: config?.baseColor }} />
-                    <AttributeName>{attr.name}:</AttributeName>
-                    &nbsp;
-                    {attr.__typename === 'GenomeAttributeHex' && attr.valueHex}
-                    {attr.__typename === 'GenomeAttributeInt' && attr.valueInt}
-                  </Attribute>
+                <Grid item xs={1} pb={1} key={attr.name}>
+                  <Stack direction="row" alignItems="center">
+                    <AttributeSquare $color={config?.baseColor} />
+                    <Typography textTransform="capitalize" variant="subtitle1">
+                      {attr.name}:{' '}
+                      {attr.__typename === 'GenomeAttributeHex' &&
+                        attr.valueHex}
+                      {attr.__typename === 'GenomeAttributeInt' &&
+                        attr.valueInt}
+                    </Typography>
+                  </Stack>
                 </Grid>
               )
             })}
         </Grid>
-        <Button variant="outlined" sx={{ mt: 6 }} onClick={onClick}>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={onClick}
+          startIcon={<SquareIcon />}
+        >
           Select Brain #{tokenIdNum}
         </Button>
       </ContentContainer>

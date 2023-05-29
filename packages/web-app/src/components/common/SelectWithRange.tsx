@@ -33,10 +33,10 @@ export const SelectWithRange: FC<SelectProps> = ({
   const disabled = !onChange
   return (
     <FormControl fullWidth>
-      <InputLabel id={`${label}-label`}>{label}</InputLabel>
+      <InputLabel htmlFor={label}>{label}</InputLabel>
       <Stack direction="row" alignItems="center" gap={1}>
         <Select
-          labelId={`${label}-label`}
+          id={label}
           label={label}
           value={value}
           onChange={onChange}

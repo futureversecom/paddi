@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from '@mui/material'
 import type { FC } from 'react'
 import { useMemo } from 'react'
 import type { RewardConfig } from 'src/graphql/generated'
-import { humanCamel } from 'src/utils/humanCamel'
 
 import type {
   TrainingParamKeys,
@@ -24,6 +23,20 @@ const rewardConfigToTrainingParams = (
   }
 }
 
+export const getMappedTrainingKey = (key: TrainingParamKeys) => {
+  type MapType = { [key in TrainingParamKeys]: string }
+  const map: MapType = {
+    wins: 'Win',
+    lose: 'Loss',
+    paddleHit: 'Paddle Hit',
+    nearMiss: 'Near Miss',
+    endurancePenalty: 'Endurance Depletion',
+    survival: 'Survival',
+  }
+
+  return map[key] || key
+}
+
 export const TrainingParamsViewer: FC<Props> = ({ rewardConfig }) => {
   const trainingParams = useMemo(
     () => rewardConfigToTrainingParams(rewardConfig),
@@ -41,7 +54,7 @@ export const TrainingParamsViewer: FC<Props> = ({ rewardConfig }) => {
           return (
             <Grid key={key} item xs={6}>
               <Typography>
-                {`${humanCamel(key)}: `}
+                {`${getMappedTrainingKey(key as TrainingParamKeys)}: `}
                 <Box component="span" sx={{ fontWeight: 700 }}>
                   {key === 'lose' || key === 'endurancePenalty' ? -num : num}
                 </Box>

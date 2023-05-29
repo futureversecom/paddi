@@ -3,20 +3,22 @@ import { css, styled } from '@mui/material'
 import { OrbitControls, OrthographicCamera } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import type { FC } from 'react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { Group } from 'three'
 import { MathUtils } from 'three'
 
 type Props = {
   matrix: number[]
+  isActive?: boolean
 }
 const Container = styled('div')(
   ({ theme }) =>
     css`
-      background: ${theme.palette.divider};
       height: 100%;
+      background: ${theme.palette.background.transparentBlack};
     `,
 )
+
 export const getGenomeConfigByName = (key: string) => {
   return GENOME_ATTRIBUTES.flatMap(a => (a.key === key ? [a] : []))[0]
 }
@@ -136,17 +138,23 @@ const getPercentageOfColor = (color: string, percentage: number): number => {
   return result
 }
 
-const ThreeDee = ({ matrix }: Props) => {
+const ThreeDee = ({ matrix, isActive }: Props) => {
   const gridSize = 40
   const cellSize = 1
   const cellHeight = 10
 
   const containerRef = useRef<Group>(null)
+  const currentRotationSpeed = useRef<number>(0)
 
   useFrame(() => {
     if (!containerRef.current) return
-    // containerRef.current.rotation.y += 0.005
+
+    const targetSpeed = isActive ? 0.005 : 0
+    currentRotationSpeed.current +=
+      (targetSpeed - currentRotationSpeed.current) * 0.05
+    containerRef.current.rotation.y += currentRotationSpeed.current
   })
+
   return (
     <>
       <ambientLight intensity={0.5} />
@@ -218,10 +226,17 @@ const ThreeDee = ({ matrix }: Props) => {
 
 export const GenomeMatrix: FC<Props> = ({ matrix }: Props) => {
   const normalisedMatrix = matrix.map(value => value / 9)
+  const [isActive, setIsActive] = useState<boolean>(false)
+  const onPointerEnter = () => {
+    setIsActive(true)
+  }
+  const onPointerLeave = () => {
+    setIsActive(false)
+  }
   return (
-    <Container>
+    <Container onMouseEnter={onPointerEnter} onMouseLeave={onPointerLeave}>
       <Canvas shadows>
-        <ThreeDee matrix={normalisedMatrix} />
+        <ThreeDee matrix={normalisedMatrix} isActive={isActive} />
       </Canvas>
     </Container>
   )

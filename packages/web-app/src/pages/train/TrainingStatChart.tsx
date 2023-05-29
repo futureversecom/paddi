@@ -21,14 +21,14 @@ const statData: Record<string, { title: string; tooltip: string }> = {
       'Shows the duration (in seconds) for each rally or turn. The longer the rallies, the more the chart is skewed to the right. More training could improve the paddle’s ability to hit the ball resulting in longer rallies.',
   },
   MissedDistanceDistribution: {
-    title: 'Paddle distance from ball when it missed',
+    title: 'Missed ball distance from paddle',
     tooltip:
-      'Shows the distance of the paddle from the ball when the opponent scores (ie, your paddle misses). Ideally, the chart is left skewed or leaning. Indicating the paddle just narrowly missed the ball.',
+      'Shows the distance of the paddle from the ball when the opponent scores (i.e. your paddle misses). Ideally the chart is left skewed or leaning, indicating the paddle just narrowly missed the ball.',
   },
   EnduranceTimeDistribution: {
-    title: 'Endurance leftover per turn',
+    title: 'Remaining endurance per turn',
     tooltip:
-      'Endurance allows the paddle to move. When its out it can’t move to the ball as quickly. This chart shows how well did it save up its endurance for each rally.',
+      'Endurance is the stamina of your paddle. If your paddle moves frequently, your endurance depletes resulting in slower paddle speed.',
   },
 }
 

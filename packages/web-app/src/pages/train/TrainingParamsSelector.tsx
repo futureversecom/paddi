@@ -1,24 +1,21 @@
 import {
-  Box,
   Button,
-  css,
   Dialog,
   DialogContent,
-  FormControl,
   FormControlLabel,
   Grid,
   Radio,
   RadioGroup,
-  styled,
   Typography,
 } from '@mui/material'
 import type { FC } from 'react'
 import { useState } from 'react'
+import { SquareIcon } from 'src/assets/icons'
 import { SelectWithRange } from 'src/components/common/SelectWithRange'
 import { reportEvent } from 'src/utils/ga'
-import { humanCamel } from 'src/utils/humanCamel'
 
-import { StepButton } from './StepButton'
+import { StepCard } from './StepCard'
+import { getMappedTrainingKey } from './TrainingParamsViewer'
 
 export type TrainingParams = {
   wins: number
@@ -55,8 +52,8 @@ export const PRESET_PARAMS: [PresetTrainingParam, ...PresetTrainingParam[]] = [
       wins: 1,
       lose: 2,
       paddleHit: 10,
-      nearMiss: 4,
       endurancePenalty: 2,
+      nearMiss: 4,
       survival: 3,
     },
   },
@@ -66,8 +63,8 @@ export const PRESET_PARAMS: [PresetTrainingParam, ...PresetTrainingParam[]] = [
       wins: 2,
       lose: 10,
       paddleHit: 10,
-      nearMiss: 0,
       endurancePenalty: 5,
+      nearMiss: 0,
       survival: 10,
     },
   },
@@ -77,8 +74,8 @@ export const PRESET_PARAMS: [PresetTrainingParam, ...PresetTrainingParam[]] = [
       wins: 10,
       lose: 3,
       paddleHit: 10,
-      nearMiss: 2,
       endurancePenalty: 0,
+      nearMiss: 2,
       survival: 2,
     },
   },
@@ -88,18 +85,12 @@ export const PRESET_PARAMS: [PresetTrainingParam, ...PresetTrainingParam[]] = [
       wins: 10,
       lose: 10,
       paddleHit: 5,
-      nearMiss: 1,
       endurancePenalty: 5,
+      nearMiss: 1,
       survival: 5,
     },
   },
 ]
-
-const Parent = styled('div')(
-  () => css`
-    position: relative;
-  `,
-)
 
 type Props = {
   trainingParams: TrainingParams
@@ -163,49 +154,77 @@ export const TrainingParamsSelector: FC<Props> = ({
   }
 
   return (
-    <Parent>
-      <StepButton onClick={handleOpen} $selected={hasConfigured}>
-        <Typography mb={2}>Step 2</Typography>
-        <span>Training Parameters</span>
-      </StepButton>
-
+    <>
+      <StepCard index={2} complete={hasConfigured} onClick={handleOpen}>
+        <Typography textAlign="center" variant="body4" maxWidth={230}>
+          {hasConfigured
+            ? 'Training Parameters Selected'
+            : 'Training Parameters'}
+        </Typography>
+      </StepCard>
       <Dialog open={open} onClose={handleClose} maxWidth="md" sx={{ px: 4 }}>
         <DialogContent>
-          <Box component={'div'} sx={{ my: 2 }}>
-            Reinforcement rates alone do not ensure performance improvements. A
-            holistic approach is necessary for optimal training parameter
-            selection. Your agent will optimize to accumulate the amount of
-            rewards for each training session.
-          </Box>
-
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <RadioGroup
-              row
-              value={presetParam}
-              onChange={handlePresetParamChange}
-            >
-              <Grid container columnSpacing={3}>
-                {PRESET_PARAMS.map(({ label }) => {
-                  return (
-                    <Grid item xs={6} key={label}>
-                      <FormControlLabel
-                        value={label}
-                        control={<Radio />}
-                        label={label}
-                        sx={{ width: '100%' }}
-                      />
-                    </Grid>
-                  )
-                })}
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-          <Grid container spacing={3}>
+          <Typography variant="h6">Select training inputs </Typography>
+          <Typography mt={2} variant="body1">
+            This is where you train your paddle to move, hit and win a game of
+            Paddi.
+            <br />
+            <br />
+            Select one of the AI Agent Training Focus pre-sets to guide your
+            paddle towards specific behaviours.
+            <br />
+            <br />
+            Change the Learning Parameters to reward or penalize your paddle as
+            it trains.
+            <br />
+            <br />
+            Your AI Agent will try to score the most rewards during each
+            training session, but relying solely on reinforcement rates may not
+            guarantee an improvement. Results will vary between each ASM Brain.
+          </Typography>
+          <br />
+          <Typography
+            mb={6}
+            variant="subtitle1"
+            color="secondary.main"
+            fontStyle="italic"
+          >
+            Hint: If you&apos;re training for the first time, try selecting the
+            Movement/Positioning Training Focus and put more effort into Near
+            Miss instead of Paddle Hit.
+          </Typography>
+          <Typography mb={1} variant="body3" color="primary.dark">
+            AI Agent Training Focus
+          </Typography>
+          <RadioGroup
+            row
+            value={presetParam}
+            onChange={handlePresetParamChange}
+          >
+            <Grid mb={4} container columnSpacing={3}>
+              {PRESET_PARAMS.map(({ label }) => {
+                return (
+                  <Grid item xs={6} key={label}>
+                    <FormControlLabel
+                      value={label}
+                      control={<Radio color="secondary" />}
+                      label={label}
+                      sx={{ width: '100%' }}
+                    />
+                  </Grid>
+                )
+              })}
+            </Grid>
+          </RadioGroup>
+          <Typography mb={3} variant="body3" color="primary.dark">
+            Learning Parameters
+          </Typography>
+          <Grid mb={4} container spacing={3}>
             {Object.keys(trainingParams).map(key => (
               <Grid key={key} item xs={6}>
                 <SelectWithRange
                   tooltip={toolTipsMap[key]}
-                  label={humanCamel(key)}
+                  label={getMappedTrainingKey(key as TrainingParamKeys)}
                   invertDisplayValue={
                     key === 'lose' || key === 'endurancePenalty'
                   }
@@ -222,16 +241,11 @@ export const TrainingParamsSelector: FC<Props> = ({
               </Grid>
             ))}
           </Grid>
-          <Button
-            variant="contained"
-            onClick={handleConfirm}
-            fullWidth
-            sx={{ mt: 4, mb: 1 }}
-          >
+          <Button fullWidth onClick={handleConfirm} startIcon={<SquareIcon />}>
             CONFIRM TRAINING INPUTS
           </Button>
         </DialogContent>
       </Dialog>
-    </Parent>
+    </>
   )
 }

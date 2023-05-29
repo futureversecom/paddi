@@ -217,7 +217,7 @@ export const Ball = ({ gameState }: ModelProps) => {
             // set a max amount of particles for the mesh
             args={[undefined, undefined, maxParticles]}
           >
-            <boxBufferGeometry />
+            <boxGeometry />
 
             <myMaterial
               ref={matRef}

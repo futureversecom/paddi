@@ -9,7 +9,7 @@ export const Replay = () => {
 
   const brainsData = {
     paddle_l: { color: 'green', name: 'Player' },
-    paddle_r: { color: 'purple', name: 'Opponent' },
+    paddle_r: { color: 'purple', name: '' },
   }
 
   return (

@@ -1,61 +1,41 @@
-import {
-  css,
-  Dialog,
-  DialogContent,
-  Grid,
-  styled,
-  Typography,
-} from '@mui/material'
+import { Dialog, DialogContent, Grid, styled, Typography } from '@mui/material'
 import type { FC } from 'react'
 import { useState } from 'react'
 import { BrainImage } from 'src/components/Brain/BrainImage'
 import { BrainPanel } from 'src/components/Brain/BrainPanel'
-import { DescriptionBox } from 'src/components/common/DescriptionBox'
 import type { ParentMemoryNodeConfig } from 'src/graphql/generated'
 import { useBrainTokens } from 'src/hooks/contracts/useBrainContract'
 import { reportEvent } from 'src/utils/ga'
 
 import { MemorySelectorDialogContent } from './MemorySelector'
-import { StepButton } from './StepButton'
+import { StepCard } from './StepCard'
 
-const BrainImageContainer = styled('div')(
-  () => css`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    padding-top: 15px;
-    z-index: -1;
-  `,
-)
+const BrainImageContainer = styled('div')`
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100%;
+  padding-top: 15px;
+  position: absolute;
+`
 
 type Props = {
   address: string
   brainId?: number
+  complete: boolean
   parentMemoryNodeConfig?: ParentMemoryNodeConfig
   setBrain: (param: {
     id: number
     parentMemoryNodeConfig: ParentMemoryNodeConfig
   }) => void
 }
-const GridItem = styled('div')(
-  () =>
-    css`
-      min-height: 300px;
-    `,
-)
-
-const Parent = styled('div')(
-  () => css`
-    position: relative;
-  `,
-)
 
 export const BrainSelector: FC<Props> = ({
   brainId,
   parentMemoryNodeConfig,
   address,
   setBrain,
+  complete,
 }) => {
   const [_brainId, _setBrainId] = useState<number>()
   const { data: brainTokens } = useBrainTokens(address)
@@ -98,69 +78,59 @@ export const BrainSelector: FC<Props> = ({
   }
 
   return (
-    <Parent>
-      <StepButton
-        onClick={handleBrainDialogOpen}
-        $selected={brainId !== undefined}
-      >
-        <Typography mb={2}>Step 1</Typography>
+    <>
+      <StepCard index={1} complete={complete} onClick={handleBrainDialogOpen}>
         {brainId !== undefined ? (
           <>
             <BrainImageContainer>
               <BrainImage id={brainId} fixedHeight="100%" />
             </BrainImageContainer>
-            <span>{`Brain #${brainId}`}</span>
-            <span>{`(Memory Node ${
+            <Typography variant="body4">{`Brain #${brainId}`}</Typography>
+            <Typography variant="body4">{`(Memory Node ${
               parentMemoryNodeConfig?.memoryId
                 ? parentMemoryNodeConfig.memoryId
                 : 'Untrained'
-            })`}</span>
+            })`}</Typography>
           </>
         ) : (
-          <span>Select Brain</span>
+          <Typography variant="body4">
+            Select Brain +<br />
+            Memory Node
+          </Typography>
         )}
-      </StepButton>
-
+      </StepCard>
       <Dialog
-        open={brainDialogOpen}
-        onClose={handleBrainDialogClose}
         fullWidth
         maxWidth={'md'}
+        open={brainDialogOpen}
+        onClose={handleBrainDialogClose}
       >
         <DialogContent>
-          <DescriptionBox sx={{ my: 2, backgroundColor: 'transparent' }}>
-            <Typography variant="h5">Select Brain</Typography>
-            <p>
-              Select a Gen ll Brain to train. Each brain has uniques attributes
-              base on its genome Matrix. The attribute will have an influence on
-              the training that occurs.
-            </p>
+          <Typography variant="h6">Pick your Brain</Typography>
+          <Typography mt={2} mb={4} variant="body1">
+            Every ASM Brain is created with a randomized set of base values
+            known as a Genome Matrix. This gives your AI Agent a unique
+            combination of strengths and weaknesses such as size, strength,
+            speed, and endurance.
+          </Typography>
+          <Grid container spacing={3} columns={2}>
+            {brainTokens?.map(tokenId => {
+              const numberId = tokenId.toNumber()
 
-            <Grid container spacing={3} columns={2}>
-              {brainTokens?.map(tokenId => {
-                const numberId = tokenId.toNumber()
-                // Prevent overlap when there are two brains. Any better way?
-
-                return (
-                  <Grid key={numberId} padding={1} item xs={1}>
-                    <GridItem>
-                      <BrainPanel
-                        tokenId={numberId}
-                        onSelect={handleSelectBrain}
-                      />
-                    </GridItem>
-                  </Grid>
-                )
-              })}
-            </Grid>
-          </DescriptionBox>
+              return (
+                <Grid key={numberId} padding={1} item xs={1}>
+                  <BrainPanel tokenId={numberId} onSelect={handleSelectBrain} />
+                </Grid>
+              )
+            })}
+          </Grid>
         </DialogContent>
       </Dialog>
       {_brainId && (
         <Dialog
+          maxWidth="md"
           open={memoryDialogOpen}
           onClose={MemoryDialogClose}
-          maxWidth="md"
         >
           <MemorySelectorDialogContent
             brainId={_brainId}
@@ -168,6 +138,6 @@ export const BrainSelector: FC<Props> = ({
           />
         </Dialog>
       )}
-    </Parent>
+    </>
   )
 }

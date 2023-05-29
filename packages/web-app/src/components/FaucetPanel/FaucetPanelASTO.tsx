@@ -43,7 +43,7 @@ export const FaucetPanelASTO = ({ address }: Props) => {
           type="ASTO"
           imgPath="images/asto.png"
           balance={utils.formatEther(astoBal as BigNumberish)}
-          explainer="Claim ASTO tokens to pay for training. 10 $ASTO per claim."
+          explainer="Claim ASTO tokens to pay for training. 100 $ASTO per claim."
         >
           <Button fullWidth variant="outlined" onClick={handleClaimASTO}>
             Claim $ASTO

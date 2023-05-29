@@ -9,16 +9,19 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { NavLink, Outlet } from 'react-router-dom'
 import {
+  ASMLogo,
   ExternalLinkIcon,
   FooterLine,
+  LogoSeperator,
   PaddiIcon,
-  PairedLogos,
+  RootLogo,
 } from 'src/assets/icons'
 import allstarsUfoVideo from 'src/assets/videos/allstarsUfo.mp4'
+import { Account } from 'src/components/Account'
 import { reportEvent } from 'src/utils/ga'
+import { routes } from 'src/utils/routes'
 
 const SmallScreenWarning = styled('div')(
   ({ theme }) => css`
@@ -47,12 +50,36 @@ const HeaderContent = styled(Container)`
   justify-content: space-between;
 `
 
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
-  ...theme.typography.button,
-}))
+const HeaderLink = styled(NavLink)(
+  ({ theme }) => css`
+    display: flex;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-size: ${theme.typography.pxToRem(14)};
+    line-height: ${theme.typography.pxToRem(20)};
+    transition: ${theme.transitions.create(['color', 'border-bottom-color'])};
+
+    &.active {
+      border-bottom: 1px solid #fff;
+    }
+
+    :hover {
+      color: ${theme.palette.secondary.main};
+
+      &.active {
+        border-bottom-color: ${theme.palette.secondary.main};
+      }
+    }
+  `,
+)
 
 const StyledLinkIcon = styled(ExternalLinkIcon)`
   margin-left: 4px;
+`
+const LogoSeperatorComponent = styled(LogoSeperator)`
+  margin-left: 24px;
+  margin-right: 24px;
 `
 
 const Main = styled('main')`
@@ -86,6 +113,7 @@ const VideoContainerOuter = styled('div')`
   max-width: 1400px;
   position: absolute;
   transform: translateX(-50%);
+  z-index: -1;
 `
 
 const VideoContainerInner = styled('div')`
@@ -113,6 +141,22 @@ const FooterContent = styled(Container)`
   position: relative;
   align-items: center;
   justify-content: space-between;
+`
+const SmallPrint = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+`
+const Logos = styled('div')`
+  flex: 0.1;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 24px;
 `
 
 const StyledFooterLine = styled(FooterLine)(
@@ -164,12 +208,12 @@ const footerLinks = [
     to: 'https://www.alteredstatemachine.xyz',
   },
   {
-    to: '',
     label: 'The Root Network',
+    to: 'https://www.futureverse.com/technology/root',
   },
   {
     label: 'FAQS',
-    to: 'https://www.futureverse.com/technology/root',
+    to: 'https://medium.com/@alteredstatemachine/asm-ai-protocol-demo-paddi-faq-1660b95c6ce9',
   },
   {
     label: 'Discord',
@@ -189,32 +233,35 @@ export const Layout = () => {
 
   return isBigScreen ? (
     <AppContainer>
-      <AppBar position="static">
+      <AppBar position="static" elevation={0}>
         <HeaderContent>
-          <PaddiIcon />
+          <Link href={routes.home} aria-label="Home">
+            <PaddiIcon />
+          </Link>
           <Stack component="nav" direction="row" columnGap={3}>
             {headerLinks.map(({ to, label }) => (
-              <StyledNavLink
+              <HeaderLink
                 to={to}
                 key={to}
                 onClick={() => {
                   handleClick(label)
                 }}
+                className={({ isActive }) => (isActive ? 'active' : '')}
               >
                 {label}
-              </StyledNavLink>
+              </HeaderLink>
             ))}
             <Link
               target="_blank"
               rel="noopener noreferrer"
               href="https://github.com/futureversecom/paddi"
             >
-              Github
+              GitHub
               <StyledLinkIcon />
             </Link>
           </Stack>
 
-          <ConnectButton />
+          <Account />
         </HeaderContent>
       </AppBar>
       <Main>
@@ -232,16 +279,51 @@ export const Layout = () => {
           </VideoContainerInner>
         </VideoContainerOuter>
         <StyledFooterLine />
+
         <FooterContent>
-          <PairedLogos />
+          <Logos>
+            <Link target="_blank" href="https://www.alteredstatemachine.xyz/">
+              <ASMLogo />
+            </Link>
+            <LogoSeperatorComponent />
+            <Link
+              rel="noopener noreferrer"
+              href="https://www.futureverse.com/technology/root"
+            >
+              <RootLogo />
+            </Link>
+          </Logos>
           <Stack direction="row" columnGap={3}>
             {footerLinks.map(({ to, label }) => (
-              <Link href={to} key={to} rel="noopener noreferrer">
+              <Link
+                key={to}
+                href={to}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {label}
               </Link>
             ))}
           </Stack>
         </FooterContent>
+        <SmallPrint>
+          {/* <Link href="/terms">
+            <Typography
+              variant="body1"
+              sx={{ fontSize: '8px', marginRight: '5px' }}
+            >
+              Terms
+            </Typography>
+          </Link> */}
+          <Link href="/privacy">
+            <Typography
+              variant="body1"
+              sx={{ fontSize: '8px', marginLeft: '5px' }}
+            >
+              Privacy
+            </Typography>
+          </Link>
+        </SmallPrint>
       </Footer>
     </AppContainer>
   ) : (

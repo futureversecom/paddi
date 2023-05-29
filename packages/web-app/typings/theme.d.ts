@@ -24,3 +24,11 @@ declare module '@mui/material/Typography' {
     overline: true
   }
 }
+
+declare module '@mui/material/styles/createPalette' {
+  interface TypeBackground {
+    border: string
+    darkGrey: string
+    transparentBlack: string
+  }
+}

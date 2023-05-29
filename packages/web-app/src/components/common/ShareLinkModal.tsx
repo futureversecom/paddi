@@ -2,8 +2,8 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogTitle,
   TextField,
+  Typography,
 } from '@mui/material'
 import type { FC } from 'react'
 import React, { useState } from 'react'
@@ -40,14 +40,18 @@ export const ShareLinkModal: FC<Props> = ({ title, link }) => {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleOpen}>
+      <Button onClick={handleOpen} sx={{ width: 280 }}>
         {title}
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle variant="h6" component="h2">
-          {title}
-        </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ py: 4, px: 6 }}>
+          <Typography component="h2" variant="h6" sx={{ mb: 4 }}>
+            {title}
+          </Typography>
+          <Typography>
+            Share a unique link to this replay. It works automagically, no
+            wallet required.
+          </Typography>
           <TextField
             id="modal-description"
             fullWidth

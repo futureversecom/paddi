@@ -1,9 +1,9 @@
-# Pong Simulation
+# Paddi Simulation
 
 This is an implementation of ping-pong game described in the ASM whitepaper with
 the following goals in mind.
 
-1. Pong game to demonstrate ASM protocol
+1. Paddi game to demonstrate ASM protocol
 2. Validate python could be used for game and RL training
 3. Simple enough project structure for Game Devs and ML Engineers to work together.
    Game devs should be able to train and configure while ML engineers could alter
@@ -22,7 +22,7 @@ the following goals in mind.
 The project is structured in three layers.
 
 1. Simulation -
-   Simulation defines the core logic for running the pong game. This is not dependent
+   Simulation defines the core logic for running the paddi game. This is not dependent
    on any rendering concerns (PyGame) or AI (no PyTorch).
 
    Components:

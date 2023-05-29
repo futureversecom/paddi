@@ -16,12 +16,16 @@ export const useASTOContract = () => {
   return contract
 }
 
-export const useASTOBalance = (address: string) => {
+export const useASTOBalance = (address: string, enabled = true) => {
   const contract = useASTOContract()
 
-  return useQuery(['ASTO', 'balanceOf', address], () => {
-    return contract.balanceOf(address)
-  })
+  return useQuery(
+    ['ASTO', 'balanceOf', address],
+    () => {
+      return contract.balanceOf(address)
+    },
+    { enabled },
+  )
 }
 
 export const useASTOAllowance = (owner: string, spender: string) => {

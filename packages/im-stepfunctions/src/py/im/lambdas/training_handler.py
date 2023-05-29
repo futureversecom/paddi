@@ -4,6 +4,7 @@ from typing import Any, Dict
 import boto3
 from aws_lambda_powertools.utilities.parser import event_parser
 from aws_lambda_powertools.utilities.typing import LambdaContext
+from im.lambdas.utils.sentry import init as init_sentry
 from im.services.common.configuration import ExecutionEnvironmentConfig
 from im.services.memory_resolver import MemoryResolver
 from im.services.model_loader import S3ModelLoader
@@ -12,6 +13,8 @@ from im.services.train_service import TrainService
 from im.services.training_result_store import S3TrainingResultsStore
 from pydantic import BaseSettings
 from schemas.training_request import TrainingRequest
+
+init_sentry()
 
 
 class Settings(BaseSettings):

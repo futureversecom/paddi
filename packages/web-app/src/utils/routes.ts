@@ -4,4 +4,6 @@ export const routes = {
   train: '/train',
   faucet: '/faucet',
   replay: '/replay',
+  terms: '/terms',
+  privacy: '/privacy',
 }

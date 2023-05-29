@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import type { FC, ReactElement } from 'react'
 import { cloneElement, useMemo, useState } from 'react'
+import { PlusIcon } from 'src/assets/icons'
 import { RoundedBox } from 'src/components/common/RoundedBox'
 import type {
   EvaluationOutput,
@@ -75,19 +76,21 @@ export const TrainingStatsModal: FC<Props> = ({
     ? cloneElement(children, { onClick: handleOpen })
     : null
 
+  const name = evaluationId === 'AllRounder' ? 'All Rounder' : evaluationId
+
   return (
     <>
       {childWithProps ? (
         childWithProps
       ) : (
-        <Button variant="outlined" onClick={handleOpen}>
-          Training Stats
+        <Button fullWidth size="small" variant="outlined" onClick={handleOpen}>
+          Evaluation Stats
         </Button>
       )}
       <ResponsiveDialog open={open} onClose={handleClose} scroll="body">
         <DialogContent sx={{ py: 4, px: 6 }}>
           <Typography variant="h6" sx={{ mb: 4 }}>
-            {`Training Stats vs a ${evaluationId} Opponent stats`}
+            {`Training Stats vs a ${name} Opponent stats`}
           </Typography>
           <RoundedBox>
             <TrainingParamsViewer rewardConfig={rewardConfig} />
@@ -96,7 +99,7 @@ export const TrainingStatsModal: FC<Props> = ({
           <Stack direction="row" spacing={3} sx={{ my: 3 }}>
             <ScoreContainer>
               <RoundedBox>
-                Agent Score
+                AI Agent Score
                 <Typography variant="subtitle1">
                   {score['left'] ?? 0}
                 </Typography>
@@ -123,7 +126,12 @@ export const TrainingStatsModal: FC<Props> = ({
               ))}
           </Stack>
           <DialogActions sx={{ p: 4 }}>
-            <Button variant="contained" fullWidth onClick={handleClose}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleClose}
+              startIcon={<PlusIcon />}
+            >
               Close
             </Button>
           </DialogActions>

@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import type { ScenarioInput } from 'src/graphql/generated'
 
 import { preTrainedModel } from './preTrainedModel'
-import { StepButton } from './StepButton'
+import { StepCard } from './StepCard'
 
 type opponentButtonProps = {
   scenario?: ScenarioInput
@@ -12,13 +12,17 @@ type opponentButtonProps = {
 
 const OpponentContent = ({ scenario }: { scenario: ScenarioInput }) => {
   if (scenario.wall) {
-    return <span>Wall Scenario</span>
+    return <Typography variant="body4">Agent: Wall</Typography>
   }
   const model = preTrainedModel.find(
     p => p.agentType === scenario?.agent?.agentType,
   )
+
   if (model) {
-    return <span>Agent: {model.agentName}</span>
+    const name =
+      model.agentName === 'AllRounder' ? 'All Rounder' : model.agentName
+
+    return <Typography variant="body4">Agent: {name}</Typography>
   }
   return null
 }
@@ -28,13 +32,12 @@ export const OpponentButton: FC<opponentButtonProps> = ({
   onClick,
 }) => {
   return (
-    <StepButton onClick={onClick} $selected={scenario !== undefined}>
-      <Typography mb={2}>Step 3</Typography>
+    <StepCard index={3} complete={scenario !== undefined} onClick={onClick}>
       {scenario !== undefined ? (
         <OpponentContent scenario={scenario} />
       ) : (
-        <span>Select Opponent</span>
+        <Typography variant="body4">Training Opponent</Typography>
       )}
-    </StepButton>
+    </StepCard>
   )
 }

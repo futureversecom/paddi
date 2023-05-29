@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 from aws_lambda_powertools.utilities.typing import LambdaContext
+from im.lambdas.utils.sentry import init as init_sentry
 from schemas.evaluation_config_output import EvaluationScenarioConfig
 from schemas.segments.agent_config import (
     AgentConfig,
@@ -15,6 +16,8 @@ from schemas.segments.scenario_config import (
     ScenarioConfig,
     WallScenario,
 )
+
+init_sentry()
 
 
 def handler(event: Any, context: LambdaContext) -> Dict[str, Any]:

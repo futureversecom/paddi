@@ -22,7 +22,7 @@ import { publicProvider } from 'wagmi/providers/public'
 import { clearJwt, client, getInitAuthStatus, setJwt } from './graphql/client'
 import { useAuthenticateMutation } from './graphql/generated'
 import { useAuthStatus } from './hooks/useAuthStatus'
-import { useRainbowTheme } from './hooks/useRainbowTheme'
+import { rainbowTheme } from './utils/rainbowkit'
 
 const nonceQuery = gql`
   query nonce($userWalletAddress: ChainAddress!) {
@@ -81,7 +81,6 @@ type Props = {
 }
 
 export const Web3Provider: React.FC<Props> = ({ children }) => {
-  const rainbowTheme = useRainbowTheme()
   const { address } = useAccount()
   const { authStatus, setAuthStatus } = useAuthStatus()
   useEffect(() => {

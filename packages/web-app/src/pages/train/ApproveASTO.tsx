@@ -4,6 +4,7 @@ import { utils } from 'ethers'
 import type { FC, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { PlusIcon } from 'src/assets/icons'
 import {
   useASTOAllowance,
   useASTOApprove,
@@ -51,6 +52,7 @@ export const ApproveASTO: FC<Props> = ({ address, trainingCost, children }) => {
         variant="contained"
         sx={{ minWidth: 380 }}
         onClick={() => navgiate('/faucet')}
+        startIcon={<PlusIcon />}
       >
         Get ASTO
       </Button>

@@ -1,14 +1,12 @@
 import { css, styled } from '@mui/material'
 import type { FC } from 'react'
 import { useMemoryTreesOfBrain } from 'src/hooks/contracts/useMemoryTreeContract'
-import { pressStartFamily } from 'src/styles/fonts'
 
 const Container = styled('button')(
   ({ theme }) => css`
     display: flex;
     justify-content: center;
     font-size: 24px;
-    font-family: ${pressStartFamily};
     text-align: center;
     width: 100%;
     height: 120px;

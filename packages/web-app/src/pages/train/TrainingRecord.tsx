@@ -1,14 +1,13 @@
 import {
   Box,
   Button,
+  Card,
   css,
   Dialog,
   DialogActions,
   DialogContent,
-  Grid,
   Stack,
   styled,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import type { BigNumber } from 'ethers'
@@ -19,13 +18,13 @@ import { useQueryClient } from 'react-query'
 import { toast } from 'react-toastify'
 import type { BrainsData } from 'replay-component/src/components/Pong/Pong'
 import Pong from 'replay-component/src/components/Pong/Pong'
+import { SquareIcon } from 'src/assets/icons'
 import { BrainImage } from 'src/components/Brain/BrainImage'
 import { useConfirmationDialog } from 'src/components/common/ConfirmationContext'
 import { ShareLinkModal } from 'src/components/common/ShareLinkModal'
 import { client } from 'src/graphql/client'
 import type { EvaluationOutput, Training } from 'src/graphql/generated'
 import {
-  TrainingState,
   useGenomeAttributesQuery,
   usePendingNodeSignatureQuery,
   useSavePinnedNodeIdMutation,
@@ -38,24 +37,58 @@ import {
 } from 'src/hooks/contracts/useMemoryTreeContract'
 import { reportEvent } from 'src/utils/ga'
 
+import { LearningParametersModal } from './LearningParametersModal'
 import { NormalizedNodeId } from './NormalizedNodeId'
 import { preTrainedModel } from './preTrainedModel'
-import { TrainingInputModal } from './TrainingInputModal'
 import { TrainingStateIndicator } from './TrainingStateIndicator'
 import { TrainingStatsModal } from './TrainingStatsModal'
 
-const ReplayGrid = styled(Grid)({
-  height: '100%',
-  background: 'black',
-  borderRadius: '50px',
-  textAlign: 'left',
-})
-const Container = styled('div')(
-  () =>
+const LearningParametersText = styled(Typography)(
+  ({ theme }) => css`
+    cursor: pointer;
+    border-bottom: 1px solid #fff;
+    transition: ${theme.transitions.create(['color', 'border-bottom-color'])};
+
+    :hover {
+      color: ${theme.palette.secondary.main};
+      border-bottom-color: ${theme.palette.secondary.main};
+    }
+  `,
+)
+
+const PinMemoryContainer = styled('div')(
+  ({ theme }) =>
     css`
-      background-color: #1b1b1b;
-      padding: 60px 32px;
-      margin-bottom: 44px;
+      display: flex;
+      background-color: #111;
+      justify-content: flex-end;
+      padding: ${theme.spacing(2, 4)};
+
+      button {
+        width: 50%;
+      }
+    `,
+)
+
+const ReplayContainer = styled('div')`
+  height: 100%;
+  display: flex;
+  border-radius: 50px;
+  align-items: flex-start;
+  background-color: #000;
+`
+
+const ReplayContentCard = styled('div')(
+  ({ theme }) =>
+    css`
+      display: flex;
+      min-width: 320px;
+      border-radius: 50px;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: ${theme.spacing(6, 4)};
+      margin: ${theme.spacing(2, 0, 0, 2)};
+      border: 1px solid ${theme.palette.background.border};
     `,
 )
 
@@ -76,11 +109,15 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
 
   const [isPinning, setIsPinning] = useState(false)
   const [open, setOpen] = useState(false)
+  const [learningParamsModalOpen, setLearningParamsModalOpen] = useState(false)
   const [currentEvaluation, setCurrentEvaluation] = useState<
     EvaluationOutput | undefined
   >(undefined)
 
   const [replayPath, setReplayPath] = useState<string>()
+
+  const isEvaluated =
+    !!training.evaluationOutput && training.evaluationOutput.length >= 4
 
   const handleOpen = (replayPath: string, evaluation: EvaluationOutput) => {
     reportEvent('button_click', {
@@ -209,8 +246,10 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       const model = preTrainedModel.find(
         p => p.agentType === scenario.agentType,
       )
+      const rawName = model?.agentName
+      const name = rawName === 'AllRounder' ? 'All Rounder' : rawName
 
-      return model?.agentName
+      return name
     }
     return 'Wall'
   }, [training])
@@ -228,14 +267,19 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
       a.__typename === 'GenomeAttributeHex' ? [a] : [],
     )[0] ?? null
 
+  const paddleRName = currentEvaluation
+    ? currentEvaluation.evaluationId === 'AllRounder'
+      ? 'All Rounder'
+      : currentEvaluation.evaluationId
+    : 'Opponent'
+
   const brainsData: BrainsData | null = hexAttribute
     ? {
         paddle_l: {
           color: hexAttribute.valueHex,
           name: `Brain ${training.brainId}`,
         },
-        // TODO: hardcoded for pre-trained agents
-        paddle_r: { color: 'red', name: opponentName },
+        paddle_r: { color: 'red', name: paddleRName },
       }
     : null
 
@@ -245,103 +289,168 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
 
   return (
     <>
-      <Container>
-        <Stack spacing={3}>
-          <div>
-            <Typography
-              sx={{ fontSize: 22, fontWeight: 900 }}
-            >{`Brain #${training.brainId} - Trained against ${opponentName} opponent`}</Typography>
-
-            <Typography sx={{ my: 1 }}>
-              {new Date(training.timestamp).toLocaleString()}
+      <Card>
+        <Stack p={6}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography component="h2" variant="h5">
+              Training Session
             </Typography>
-            <TrainingStateIndicator
-              state={training.recordState}
-              totalUnits={training.units}
-              completedUnits={training.completedUnits}
-              cancelTraining={handleCancelTraining}
-            />
-          </div>
-
-          {training.evaluationOutput && (
-            <>
-              <Typography sx={{ alignItems: 'center', display: 'flex' }}>
-                Training Model evaluation against all training opponents
-                <Tooltip
-                  placement="top-start"
-                  title="Each new model trains against an opponent. The new model is then tested against all opponents. Helping you assess overall change in performance."
-                >
-                  <span className="material-symbols-outlined">help</span>
-                </Tooltip>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Typography variant="subtitle1">
+                {new Date(training.timestamp).toLocaleString()}
               </Typography>
-
-              <div>
-                {training.evaluationOutput.map(evaluation => {
+              <TrainingStateIndicator
+                state={training.recordState}
+                totalUnits={training.units}
+                completedUnits={training.completedUnits}
+                cancelTraining={handleCancelTraining}
+              />
+            </Stack>
+          </Stack>
+          <Stack direction="row" mt={4}>
+            <Box component="div">
+              <Typography variant="body2">Training Parameters</Typography>
+              <Typography variant="body1" color="primary.dark">
+                A recap of your training input for this session.
+              </Typography>
+              <Stack direction="row" justifyContent="space-between" mt={4}>
+                <Box component="div" width={150}>
+                  <BrainImage id={training.brainId} fixedHeight="100%" />
+                </Box>
+                <Box component="div" ml={2} mr={8}>
+                  <Typography variant="body2" mb={2}>
+                    #{training.brainId}
+                  </Typography>
+                  <Typography variant="body1" mb={1}>
+                    Memory Node: {pinnedNodeId}
+                  </Typography>
+                  <LearningParametersText
+                    role="button"
+                    variant="body1"
+                    mb={1}
+                    onClick={() => {
+                      setLearningParamsModalOpen(true)
+                    }}
+                  >
+                    Learning Parameter Values
+                  </LearningParametersText>
+                  <Typography variant="body1" mb={1}>
+                    {opponentName} Opponent
+                  </Typography>
+                  <Typography variant="body1">
+                    Training Units ({training.units})
+                  </Typography>
+                </Box>
+              </Stack>
+            </Box>
+            <Box component="div" flex="1">
+              <Typography variant="body2">Model Evaluation</Typography>
+              <Typography variant="body1" color="primary.dark">
+                Training model evaluation against all training opponents.
+              </Typography>
+              <Box mt={4} pl={2} component="div" position="relative">
+                <Box
+                  top="50%"
+                  left={0}
+                  width="1px"
+                  height="90%"
+                  component="div"
+                  position="absolute"
+                  sx={{
+                    backgroundColor: 'background.border',
+                    transform: 'translateY(-50%)',
+                  }}
+                />
+                {training.evaluationOutput?.map(evaluation => {
                   const replayPath =
                     import.meta.env.VITE_REPLAY_ENDPOINT + evaluation.replayPath
+                  const name =
+                    evaluation.evaluationId === 'AllRounder'
+                      ? 'All Rounder'
+                      : evaluation.evaluationId
 
-                  const replayLink = `${window.location.protocol}//${window.location.host}/replay?replay_path=${replayPath}`
                   return (
                     <Box
                       key={evaluation.evaluationId}
-                      component={'div'}
+                      component="div"
                       marginBottom={1}
                     >
-                      <Stack direction="row" alignItems="center" spacing={1}>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        spacing={1}
+                      >
                         <Typography
+                          minWidth={110}
+                          variant="body1"
                           textTransform="capitalize"
-                          variant="subtitle2"
-                          sx={{
-                            width: '150px',
-                          }}
-                        >{`${evaluation.evaluationId}: `}</Typography>
-                        <Button
-                          variant="outlined"
-                          onClick={() => handleOpen(replayPath, evaluation)}
                         >
-                          Replay
-                        </Button>
-
-                        {evaluation && (
-                          <TrainingStatsModal
-                            evaluation={evaluation}
-                            rewardConfig={training.rewardConfig}
-                          />
-                        )}
-
-                        <ShareLinkModal link={replayLink} title="Share" />
+                          {name}:
+                        </Typography>
+                        <Stack flex={1} direction="row" spacing={1}>
+                          <Box flex={1} component="div">
+                            <Button
+                              fullWidth
+                              size="small"
+                              variant="outlined"
+                              sx={{ height: '100%' }}
+                              onClick={() => handleOpen(replayPath, evaluation)}
+                            >
+                              Game Replay
+                            </Button>
+                          </Box>
+                          {evaluation && (
+                            <Box flex={1} component="div">
+                              <TrainingStatsModal
+                                evaluation={evaluation}
+                                rewardConfig={training.rewardConfig}
+                              />
+                            </Box>
+                          )}
+                        </Stack>
                       </Stack>
                     </Box>
                   )
                 })}
-              </div>
-            </>
-          )}
+              </Box>
+            </Box>
+          </Stack>
         </Stack>
-        {training.recordState === TrainingState.Completed && (
+        <PinMemoryContainer>
           <Button
-            variant="outlined"
             onClick={handlePin}
-            disabled={hasPinned || isPinning}
-            sx={{ mt: '48px', ml: '158px' }}
+            disabled={hasPinned || isPinning || !isEvaluated}
+            startIcon={<SquareIcon />}
           >
             {isPinning ? (
-              `Pinning Memory`
+              'Pinning Memory'
             ) : hasPinned ? (
-              <span>
+              <>
                 Memory Saved (Node:{' '}
                 <NormalizedNodeId
-                  brainId={training.brainId}
                   nodeId={pinnedNodeId}
+                  brainId={training.brainId}
                 />
                 )
-              </span>
+              </>
             ) : (
-              `Save Memory`
+              'Save Memory'
             )}
           </Button>
-        )}
-      </Container>
+        </PinMemoryContainer>
+      </Card>
+      <LearningParametersModal
+        open={learningParamsModalOpen}
+        rewardConfig={training.rewardConfig}
+        handleClose={() => {
+          setLearningParamsModalOpen(false)
+        }}
+      />
 
       <Dialog open={open} onClose={handleClose} fullScreen>
         {replayPath && brainsData && currentEvaluation && (
@@ -350,41 +459,51 @@ export const TrainingRecord: FC<Props> = ({ training }) => {
               training.timestamp,
             ).toLocaleString()} `}</Typography>
             <DialogContent sx={{ mb: '10px', pb: 0 }}>
-              <ReplayGrid container>
-                <Grid item xs={5}>
-                  <Grid container height={'100%'} paddingTop={'30px'}>
-                    <Grid item xs={6} padding={'30px'}>
-                      <BrainImage
-                        id={training.brainId}
-                        fixedHeight="100%"
-                        isCentered={false}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2">
-                        #{training.brainId}
-                      </Typography>
-                      {/* <p>Brain Id: #{training.brainId}</p> */}
-                      <p>Memory Node: {pinnedNodeId}</p>
-
-                      <TrainingInputModal
-                        rewardConfig={training.rewardConfig}
-                      />
-                      <p>{currentEvaluation.evaluationId} Opponent</p>
-                      <p>Training rounds({training.units})</p>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={7}>
-                  <Pong path={replayPath} brainsData={brainsData} />
-                </Grid>
-              </ReplayGrid>
+              <ReplayContainer>
+                <ReplayContentCard>
+                  <Box component="div" ml={2} width={175} height={175}>
+                    <BrainImage id={training.brainId} fixedHeight="100%" />
+                  </Box>
+                  <Box mt={2} component="div">
+                    <Typography variant="body2" mb={2}>
+                      #{training.brainId}
+                    </Typography>
+                    <Typography variant="body1" mb={1}>
+                      Memory Node: {pinnedNodeId}
+                    </Typography>
+                    <LearningParametersText
+                      role="button"
+                      variant="body1"
+                      mb={1}
+                      onClick={() => {
+                        setLearningParamsModalOpen(true)
+                      }}
+                    >
+                      Learning Parameter Values
+                    </LearningParametersText>
+                    <Typography variant="body1" mb={1}>
+                      {opponentName} Opponent
+                    </Typography>
+                    <Typography variant="body1">
+                      Training Units ({training.units})
+                    </Typography>
+                  </Box>
+                </ReplayContentCard>
+                <Pong path={replayPath} brainsData={brainsData} />
+              </ReplayContainer>
             </DialogContent>
             <DialogActions sx={{ mb: 2, mr: 2 }}>
-              <Button variant="outlined" onClick={handleClose}>
+              <Button
+                variant="outlined"
+                onClick={handleClose}
+                sx={{ width: 280 }}
+              >
                 Close
               </Button>
-              <ShareLinkModal link={replayPath} title="Share" />
+              <ShareLinkModal
+                link={`${window.location.origin}/replay?replay_path=${replayPath}`}
+                title="Share"
+              />
             </DialogActions>
           </>
         )}
