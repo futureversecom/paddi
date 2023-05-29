@@ -13,22 +13,22 @@ In mid-May 2023, we launched Paddi to the community as an open-source project on
 Introducing Paddi, a futuristic take on a nostalgic arcade game where you can train an AI Agent to compete in your place.
 
 - This version has ASM Brains which power the paddles. Each Brain brings diverse attributes, so no two paddles are the same. We have included speed, strength, endurance & size in this example.
-- Paddi demonstrates the ASM Core Protocol, which facilitates AI/ML training payments with ASTO and provides Memory Trees that hold AI models from training.
+- Paddi demonstrates the ASM AI Protocol, which facilitates AI/ML training payments with ASTO and provides Memory Trees that hold AI models from training.
 - Paddi demonstrates how AI training can be incorporated into games using reinforcement learning algorithms and open-source Python libraries. We don’t show everything possible but just enough to spark your creativity. We also show examples of extending this further, so check out the examples section for this.
 
 ## Components
 
 The open-source repository for Paddi includes the following components:
 
-- [Pong Simulation](packages/pong-simulation/README.md) Reinforcement Learning to teach a paddle to play Paddi
+- [Paddi Simulation](packages/pong-simulation/README.md) Reinforcement Learning to teach a paddle to play Paddi
 - [Replay - 3d](packages/replay-component) ThreeJs based replay engine for interpreting what happened during a simulation.
 - [Replay - 2d](packages/replay-component-2d) VanillaJS based replay engine for interpreting what happened during a simulation.
-- [Smart Contracts](packages/smart-contracts/README.md) Smart contracts extending the ASM Core Protocol.
+- [Smart Contracts](packages/smart-contracts/README.md) Smart contracts extending the ASM AI Protocol.
 - [Schemas](packages/schemas/README.md) Json schema definitions for replay events and internal intelligence mining events.
 - [IM Stepfunctions](packages/im-stepfunctions/README.md) The Intelligence Mining service layer logic and step function definitions.
 - [Web App](packages/web-app/README.md) React.js based web experience for Paddi.
 - [GraphQL Api and `core`, `core-backend`, `event-handlers`](packages/gql-api/README.md) The backend Apis, event handlers, types and common packages.
-- `Terraform` Scalable AWS Infrastructure as code for Paddi.
+- [Terraform](terraform/README.md) Scalable AWS Infrastructure as code for Paddi.
 
 ## Getting Started
 
