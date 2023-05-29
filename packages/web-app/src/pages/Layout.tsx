@@ -307,14 +307,14 @@ export const Layout = () => {
           </Stack>
         </FooterContent>
         <SmallPrint>
-          {/* <Link href="/terms">
+          <Link href="/terms">
             <Typography
               variant="body1"
               sx={{ fontSize: '8px', marginRight: '5px' }}
             >
               Terms
             </Typography>
-          </Link> */}
+          </Link>
           <Link href="/privacy">
             <Typography
               variant="body1"
